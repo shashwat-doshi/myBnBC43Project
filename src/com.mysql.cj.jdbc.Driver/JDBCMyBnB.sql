@@ -1,0 +1,177 @@
+create table Listing (
+    listingID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    listingStatus ENUM('available', 'unavailable') DEFAULT 'available',
+    startDate DATETIME NOT NULL,
+    endDate DATETIME NOT NULL,
+    pricePerNight FLOAT(7,2) NOT NULL,
+    propertyID int(50) NOT NULL,/* foreign key fill later */, 
+    posterID int(50) NOT NULL/* foreign key fill later */, 
+    currencyID int(50) NOT NULL/* foreign key fill later */,
+    FOREIGN KEY (propertyID)
+        REFERENCES Property(propertyID),
+    FOREIGN KEY (posterID)
+        REFERENCES User(userID),
+    FOREIGN KEY (currencyID)
+        REFERENCES Currency(currencyID),
+);
+
+create table User (
+    userID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    SIN int(10) NOT NULL UNIQUE,
+    userAddress varchar(100) NOT NULL,
+    DOB DATE NOT NULL,
+    firstName varchar(30) NOT NULL,
+    lastName varchar(30) NOT NULL,
+    age int(10) NOT NULL,
+    isAdmin Boolean NOT NULL DEFAULT 0,
+    occupation varchar(50) NOT NULL,
+);
+
+create table Property(
+    propertyID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    street varchar(100) NOT NULL,
+    country varchar(50) NOT NULL,
+    city varchar(50) NOT NULL,
+    postalCode varchar(10) NOT NULL,
+    coordinates POINT NOT NULL,
+);
+
+create table Amenity(
+    amenityID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    amenityType varchar(100) NOT NULL UNIQUE,
+    details varchar(100),
+);
+
+create table Payment(
+    paymentID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    cardNumber int(16) NOT NULL UNIQUE,
+    expiryDate DATE NOT NULL,
+    billingAddress varchar(100) NOT NULL,
+    paymentTypeID int(50) NOT NULL,
+    FOREIGN KEY (paymentTypeID)
+        REFERENCES PaymentType(paymentTypeID),
+);
+
+create table PaymentType(
+    paymentTypeID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    paymentName varchar(16) NOT NULL UNIQUE,
+);
+
+create table PaymentInfo(
+    paymentInfoID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    cardNumber int(16) NOT NULL UNIQUE,
+    expiryDate DATE NOT NULL,
+    billingAddress varchar(100) NOT NULL,
+    userID int(50) NOT NULL,
+    paymentTypeID int(50) NOT NULL,
+    FOREIGN KEY (userID)
+        REFERENCES User(userID),
+    FOREIGN KEY (paymentTypeID)
+        REFERENCES PaymentType(paymentTypeID),
+);
+
+create table Booking(
+    bookingID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    paymentName varchar(16) NOT NULL UNIQUE,
+    startDate DATETIME NOT NULL,
+    endDate DATETIME NOT NULL,
+    accommodations varchar(100),
+    listingID int(50) NOT NULL,
+    paymentID int(50) NOT NULL,
+    renterID int(50) NOT NULL,
+    reviewForRenter int(50) NULL,
+    reviewForOwner int(50) NULL, /* allows NULL -- check */
+    reviewForProperty int(50) NULL,
+
+    FOREIGN KEY (listingID)
+        REFERENCES Listing(listingID),
+    FOREIGN KEY (paymentID)
+        REFERENCES Payment(paymentID),
+    FOREIGN KEY (renterID)
+        REFERENCES User(userID),
+    FOREIGN KEY (reviewForRenter)
+        REFERENCES Review(reviewID),
+    FOREIGN KEY (reviewForOwner)
+        REFERENCES Review(reviewID),
+    FOREIGN KEY (reviewForProperty)
+        REFERENCES Review(reviewID)
+);
+
+create table Review(
+    reviewID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    rating int(1) NOT NULL CONSTRAINT ratingCheck CHECK (rating BETWEEN 1 AND 5),
+    commentID int(50) NULL,
+    FOREIGN KEY (commentID)
+        REFERENCES Comment(commentID)
+);
+
+create table Comment(
+    commentID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    details varchar(50) NOT NULL, 
+);
+
+create table House (
+    propertyID int(50) NOT NULL PRIMARY KEY, 
+    capacity int(10) NOT NULL,
+    FOREIGN KEY (propertyID)
+        REFERENCES Property(propertyID)
+);
+
+create table HotelApartment(
+    propertyID int(50) NOT NULL PRIMARY KEY, 
+    capacity int(10) NOT NULL,
+    FOREIGN KEY (propertyID)
+        REFERENCES Property(propertyID)
+);
+
+create table Room(
+    propertyID int(50) NOT NULL PRIMARY KEY, 
+    isShared BOOLEAN,
+    capacity int(10) NOT NULL,
+    FOREIGN KEY (propertyID)
+        REFERENCES Property(propertyID)
+);
+
+create table Currency (
+    cropertyID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+    currencyName varchar(20) NOT NULL,
+    symbol varchar(2) NOT NULL,
+);
+
+create table Offers (
+    amenityID int(50) NOT NULL, 
+    propertyID int(50) NOT NULL,
+    isAvailable Boolean NOT NULL,
+    cost int(10) NOT NULL DEFAULT 0,
+    PRIMARY KEY(amenityID, propertyID),
+    FOREIGN KEY (amenityID)
+        REFERENCES Amenity(amenityID),
+    FOREIGN KEY (propertyID)
+        REFERENCES Property(propertyID),
+);
+
+/*
+Entities:
+
+Listing (ListingID, Status, Start Date, End Date, PricePerNight, PropertyID, posterID(userId from Poster table), CurrencyID)
+User (UserID, SIN, Address, DOB, Name, Age, isAdmin, Occupation)
+Property (PropertyID, Street, Country, City, PostalCode, Latitude, Longitude)
+Amenity (AmenityID, Type, Details)
+Payment(PaymentID, CardNumber, ExpiryDate, BillingAddress, PaymentTypeID)
+PaymentType (PaymentTypeID, Payment Name)
+PaymentInfo (PaymentInfoID, CardNumber, Expiry Date, Billing Address, UserID, PaymentTypeID)
+Booking(BookingID, Start Date, EndDate, Accommodations, ListingID, PaymentID, renterID(userID from Booker table), ReviewForRenter(Ids in the Review table), ReviewForOwner, ReviewForProperty)
+Review (ReviewID, Rating, CommentID)
+Comment(CommentID, Details)
+House(PropertyID, Type, Capacity)
+HotelApartment(PropertyID, Type, Capacity)
+Room(PropertyID, isShared, Type, Capacity)
+Currency(CurrencyID, CurrencyName, Symbol)
+
+Relationships:
+
+Offers(AmenityID, PropertyID, isAvailable, Cost) 
+
+*/
+
+

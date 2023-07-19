@@ -3,7 +3,7 @@ import java.sql.*;
 public class JDBCExample {
 
 	private static final String dbClassName = "com.mysql.cj.jdbc.Driver";
-	private static final String CONNECTION = "jdbc:mysql://127.0.0.1/mydb";
+	private static final String CONNECTION = "jdbc:mysql://127.0.0.1/myBnBC43Project";
 
 	public static void main(String[] args) throws ClassNotFoundException {
 		// Register JDBC driver
