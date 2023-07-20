@@ -11,6 +11,17 @@ create table User (
     occupation varchar(50) NOT NULL
 );
 
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (5665424957, '221B Baker St', '1970-11-30', 'Sherlock', 'Holmes', 52, 0, 'Detective');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (3105037991, 'St 1 Calgary', '1972-12-31', 'James', 'Doah', 33, 0, 'Engineer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (3811452384, 'St 2 Vancouver', '1980-09-02', 'Mahesh', 'Dalle', 32, 0, 'Professor');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (6562433252, 'St 3 Toronto', '2000-02-14', 'Kamlesh', 'Singh', 32, 0, 'Artist');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (6317190891, 'St 4 Dubai', '2002-05-26', 'William', 'Root', 32, 0, 'Lawyer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (1398192688, 'St 5 Mumbai', '1990-08-13', 'Peter', 'Parker', 32, 0, 'Manager');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (4054121868, 'St 6 Delhi', '2003-04-26', 'Walt', 'Whitman', 32, 0, 'Sportsman');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (4243858298, 'St 7 Singapore', '1970-09-29', 'Stephen', 'Strange', 32, 0, 'Gym Trainee');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (7174630225, 'St 8 Sydney', '2000-11-30', 'Tony', 'Stark', 32, 0, 'UI Designer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (6800269404, 'St 9 Geneva', '1994-12-08', 'James', 'Trickington', 32, 1, 'Aircraft Pilot');
+
 create table Property(
     propertyID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     street varchar(100) NOT NULL,
