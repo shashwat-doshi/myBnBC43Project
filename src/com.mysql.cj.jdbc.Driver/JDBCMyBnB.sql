@@ -22,6 +22,10 @@ INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occu
 INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (7174630225, 'St 8 Sydney', '2000-11-30', 'Tony', 'Stark', 32, 0, 'UI Designer');
 INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (6800269404, 'St 9 Geneva', '1994-12-08', 'James', 'Trickington', 32, 1, 'Aircraft Pilot');
 
+
+/* add query about updating age w.r.t DOB */
+
+
 create table Property(
     propertyID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     street varchar(100) NOT NULL,
@@ -30,6 +34,17 @@ create table Property(
     postalCode varchar(10) NOT NULL,
     coordinates POINT NOT NULL
 );
+
+insert into Property (street, country, city, postalCode, coordinates) values ('8354 Walton Way', 'Poland', 'Płońsk', '09-101', POINT(52.931452, 101.9214852));
+insert into Property (street, country, city, postalCode, coordinates) values ('67 Glacier Hill Plaza', 'Philippines', 'Tubod', '9209', POINT(7.9632405, 123.8751554));
+insert into Property (street, country, city, postalCode, coordinates) values ('023 Bayside Circle', 'Indonesia', 'Palamadu', 'M1A 5J2', POINT(-10.0396, 120.754));
+insert into Property (street, country, city, postalCode, coordinates) values ('76 Brentwood Place', 'Iran', 'Semīrom', 'M1X 4D1', POINT(31.4151366, 51.5683274));
+insert into Property (street, country, city, postalCode, coordinates) values ('644 Luster Circle', 'Japan', 'Setaka', '834-0122', POINT(32.5539412, 130.4103077));
+insert into Property (street, country, city, postalCode, coordinates) values ('66 Talmadge Center', 'China', 'Erdao', '772-9234', POINT(43.865595, 125.374217));
+insert into Property (street, country, city, postalCode, coordinates) values ('71310 Havey Terrace', 'New Caledonia', 'Koumac', '98850', POINT(-20.5805385, 164.2740515));
+insert into Property (street, country, city, postalCode, coordinates) values ('95 Graedel Lane', 'Ireland', 'Coolock', 'D17', POINT(53.3916434, -6.1920933));
+insert into Property (street, country, city, postalCode, coordinates) values ('007 Green Ridge Place', 'China', 'Yudong', 'M1D LS2', POINT(28.705864, 109.276796));
+insert into Property (street, country, city, postalCode, coordinates) values ('45738 3rd Center', 'Japan', 'Toyonaka', '771-0217', POINT(34.1228075, 134.5990156));
 
 create table Amenity(
     amenityID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
