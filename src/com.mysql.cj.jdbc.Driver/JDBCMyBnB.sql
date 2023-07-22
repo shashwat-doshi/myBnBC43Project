@@ -52,6 +52,17 @@ create table Amenity(
     details varchar(100)
 );
 
+insert into Amenity (amenityType, details) values ('A washer or dryer', 'Includes washer/dryer in the property');
+insert into Amenity (amenityType, details) values ('Heating', 'Includes Heating in the property');
+insert into Amenity (amenityType, details) values ('pool', 'Includes a swimming pool in the property');
+insert into Amenity (amenityType, details) values ('a kitchen', 'Includes a kitchen in the property');
+insert into Amenity (amenityType, details) values ('mini bar', 'Includes a mini bar in the property');
+insert into Amenity (amenityType, details) values ('Pets allowed', 'Pets are allowed at the property');
+insert into Amenity (amenityType, details) values ('Wifi', 'Includes wifi access at the property');
+insert into Amenity (amenityType, details) values ('Jacuzzi', 'Includes Jacuzzi at the property');
+insert into Amenity (amenityType, details) values ('Free parking', 'Property includes free parking at the premises');
+insert into Amenity (amenityType, details) values ('Laptop-friendly workspace', 'The property has a comfortable workspace for guests');
+
 create table PaymentType(
     paymentTypeID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     paymentName varchar(16) NOT NULL UNIQUE
@@ -61,6 +72,17 @@ create table Comment(
     commentID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     details varchar(50) NOT NULL
 );
+
+insert into Comment (details) values ('Great stay!');
+insert into Comment (details) values ('Highly recommended!');
+insert into Comment (details) values ('Amazing experience!');
+insert into Comment (details) values ('Top-notch service and impeccable cleanliness.');
+insert into Comment (details) values ('Clean, neat and tidy!');
+insert into Comment (details) values ('Clean and cozy accommodation.');
+insert into Comment (details) values ('Disappointing.');
+insert into Comment (details) values ('Would definitely come back.');
+insert into Comment (details) values ('I feel this property is a bit overrated!');
+insert into Comment (details) values ('Overpriced!');
 
 create table Currency (
     currencyID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
