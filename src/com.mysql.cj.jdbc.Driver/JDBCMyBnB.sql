@@ -67,7 +67,7 @@ create table Listing (
 
 create table Payment(
     paymentID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    cardNumber varchar(20) NOT NULL UNIQUE,
+    cardNumber varchar(16) NOT NULL UNIQUE,
     expiryDate DATE NOT NULL,
     billingAddress varchar(100) NOT NULL,
     paymentTypeID int(50) NOT NULL,
@@ -78,7 +78,7 @@ create table Payment(
 
 create table PaymentInfo(
     paymentInfoID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    cardNumber int(16) NOT NULL UNIQUE,
+    cardNumber varchar(16) NOT NULL UNIQUE,
     expiryDate DATE NOT NULL,
     billingAddress varchar(100) NOT NULL,
     userID int(50) NOT NULL,
@@ -99,7 +99,6 @@ create table Review(
 
 create table Booking(
     bookingID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    paymentName varchar(16) NOT NULL UNIQUE,
     startDate DATETIME NOT NULL,
     endDate DATETIME NOT NULL,
     accommodations varchar(100),

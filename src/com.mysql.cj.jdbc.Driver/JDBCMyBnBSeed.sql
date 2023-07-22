@@ -76,14 +76,84 @@ insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyI
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 11:00:00', '2023-09-22 15:00:00', 109.63, 4, 4, 1);
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-26 11:00:00', '2023-09-27 15:00:00', 251.42, 7, 8, 2);
 
-/* Seed Payment table */
-insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('633422225593491153', '2026-01-06', '6902 Briar Crest Junction', 9);
-insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('4405641406297816', '2025-04-18', '45440 Harper Avenue', 10);
-insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('3561548840374782', '2025-11-16', '7 Texas Avenue', 7);
-insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('6706531481225272', '2026-03-07', '6449 Magdeline Drive', 1);
-insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('3564902688567659', '2025-12-30', '77406 Holmberg Circle', 2);
+/* Updated seed data for Payment table with cardNumber as a string of length 16 */
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('6334222255934911', '2026-01-06', '6902 Briar Crest Junction', 1);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('4405641406297816', '2025-04-18', '45440 Harper Avenue', 2);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('3561548840374782', '2025-11-16', '7 Texas Avenue', 3);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('6706531481225272', '2026-03-07', '6449 Magdeline Drive', 4);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('3564902688567659', '2025-12-30', '77406 Holmberg Circle', 4);
 insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('5602227679766824', '2025-11-05', '468 Texas Avenue', 4);
-insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('4041377840962', '2025-07-12', '52437 Banding Center', 6);
-insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('3557228239376245', '2025-08-14', '94268 Red Cloud Circle', 5);
-insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('4913346333896756', '2026-02-10', '6 Fordem Avenue', 3);
-insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('5108752749363939', '2025-04-27', '28289 Birchwood Drive', 6);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('4041377840962352', '2025-07-12', '52437 Banding Center', 1);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('3557228239376245', '2025-08-14', '94268 Red Cloud Circle', 2);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('4913346333896756', '2026-02-10', '6 Fordem Avenue', 1);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('5108752749363939', '2025-04-27', '28289 Birchwood Drive', 2);
+
+
+/* Updated seed data for PaymentInfo table with cardNumber as a string of length 16 */
+insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('6334222255934911', '2026-01-06', '6902 Briar Crest Junction', 3, 1);
+insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('4405641406297816', '2025-04-18', '45440 Harper Avenue', 1, 2);
+insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('3561548840374782', '2025-11-16', '7 Texas Avenue', 5, 3);
+insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('6706531481225272', '2026-03-07', '6449 Magdeline Drive', 2, 4);
+insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('3564902688567659', '2025-12-30', '77406 Holmberg Circle', 4, 4);
+insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('5602227679766824', '2025-11-05', '468 Texas Avenue', 8, 1);
+insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('4041377840962352', '2025-07-12', '52437 Banding Center', 6, 3);
+insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('3557228239376245', '2025-08-14', '94268 Red Cloud Circle', 9, 2);
+insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('4913346333896756', '2026-02-10', '6 Fordem Avenue', 10, 2);
+insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('5108752749363939', '2025-04-27', '28289 Birchwood Drive', 7, 1);
+
+
+/* Seed Review table */
+insert into Review (rating, commentID) values (4, 1);
+insert into Review (rating, commentID) values (5, 2);
+insert into Review (rating, commentID) values (3, 3);
+insert into Review (rating, commentID) values (5, 4);
+insert into Review (rating, commentID) values (4, 5);
+insert into Review (rating, commentID) values (2, 6);
+insert into Review (rating, commentID) values (5, 7);
+insert into Review (rating, commentID) values (3, 8);
+insert into Review (rating, commentID) values (4, 9);
+insert into Review (rating, commentID) values (1, 10);
+
+/* Updated seed data for Booking table with consistent start and end times and valid date ranges */
+insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
+values ('2023-09-26 11:00:00', '2023-10-01 15:00:00', 'I like the place neat and tidy', 1, 1, 3, 2, null, null);
+insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
+values ('2023-09-08 11:00:00', '2023-09-10 15:00:00', 'Have a disability, can I get help moving my luggage?', 2, 2, 1, 4, null, 3);
+insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
+values ('2023-09-18 11:00:00', '2023-09-21 15:00:00', 'I will have some friends over between 8:00-10:00 pm is that ok?', 3, 3, 5, null, null, null);
+insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
+values ('2023-09-16 11:00:00', '2023-09-18 15:00:00', 'Can we please keep the noise to a minimum', 4, 4, 2, null, 1, 5);
+insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
+values ('2023-09-26 11:00:00', '2023-09-27 15:00:00', 'I will have a pet with me can I get the access to the backyard?', 10, 5, 4, 10, 9, 8);
+
+
+/* Seed House table */
+insert into House (propertyID, capacity) values (1, 6);
+insert into House (propertyID, capacity) values (5, 8);
+insert into House (propertyID, capacity) values (8, 4);
+
+/* Seed HotelApartment table */
+insert into HotelApartment (propertyID, capacity) values (2, 4);
+insert into HotelApartment (propertyID, capacity) values (4, 2);
+insert into HotelApartment (propertyID, capacity) values (9, 1);
+
+/* Seed Room table */
+insert into Room (propertyID, isShared, capacity) values (3, true, 4);
+insert into Room (propertyID, isShared, capacity) values (6, true, 3);
+insert into Room (propertyID, isShared, capacity) values (7, false, 2);
+insert into Room (propertyID, isShared, capacity) values (10, false, 1);
+
+/* Seed Offers table */
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (1, 1, true, 20);
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (1, 2, true, 15);
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (3, 3, false, 0);
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (5, 4, true, 10);
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (5, 5, true, 5);
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (5, 6, true, 8);
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (5, 1, true, 12);
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (8, 2, false, 0);
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (8, 9, true, 18);
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (8, 10, true, 25);
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (1, 7, true, 0);
+insert into Offers (amenityID, propertyID, isAvailable, cost) values (1, 8, true, 0);
+
