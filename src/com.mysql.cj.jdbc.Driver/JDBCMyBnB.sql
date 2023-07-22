@@ -1,4 +1,3 @@
-
 create table User(
     userID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     SIN varchar(10) NOT NULL UNIQUE,
@@ -6,13 +5,10 @@ create table User(
     DOB DATE NOT NULL,
     firstName varchar(30) NOT NULL,
     lastName varchar(30) NOT NULL,
-    age int(10) NOT NULL,
+    age int(10) NULL,
     isAdmin Boolean NOT NULL DEFAULT 0,
     occupation varchar(50) NOT NULL
 );
-
-
-/* add query about updating age w.r.t DOB */
 
 
 create table Property(

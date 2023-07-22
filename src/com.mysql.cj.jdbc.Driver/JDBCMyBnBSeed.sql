@@ -10,10 +10,6 @@ INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupatio
 INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('7174630225', 'St 8 Sydney', '2000-11-30', 'Tony', 'Stark', 0, 'UI Designer');
 INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('6800269404', 'St 9 Geneva', '1994-12-08', 'James', 'Trickington', 1, 'Aircraft Pilot');
 
-/* updating the User table to add an 'age' column which calculates the current age of the user using the user's date of birth */
-UPDATE `User`
-SET age = DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), DOB)), '%Y') + 0;
-
 /* seed property table */
 insert into Property (street, country, city, postalCode, coordinates) values ('8354 Walton Way', 'Poland', 'Płońsk', '09-101', POINT(52.931452, 101.9214852));
 insert into Property (street, country, city, postalCode, coordinates) values ('67 Glacier Hill Plaza', 'Philippines', 'Tubod', '9209', POINT(7.9632405, 123.8751554));
