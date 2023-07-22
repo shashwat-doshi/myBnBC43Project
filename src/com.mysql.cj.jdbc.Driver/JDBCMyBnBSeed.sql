@@ -66,12 +66,24 @@ insert into Currency (currencyName, symbol) values ('Peso', 'PHP');
 
 /* Seed Listing table */
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-26 11:00:00', '2023-10-01 15:00:00', 198.51, 9, 9, 7);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-07 18:14:54', '2023-09-12 11:48:37', 301.12, 6, 10, 4);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-08 05:45:05', '2023-09-28 08:34:18', 319.36, 8, 2, 7);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-15 11:28:12', '2023-09-08 01:34:43', 230.56, 4, 4, 3);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-07 16:49:39', '2023-09-15 12:00:32', 168.06, 2, 3, 7);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 14:55:06', '2023-09-20 15:42:48', 261.96, 10, 10, 7);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 12:10:08', '2023-09-20 18:30:24', 42.95, 8, 8, 4);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 13:18:24', '2023-09-03 17:05:21', 298.88, 4, 3, 1);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 23:14:45', '2023-09-22 11:28:54', 109.63, 4, 4, 1);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-26 22:23:17', '2023-09-16 02:59:06', 251.42, 7, 8, 2);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-07 11:00:00', '2023-09-12 15:00:00', 301.12, 6, 10, 4);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-08 11:00:00', '2023-09-28 15:00:00', 319.36, 8, 2, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-15 11:00:00', '2023-09-19 15:00:00', 230.56, 4, 4, 3);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-07 11:00:00', '2023-09-20 15:00:00', 168.06, 2, 3, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 11:00:00', '2023-10-01 15:00:00', 261.96, 10, 10, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 11:00:00', '2023-09-20 15:00:00', 42.95, 8, 8, 4);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 11:00:00', '2023-09-29 15:00:00', 298.88, 4, 3, 1);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 11:00:00', '2023-09-22 15:00:00', 109.63, 4, 4, 1);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-26 11:00:00', '2023-09-27 15:00:00', 251.42, 7, 8, 2);
+
+/* Seed Payment table */
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('633422225593491153', '2026-01-06', '6902 Briar Crest Junction', 9);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('4405641406297816', '2025-04-18', '45440 Harper Avenue', 10);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('3561548840374782', '2025-11-16', '7 Texas Avenue', 7);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('6706531481225272', '2026-03-07', '6449 Magdeline Drive', 1);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('3564902688567659', '2025-12-30', '77406 Holmberg Circle', 2);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('5602227679766824', '2025-11-05', '468 Texas Avenue', 4);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('4041377840962', '2025-07-12', '52437 Banding Center', 6);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('3557228239376245', '2025-08-14', '94268 Red Cloud Circle', 5);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('4913346333896756', '2026-02-10', '6 Fordem Avenue', 3);
+insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('5108752749363939', '2025-04-27', '28289 Birchwood Drive', 6);

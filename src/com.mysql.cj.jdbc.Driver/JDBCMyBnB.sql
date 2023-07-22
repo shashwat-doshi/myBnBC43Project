@@ -67,7 +67,7 @@ create table Listing (
 
 create table Payment(
     paymentID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    cardNumber int(16) NOT NULL UNIQUE,
+    cardNumber varchar(20) NOT NULL UNIQUE,
     expiryDate DATE NOT NULL,
     billingAddress varchar(100) NOT NULL,
     paymentTypeID int(50) NOT NULL,
