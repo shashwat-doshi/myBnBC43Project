@@ -95,6 +95,7 @@ create table Review(
 
 create table Booking(
     bookingID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    bookingStatus ENUM('confirmed', 'canceled by guest', 'canceled by host') DEFAULT 'confirmed',
     startDate DATETIME NOT NULL,
     endDate DATETIME NOT NULL,
     accommodations varchar(100),
