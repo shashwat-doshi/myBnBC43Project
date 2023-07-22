@@ -68,6 +68,11 @@ create table PaymentType(
     paymentName varchar(16) NOT NULL UNIQUE
 );
 
+insert into PaymentType (paymentName) values ('Debit Card');
+insert into PaymentType (paymentName) values ('Credit Card');
+insert into PaymentType (paymentName) values ('Cheque');
+insert into PaymentType (paymentName) values ('Bank Transfer');
+
 create table Comment(
     commentID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     details varchar(50) NOT NULL
@@ -118,6 +123,16 @@ create table Listing (
         REFERENCES Currency(currencyID)
 );
 
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-26 11:00:00', '2023-10-01 15:00:00', 198.51, 9, 9, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-07 18:14:54', '2023-09-12 11:48:37', 301.12, 6, 10, 4);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-08 05:45:05', '2023-09-28 08:34:18', 319.36, 8, 2, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-15 11:28:12', '2023-09-08 01:34:43', 230.56, 4, 4, 3);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-07 16:49:39', '2023-09-15 12:00:32', 168.06, 2, 3, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 14:55:06', '2023-09-20 15:42:48', 261.96, 10, 10, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 12:10:08', '2023-09-20 18:30:24', 42.95, 8, 8, 4);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 13:18:24', '2023-09-03 17:05:21', 298.88, 4, 3, 1);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 23:14:45', '2023-09-22 11:28:54', 109.63, 4, 4, 1);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-26 22:23:17', '2023-09-16 02:59:06', 251.42, 7, 8, 2);
 
 
 
