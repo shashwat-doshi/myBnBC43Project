@@ -1,7 +1,7 @@
 
 create table User (
     userID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    SIN int(10) NOT NULL UNIQUE,
+    SIN varchar(10) NOT NULL UNIQUE,
     userAddress varchar(100) NOT NULL,
     DOB DATE NOT NULL,
     firstName varchar(30) NOT NULL,
@@ -11,16 +11,16 @@ create table User (
     occupation varchar(50) NOT NULL
 );
 
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (5665424957, '221B Baker St', '1970-11-30', 'Sherlock', 'Holmes', 52, 0, 'Detective');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (3105037991, 'St 1 Calgary', '1972-12-31', 'James', 'Doah', 33, 0, 'Engineer');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (3811452384, 'St 2 Vancouver', '1980-09-02', 'Mahesh', 'Dalle', 32, 0, 'Professor');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (6562433252, 'St 3 Toronto', '2000-02-14', 'Kamlesh', 'Singh', 32, 0, 'Artist');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (6317190891, 'St 4 Dubai', '2002-05-26', 'William', 'Root', 32, 0, 'Lawyer');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (1398192688, 'St 5 Mumbai', '1990-08-13', 'Peter', 'Parker', 32, 0, 'Manager');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (4054121868, 'St 6 Delhi', '2003-04-26', 'Walt', 'Whitman', 32, 0, 'Sportsman');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (4243858298, 'St 7 Singapore', '1970-09-29', 'Stephen', 'Strange', 32, 0, 'Gym Trainee');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (7174630225, 'St 8 Sydney', '2000-11-30', 'Tony', 'Stark', 32, 0, 'UI Designer');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES (6800269404, 'St 9 Geneva', '1994-12-08', 'James', 'Trickington', 32, 1, 'Aircraft Pilot');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('5665424957', '221B Baker St', '1970-11-30', 'Sherlock', 'Holmes', 52, 0, 'Detective');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('3105037991', 'St 1 Calgary', '1972-12-31', 'James', 'Doah', 33, 0, 'Engineer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('3811452384', 'St 2 Vancouver', '1980-09-02', 'Mahesh', 'Dalle', 22, 0, 'Professor');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('6562433252', 'St 3 Toronto', '2000-02-14', 'Kamlesh', 'Singh', 29, 0, 'Artist');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('6317190891', 'St 4 Dubai', '2002-05-26', 'William', 'Root', 34, 0, 'Lawyer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('1398192688', 'St 5 Mumbai', '1990-08-13', 'Peter', 'Parker', 28, 0, 'Manager');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('4054121868', 'St 6 Delhi', '2003-04-26', 'Walt', 'Whitman', 27, 0, 'Sportsman');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('4243858298', 'St 7 Singapore', '1970-09-29', 'Stephen', 'Strange', 26, 0, 'Gym Trainee');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('7174630225', 'St 8 Sydney', '2000-11-30', 'Tony', 'Stark', 30, 0, 'UI Designer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('6800269404', 'St 9 Geneva', '1994-12-08', 'James', 'Trickington', 41, 1, 'Aircraft Pilot');
 
 
 /* add query about updating age w.r.t DOB */
@@ -87,8 +87,19 @@ insert into Comment (details) values ('Overpriced!');
 create table Currency (
     currencyID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     currencyName varchar(20) NOT NULL,
-    symbol varchar(2) NOT NULL
+    symbol varchar(3) NOT NULL
 );
+
+insert into Currency (currencyName, symbol) values ('Ruble', 'BYR');
+insert into Currency (currencyName, symbol) values ('Franc', 'XOF');
+insert into Currency (currencyName, symbol) values ('Yuan Renminbi', 'CNY');
+insert into Currency (currencyName, symbol) values ('UAE Dirham', 'AED');
+insert into Currency (currencyName, symbol) values ('Krona', 'SEK');
+insert into Currency (currencyName, symbol) values ('Real', 'BRL');
+insert into Currency (currencyName, symbol) values ('Manat', 'AZN');
+insert into Currency (currencyName, symbol) values ('Indian Rupee', 'INR');
+insert into Currency (currencyName, symbol) values ('Euro', 'EUR');
+insert into Currency (currencyName, symbol) values ('Peso', 'PHP');
 
 create table Listing (
     listingID int(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -106,6 +117,9 @@ create table Listing (
     FOREIGN KEY (currencyID)
         REFERENCES Currency(currencyID)
 );
+
+
+
 
 
 
