@@ -1,14 +1,18 @@
 /* seed user table */
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('5665424957', '221B Baker St', '1970-11-30', 'Sherlock', 'Holmes', 52, 0, 'Detective');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('3105037991', 'St 1 Calgary', '1972-12-31', 'James', 'Doah', 33, 0, 'Engineer');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('3811452384', 'St 2 Vancouver', '1980-09-02', 'Mahesh', 'Dalle', 22, 0, 'Professor');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('6562433252', 'St 3 Toronto', '2000-02-14', 'Kamlesh', 'Singh', 29, 0, 'Artist');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('6317190891', 'St 4 Dubai', '2002-05-26', 'William', 'Root', 34, 0, 'Lawyer');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('1398192688', 'St 5 Mumbai', '1990-08-13', 'Peter', 'Parker', 28, 0, 'Manager');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('4054121868', 'St 6 Delhi', '2003-04-26', 'Walt', 'Whitman', 27, 0, 'Sportsman');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('4243858298', 'St 7 Singapore', '1970-09-29', 'Stephen', 'Strange', 26, 0, 'Gym Trainee');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('7174630225', 'St 8 Sydney', '2000-11-30', 'Tony', 'Stark', 30, 0, 'UI Designer');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, age, isAdmin, occupation) VALUES ('6800269404', 'St 9 Geneva', '1994-12-08', 'James', 'Trickington', 41, 1, 'Aircraft Pilot');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('5665424957', '221B Baker St', '1970-11-30', 'Sherlock', 'Holmes', 0, 'Detective');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('3105037991', 'St 1 Calgary', '1972-12-31', 'James', 'Doah', 0, 'Engineer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('3811452384', 'St 2 Vancouver', '1980-09-02', 'Mahesh', 'Dalle', 0, 'Professor');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('6562433252', 'St 3 Toronto', '2000-02-14', 'Kamlesh', 'Singh', 0, 'Artist');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('6317190891', 'St 4 Dubai', '2002-05-26', 'William', 'Root', 0, 'Lawyer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('1398192688', 'St 5 Mumbai', '1990-08-13', 'Peter', 'Parker', 0, 'Manager');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('4054121868', 'St 6 Delhi', '2003-04-26', 'Walt', 'Whitman', 0, 'Sportsman');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('4243858298', 'St 7 Singapore', '1970-09-29', 'Stephen', 'Strange', 0, 'Gym Trainee');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('7174630225', 'St 8 Sydney', '2000-11-30', 'Tony', 'Stark', 0, 'UI Designer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('6800269404', 'St 9 Geneva', '1994-12-08', 'James', 'Trickington', 1, 'Aircraft Pilot');
+
+/* updating the User table to add an 'age' column which calculates the current age of the user using the user's date of birth */
+UPDATE `User`
+SET age = DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), DOB)), '%Y') + 0;
 
 /* seed property table */
 insert into Property (street, country, city, postalCode, coordinates) values ('8354 Walton Way', 'Poland', 'Płońsk', '09-101', POINT(52.931452, 101.9214852));
