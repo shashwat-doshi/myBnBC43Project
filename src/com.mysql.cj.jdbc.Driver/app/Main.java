@@ -45,7 +45,6 @@ public class Main {
                         "exit: To exit the application\n\n" +
                         "Please enter input to continue...");
                 String command = myObj.nextLine(); // Read user input
-                System.out.println("command is: " + command); // Output user input
                 if (!commandHandler(command)) {
                     break;
                 }
