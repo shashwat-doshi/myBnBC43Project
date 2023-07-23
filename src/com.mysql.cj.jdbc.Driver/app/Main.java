@@ -2,6 +2,7 @@ package app;
 
 import java.sql.*;
 import java.util.Scanner;
+import Operations.User;
 
 public class Main {
 
@@ -9,8 +10,15 @@ public class Main {
     private static final String CONNECTION = "jdbc:mysql://127.0.0.1/myBnBC43Project";
 
     public static boolean commandHandler(String cmd) {
-        if (cmd.equals("exit")) {
-            return false;
+        switch (cmd) {
+            case "1":
+                User user = new User();
+                user.createUser();
+                break;
+            case "exit":
+                return false;
+            default:
+                System.out.println("Invalid input! Try again!");
         }
         return true;
     }
@@ -30,7 +38,12 @@ public class Main {
             Scanner myObj = new Scanner(System.in); // Create a Scanner object
             System.out.println("Welcome to MyBnB!");
             while (true) {
-                System.out.println("Please enter input to continue...");
+                System.out.println("Please select one of the following options:\n\n" +
+                        "1: Create new user\n" +
+                        "2: Delete user\n" +
+                        "3: Sign in as a user\n" +
+                        "exit: To exit the application\n\n" +
+                        "Please enter input to continue...");
                 String command = myObj.nextLine(); // Read user input
                 System.out.println("command is: " + command); // Output user input
                 if (!commandHandler(command)) {
