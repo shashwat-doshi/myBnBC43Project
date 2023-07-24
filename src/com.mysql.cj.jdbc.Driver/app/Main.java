@@ -9,11 +9,12 @@ public class Main {
     private static final String dbClassName = "com.mysql.cj.jdbc.Driver";
     private static final String CONNECTION = "jdbc:mysql://127.0.0.1/myBnBC43Project";
 
-    public static boolean commandHandler(String cmd) {
+    public static boolean commandHandler(String cmd, Connection conn) {
         switch (cmd) {
             case "1":
                 User user = new User();
-                user.createUser();
+                int candidateID = user.createUser(conn);
+                System.out.println("RETURNED CANDIDATE ID for createUser: " + candidateID);
                 break;
             case "exit":
                 return false;
@@ -41,13 +42,13 @@ public class Main {
             while (true) {
                 // myObj.nextLine();
                 System.out.println("Please select one of the following options:\n\n" +
-                        "1: Create new user\n" +
+                        "1: Sign up as a user\n" +
                         "2: Delete user\n" +
                         "3: Sign in as a user\n" +
                         "exit: To exit the application\n\n" +
                         "Please enter input to continue...");
                 command = myObj.nextLine(); // Read user input
-                if (!commandHandler(command)) {
+                if (!commandHandler(command, conn)) {
                     break;
                 }
             }
