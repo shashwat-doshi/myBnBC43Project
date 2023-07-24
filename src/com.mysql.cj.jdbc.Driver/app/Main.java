@@ -30,6 +30,7 @@ public class Main {
         final String USER = "root";
         final String PASS = "alpapiyush";
         System.out.println("Connecting to database...");
+        String command;
 
         try {
             // Establish connection
@@ -38,13 +39,14 @@ public class Main {
             Scanner myObj = new Scanner(System.in); // Create a Scanner object
             System.out.println("Welcome to MyBnB!");
             while (true) {
+                // myObj.nextLine();
                 System.out.println("Please select one of the following options:\n\n" +
                         "1: Create new user\n" +
                         "2: Delete user\n" +
                         "3: Sign in as a user\n" +
                         "exit: To exit the application\n\n" +
                         "Please enter input to continue...");
-                String command = myObj.nextLine(); // Read user input
+                command = myObj.nextLine(); // Read user input
                 if (!commandHandler(command)) {
                     break;
                 }
