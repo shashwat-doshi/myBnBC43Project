@@ -29,6 +29,15 @@ public class User {
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
+
+                this.userID = rs.getInt("userID");
+                this.fname = rs.getString("firstName");
+                this.lname = rs.getString("lastName");
+                this.SIN = rs.getString("SIN");
+                this.userAddress = rs.getString("userAddress");
+                this.occupation = rs.getString("occupation");
+                this.dob = rs.getDate("DOB").toLocalDate();
+
                 // Display values
                 System.out.print("ID: " + rs.getInt("userID"));
                 System.out.print(", fname: " + rs.getString("firstName"));
@@ -36,12 +45,13 @@ public class User {
                 System.out.print(", SIN: " + rs.getString("SIN"));
                 System.out.print(", userAddress: " + rs.getString("userAddress"));
                 System.out.print(", occupation: " + rs.getString("occupation"));
-                System.out.print(", DOB: " + rs.getObject("DOB"));
+                System.out.print(", DOB: " + rs.getDate("DOB").toLocalDate());
                 System.out.print(", age: " + rs.getInt("age"));
                 System.out.println(", isAdmin: " + rs.getBoolean("isAdmin"));
             }
             rs.close();
         } catch (Exception e) {
+            System.out.println("Unable to retrieve user from the given user ID, please try again!");
             System.out.println(e.getMessage());
         }
     }
