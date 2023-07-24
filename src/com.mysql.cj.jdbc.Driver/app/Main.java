@@ -10,12 +10,21 @@ public class Main {
     private static final String CONNECTION = "jdbc:mysql://127.0.0.1/myBnBC43Project";
 
     public static boolean commandHandler(String cmd, Connection conn) {
+        Scanner input = new Scanner(System.in);
         switch (cmd) {
             case "1":
                 User newUser = new User(conn);
                 System.out.println("User info: " + newUser.userID);
                 break;
             case "2":
+                System.out.println("Please enter the userID of the user you wish to delete:");
+                try {
+                    int userID = input.nextInt();
+                    input.nextLine();
+                    User deleteUser = new User(conn, userID);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
 
             case "exit":

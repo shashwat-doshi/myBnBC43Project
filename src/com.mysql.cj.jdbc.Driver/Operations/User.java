@@ -13,15 +13,52 @@ public class User {
     public String fname, lname, SIN, userAddress, occupation;
     public boolean isAdmin;
     public LocalDate dob;
-    public int userID;
+    public int userID, age;
 
     public User(Connection conn) {
         int userID = createUser(conn);
         this.userID = userID;
+        setAge(conn, userID);
     }
 
-    public User(Connection conn, int UserID) {
+    public User(Connection conn, int userID) {
+        try {
+            String sql = "SELECT * FROM User WHERE userID = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, userID);
+            ResultSet rs = preparedStatement.executeQuery();
 
+            while (rs.next()) {
+                // Display values
+                System.out.print("ID: " + rs.getInt("userID"));
+                System.out.print(", fname: " + rs.getString("firstName"));
+                System.out.print(", lname: " + rs.getString("lastName"));
+                System.out.print(", SIN: " + rs.getString("SIN"));
+                System.out.print(", userAddress: " + rs.getString("userAddress"));
+                System.out.print(", occupation: " + rs.getString("occupation"));
+                System.out.print(", DOB: " + rs.getObject("DOB"));
+                System.out.print(", age: " + rs.getInt("age"));
+                System.out.println(", isAdmin: " + rs.getBoolean("isAdmin"));
+            }
+            rs.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void setAge(Connection conn, int userID) {
+        try {
+            String sql = "SELECT age FROM User WHERE userID = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setInt(1, userID);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                this.age = rs.getInt("age");
+            }
+            rs.close();
+        } catch (Exception e) {
+            System.out.println("Cannot retrieve the age of the user");
+        }
     }
 
     public void setUserInfo() {
@@ -38,6 +75,8 @@ public class User {
         while (true) {
             try {
                 adminChoice = input.nextInt();
+                if (adminChoice != 0 && adminChoice != 1)
+                    throw new Exception();
                 break;
             } catch (Exception e) {
                 System.out.println("Incorrect choice! Choose again...");
@@ -89,7 +128,6 @@ public class User {
             int rowAffected = preparedStatement.executeUpdate();
 
             if (rowAffected == 1) {
-                System.out.println("One row affected!! damn!");
                 // get candidate id
                 rs = preparedStatement.getGeneratedKeys();
                 if (rs.next()) {
