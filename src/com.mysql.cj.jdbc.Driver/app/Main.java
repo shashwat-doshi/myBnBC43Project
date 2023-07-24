@@ -12,10 +12,12 @@ public class Main {
     public static boolean commandHandler(String cmd, Connection conn) {
         switch (cmd) {
             case "1":
-                User user = new User();
-                int candidateID = user.createUser(conn);
-                System.out.println("RETURNED CANDIDATE ID for createUser: " + candidateID);
+                User newUser = new User(conn);
+                System.out.println("User info: " + newUser.userID);
                 break;
+            case "2":
+                break;
+
             case "exit":
                 return false;
             default:
@@ -37,17 +39,17 @@ public class Main {
             // Establish connection
             Connection conn = DriverManager.getConnection(CONNECTION, USER, PASS);
             System.out.println("Successfully connected to MySQL!");
-            Scanner myObj = new Scanner(System.in); // Create a Scanner object
+            Scanner mainInput = new Scanner(System.in); // Create a Scanner object
             System.out.println("Welcome to MyBnB!");
             while (true) {
-                // myObj.nextLine();
+                // mainInput.nextLine();
                 System.out.println("Please select one of the following options:\n\n" +
                         "1: Sign up as a user\n" +
                         "2: Delete user\n" +
                         "3: Sign in as a user\n" +
                         "exit: To exit the application\n\n" +
                         "Please enter input to continue...");
-                command = myObj.nextLine(); // Read user input
+                command = mainInput.nextLine(); // Read user input
                 if (!commandHandler(command, conn)) {
                     break;
                 }
@@ -75,7 +77,7 @@ public class Main {
             // }
 
             System.out.println("Closing connection...");
-            myObj.close();
+            mainInput.close();
             // rs.close();
             // stmt.close();
             conn.close();

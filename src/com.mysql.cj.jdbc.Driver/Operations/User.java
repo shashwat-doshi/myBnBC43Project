@@ -9,19 +9,31 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class User {
-    public int createUser(Connection conn) {
-        Scanner input = new Scanner(System.in); // Create a Scanner object
-        Integer adminChoice;
-        LocalDate dob;
-        int candidateID = 0;
-        ResultSet rs = null;
 
+    public String fname, lname, SIN, userAddress, occupation;
+    public boolean isAdmin;
+    public LocalDate dob;
+    public int userID;
+
+    public User(Connection conn) {
+        int userID = createUser(conn);
+        this.userID = userID;
+    }
+
+    public User(Connection conn, int UserID) {
+
+    }
+
+    public void setUserInfo() {
+        Integer adminChoice;
+
+        Scanner input = new Scanner(System.in); // Create a Scanner object
         System.out.println("Before you get started, let us create your profile...\n");
 
         System.out.println("Enter your first name");
-        String fname = input.nextLine();
+        this.fname = input.nextLine();
         System.out.println("Enter your last name");
-        String lname = input.nextLine();
+        this.lname = input.nextLine();
         System.out.println("Are you an admin? 1 - yes, 0 - no");
         while (true) {
             try {
@@ -32,12 +44,12 @@ public class User {
                 input.nextLine();
             }
         }
-        boolean isAdmin = adminChoice == 1 ? true : false;
+        this.isAdmin = adminChoice == 1 ? true : false;
         input.nextLine(); // need to read \n after nextInt() is called
         System.out.println("Enter your SIN Number");
-        String SIN = input.nextLine();
+        this.SIN = input.nextLine();
         System.out.println("Enter your Address");
-        String addr = input.nextLine();
+        this.userAddress = input.nextLine();
         System.out.println("Enter your date of birth (in yyyy-mm-dd)");
         while (true) {
             try {
@@ -49,27 +61,35 @@ public class User {
             }
         }
         System.out.println("Enter your occupation");
-        String occupation = input.nextLine();
+        this.occupation = input.nextLine();
+
+        input.close();
+    }
+
+    public int createUser(Connection conn) {
+
+        setUserInfo();
+
+        int candidateID = 0;
+        ResultSet rs = null;
 
         try {
-            // Statement myStmt = conn.createStatement();
             String sql = "INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            preparedStatement.setString(1, SIN);
-            preparedStatement.setString(2, addr);
-            preparedStatement.setObject(3, dob); // check
-            preparedStatement.setString(4, fname);
-            preparedStatement.setString(5, lname);
-            preparedStatement.setBoolean(6, isAdmin);
-            preparedStatement.setString(7, occupation);
+            preparedStatement.setString(1, this.SIN);
+            preparedStatement.setString(2, this.userAddress);
+            preparedStatement.setObject(3, this.dob); // check
+            preparedStatement.setString(4, this.fname);
+            preparedStatement.setString(5, this.lname);
+            preparedStatement.setBoolean(6, this.isAdmin);
+            preparedStatement.setString(7, this.occupation);
 
             int rowAffected = preparedStatement.executeUpdate();
 
             if (rowAffected == 1) {
                 System.out.println("One row affected!! damn!");
-
                 // get candidate id
                 rs = preparedStatement.getGeneratedKeys();
                 if (rs.next()) {
@@ -79,6 +99,7 @@ public class User {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            System.out.println("Could not create user! Try again...");
         } finally {
             try {
                 if (rs != null) {
@@ -86,10 +107,9 @@ public class User {
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
+                System.out.println("Could not create user! Try again...");
             }
         }
-
-        input.close();
 
         return candidateID;
 
