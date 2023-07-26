@@ -9,8 +9,8 @@ public class Review {
     public int commentID; // foreign key
 
     public Review(Connection conn, User user) {
-        int reviewID = createReview(conn, user);
-        this.reviewID = reviewID;
+        // int reviewID = createReview(conn, user);
+        // this.reviewID = reviewID;
         // do something for comment?
     }
 
@@ -32,14 +32,14 @@ public class Review {
             }
         }
         input.nextLine(); // need to read \n after nextInt() is called
-        int commentID = getCommentID();
+        // int commentID = getCommentID();
         input.close();
     }
 
-    public int createReview(Connection conn) {
-        setReviewInfo();
-        // do something here
+    // public int createReview(Connection conn) {
+    // setReviewInfo();
+    // // do something here
 
-    }
+    // }
 
 }

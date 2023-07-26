@@ -1,12 +1,12 @@
 package Operations;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Scanner;
+import app.Main;
 
 public class User {
 
@@ -19,16 +19,16 @@ public class User {
     public String role; // need this? check -- how else will we identify when a user is a renter and
                         // when are they a host?
 
-    public User(Connection conn) {
-        int userID = createUser(conn);
+    public User() {
+        int userID = createUser();
         this.userID = userID;
-        setAge(conn, userID);
+        setAge(userID);
     }
 
-    public User(Connection conn, int userID) {
+    public User(int userID) {
         try {
             String sql = "SELECT * FROM User WHERE userID = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, userID);
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -49,10 +49,10 @@ public class User {
         }
     }
 
-    private void setAge(Connection conn, int userID) {
+    private void setAge(int userID) {
         try {
             String sql = "SELECT age FROM User WHERE userID = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, userID);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -109,10 +109,10 @@ public class User {
         input.close();
     }
 
-    public void getUserInfo(Connection conn, int userID) {
+    public void getUserInfo(int userID) {
         try {
             String sql = "SELECT * FROM User WHERE userID = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, userID);
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -121,7 +121,10 @@ public class User {
                 return;
             }
 
-            while (rs.next()) {
+            System.out.println("Signed in as User " + userID);
+            System.out.println("User " + userID + "'s Profile:\n");
+
+            do {
                 // Display values
                 System.out.print("ID: " + rs.getInt("userID"));
                 System.out.print(", fname: " + rs.getString("firstName"));
@@ -132,7 +135,7 @@ public class User {
                 System.out.print(", DOB: " + rs.getDate("DOB").toLocalDate());
                 System.out.print(", age: " + rs.getInt("age"));
                 System.out.println(", isAdmin: " + rs.getBoolean("isAdmin"));
-            }
+            } while (rs.next());
             rs.close();
             preparedStatement.close();
         } catch (Exception e) {
@@ -141,7 +144,7 @@ public class User {
         }
     }
 
-    public int createUser(Connection conn) {
+    public int createUser() {
 
         setNewUserInfo();
 
@@ -151,7 +154,7 @@ public class User {
         try {
             String sql = "INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
-            preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement = Main.conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, this.SIN);
             preparedStatement.setString(2, this.userAddress);
@@ -181,6 +184,7 @@ public class User {
                 if (preparedStatement != null) {
                     preparedStatement.close();
                 }
+                System.out.println("Created user with User ID: " + candidateID);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -189,11 +193,11 @@ public class User {
         return candidateID;
     }
 
-    public void deleteUserRecord(Connection conn, int userID) {
+    public void deleteUserRecord(int userID) {
         try {
             String sql = "DELETE FROM User " +
                     "WHERE userID = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, userID);
             int rowsDeleted = preparedStatement.executeUpdate();
             if (rowsDeleted > 0) {
