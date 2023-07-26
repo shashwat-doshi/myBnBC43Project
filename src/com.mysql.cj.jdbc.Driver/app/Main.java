@@ -3,7 +3,6 @@ package app;
 import java.sql.*;
 import java.util.Scanner;
 import Operations.User;
-import java.sql.SQLException;
 
 public class Main {
 
@@ -26,7 +25,10 @@ public class Main {
                     input.nextLine();
                     try {
                         User currentUser = new User(userIDLogIn);
-                        currentUser.getUserInfo(userIDLogIn);
+                        boolean isUserExists = currentUser.getUserInfo(userIDLogIn);
+                        if (isUserExists) {
+                            UserDashboard.userDashboardInterface(currentUser);
+                        }
                     } catch (Exception e) {
                         System.out.println(
                                 "User " + userIDLogIn + " does not exist in the database. Cannot retrieve user!");
@@ -60,6 +62,7 @@ public class Main {
                     }
                 }
                 break;
+
             case "exit":
                 input.close();
                 return false;

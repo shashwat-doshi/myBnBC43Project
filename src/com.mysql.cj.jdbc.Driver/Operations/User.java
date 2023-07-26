@@ -109,16 +109,18 @@ public class User {
         input.close();
     }
 
-    public void getUserInfo(int userID) {
+    public boolean getUserInfo(int userID) {
         try {
             String sql = "SELECT * FROM User WHERE userID = ?";
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, userID);
             ResultSet rs = preparedStatement.executeQuery();
 
+            System.out.println("HERE printed");
+
             if (!rs.next()) {
                 System.out.println("User " + userID + " does not exist!");
-                return;
+                return false;
             }
 
             System.out.println("Signed in as User " + userID);
@@ -141,7 +143,9 @@ public class User {
         } catch (Exception e) {
             System.out.println("Unable to retrieve user from the given user ID, please try again!");
             System.out.println(e.getMessage());
+            return false;
         }
+        return true;
     }
 
     public int createUser() {
