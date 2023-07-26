@@ -1,7 +1,6 @@
 package Operations;
 
 import java.sql.Timestamp;
-import java.util.Scanner;
 
 public class Listing {
 
@@ -21,7 +20,7 @@ public class Listing {
     public Listing() {
         this.status = listingStatus.available.name(); // default status is "available"
         // int listingID = createListing();
-        this.listingID = listingID;
+        // this.listingID = listingID;
     }
 
 }

@@ -9,6 +9,7 @@ public class Main {
 
     private static final String dbClassName = "com.mysql.cj.jdbc.Driver";
     private static final String CONNECTION = "jdbc:mysql://127.0.0.1/myBnBC43Project";
+    public static Connection conn;
 
     public static boolean commandHandler(String cmd, Connection conn) {
         Scanner input = new Scanner(System.in);
@@ -84,6 +85,7 @@ public class Main {
         try {
             // Establish connection
             Connection conn = DriverManager.getConnection(CONNECTION, USER, PASS);
+            Main.conn = conn;
             System.out.println("Successfully connected to MySQL!");
             Scanner mainInput = new Scanner(System.in); // Create a Scanner object
             System.out.println("\nWelcome to MyBnB!");

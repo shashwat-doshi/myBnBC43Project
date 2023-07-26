@@ -13,8 +13,11 @@ public class User {
     public String fname, lname, SIN, userAddress, occupation;
     public boolean isAdmin;
     public LocalDate dob;
-    public int userID, age;
-    public String role; // need this? check -- how else will we identify when a user is a renter and when are they a host?
+    public int userID; // as only one user operates in our app at a time, should we make userID
+                       // static??
+    public int age;
+    public String role; // need this? check -- how else will we identify when a user is a renter and
+                        // when are they a host?
 
     public User(Connection conn) {
         int userID = createUser(conn);
