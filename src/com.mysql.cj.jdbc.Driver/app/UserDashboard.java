@@ -36,15 +36,20 @@ public class UserDashboard {
                 }
                 break;
             case "3":
-                System.out.println("Enter the listing's Listing ID which you wish to delete:");
                 while (true) {
                     try {
+                        System.out.println("Enter the listing's Listing ID which you wish to delete:");
                         int deleteLID = input.nextInt();
                         input.nextLine();
                         Listing deleteListing = Listing.getListingByListingID(deleteLID);
                         if (deleteListing != null) {
-                            deleteListing.deleteListing(user);
-                            deleteListing = null;
+                            if (deleteListing.posterID == user.userID) {
+                                deleteListing.deleteListing(user);
+                                deleteListing = null;
+                            } else {
+                                System.out.println(
+                                        "Delete listing not allowed! Only hosts of the listing can delete the listing!");
+                            }
                         }
                         break;
                     } catch (Exception e) {
