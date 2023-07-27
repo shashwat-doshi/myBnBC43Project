@@ -48,7 +48,8 @@ public class UserDashboard {
                                 deleteListing = null;
                             } else {
                                 System.out.println(
-                                        "Delete listing not allowed! Only hosts of the listing can delete the listing!");
+                                        "Delete listing not allowed! Only the host of listing "
+                                                + deleteListing.listingID + " can delete the listing!");
                             }
                         }
                         break;
