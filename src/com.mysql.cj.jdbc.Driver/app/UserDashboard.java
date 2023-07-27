@@ -15,6 +15,10 @@ public class UserDashboard {
         int listingID;
         switch (cmd) {
             case "1":
+                Listing newListing = new Listing();
+                newListing.createNewListing(user);
+                break;
+            case "2":
                 System.out.println("Enter the listing ID of the listing you wish to view:");
                 while (true) {
                     try {
@@ -31,7 +35,23 @@ public class UserDashboard {
                     }
                 }
                 break;
-            case "2":
+            case "3":
+                System.out.println("Enter the listing's Listing ID which you wish to delete:");
+                while (true) {
+                    try {
+                        int deleteLID = input.nextInt();
+                        input.nextLine();
+                        Listing deleteListing = Listing.getListingByListingID(deleteLID);
+                        deleteListing.deleteListing(user);
+                        deleteListing = null;
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Incorrect Listing ID! Please try again...");
+                        input.nextLine();
+                    }
+                }
+                break;
+            case "4":
                 try {
                     String sql = "SELECT * FROM User WHERE userID = ?";
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
@@ -81,8 +101,10 @@ public class UserDashboard {
             // etc...
             System.out.println("\nWelcome " + user.fname + "! Your ID is: " + user.userID + "\n");
             System.out.println("Choose one of the following options:\n");
-            System.out.println("1: Select a listing");
-            System.out.println("2: Show profile");
+            System.out.println("1: Create a listing as a host");
+            System.out.println("2: Select a listing");
+            System.out.println("3: Delete a listing");
+            System.out.println("4: Show profile");
             System.out.println("exit: Log out and go to main menu");
             command = input.nextLine(); // Read user input
             if (!userDashboardCommandHandler(command, user)) {

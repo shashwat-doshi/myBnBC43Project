@@ -134,8 +134,6 @@ public class Listing {
         }
         this.propertyID = propID;
 
-        int listingID = 0;
-
         try {
             String insertProprtySql = "INSERT INTO Listing (startDate, endDate, pricePerNight, propertyID, posterID, currencyID)"
                     +
@@ -158,7 +156,7 @@ public class Listing {
                     this.listingID = rs.getInt(1);
                 }
             }
-            System.out.println("Created listing with ID: " + listingID);
+            System.out.println("Created listing with listing ID: " + this.listingID);
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -177,9 +175,9 @@ public class Listing {
 
             int numOfAffected = preparedStatement.executeUpdate();
             if (numOfAffected >= 1) {
-                System.out.println("Deleted listing");
+                System.out.println("Deleted listing with listing ID: " + this.listingID);
             } else {
-                System.out.println("Check your userId or listingId");
+                System.out.println("Unable to delete listing, please try again...");
             }
 
         } catch (Exception e) {
