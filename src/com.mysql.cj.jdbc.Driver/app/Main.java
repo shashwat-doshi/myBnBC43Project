@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.Scanner;
 import Operations.User;
 
+@SuppressWarnings("resource")
 public class Main {
 
     private static final String dbClassName = "com.mysql.cj.jdbc.Driver";
@@ -64,12 +65,10 @@ public class Main {
                 break;
 
             case "exit":
-                // input.close();
                 return false;
             default:
                 System.out.println("Invalid input! Try again!");
         }
-        //input.close();
         return true;
 
     }

@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Scanner;
 import app.Main;
 
+@SuppressWarnings("resource")
 public class User {
 
     public String fname, lname, SIN, userAddress, occupation;

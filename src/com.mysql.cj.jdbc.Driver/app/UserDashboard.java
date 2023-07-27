@@ -5,6 +5,7 @@ import java.util.Scanner;
 import Operations.User;
 import Operations.Review;
 
+@SuppressWarnings("resource")
 public class UserDashboard {
 
     public static boolean userDashboardCommandHandler(String cmd, User user) {

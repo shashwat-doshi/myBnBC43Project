@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 import app.Main;
 
+@SuppressWarnings("resource")
 public class Review {
     public int reviewID, rating;
     public int commentID; // foreign key
@@ -38,8 +39,32 @@ public class Review {
         this.rating = rating;
         Comment comment = new Comment();
         this.commentID = comment.commentID;
+    }
 
-        // input.close();
+    public boolean hasComment() {
+        try {
+            String sql = "SELECT * FROM Comment WHERE commentID = ?";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
+            preparedStatement.setInt(1, this.commentID);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (!rs.next()) {
+                System.out.println("No comments exist for this review!");
+                return false;
+            }
+            do {
+                // Display values
+                System.out.print("Comment ID: " + rs.getInt("commentID"));
+                System.out.print(", Details: " + rs.getString("Details"));
+            } while (rs.next());
+            rs.close();
+            preparedStatement.close();
+        } catch (Exception e) {
+            System.out.println("Unable to retrieve comment from the given comment ID, please try again!");
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return true;
     }
 
     public int createReview(User user) {
