@@ -25,16 +25,22 @@ public class UserDashboard {
         Scanner input = new Scanner(System.in); // Create a Scanner object
         String command;
         while (true) {
+
+            // ADD LISTING CORRELATION!!!
+            // add ability to review as a host
+            // add ability to review a renter by host
+            // etc...
             System.out.println("Welcome " + user.fname + "! Your ID is: " + user.userID + "\n\n");
             System.out.println("Choose one of the following options:\n");
             System.out.println("1: Add a review");
             System.out.println("exit: Log out and go to main menu");
             command = input.nextLine(); // Read user input
             if (!userDashboardCommandHandler(command, user)) {
+                System.out.println("THIS");
                 break;
             }
         }
-        input.close();
+        // input.close();
     }
 
 }

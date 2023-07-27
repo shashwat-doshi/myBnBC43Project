@@ -40,7 +40,7 @@ public class Comment {
 
             rs.close();
             preparedStatement.close();
-            input.close();
+            // input.close();
             System.out.println("Created comment with commentID: " + commentID);
         } catch (Exception e) {
             System.out.println(e.getMessage());

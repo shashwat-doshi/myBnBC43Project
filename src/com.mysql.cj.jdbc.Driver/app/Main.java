@@ -64,12 +64,12 @@ public class Main {
                 break;
 
             case "exit":
-                input.close();
+                // input.close();
                 return false;
             default:
                 System.out.println("Invalid input! Try again!");
         }
-        input.close();
+        //input.close();
         return true;
 
     }
@@ -90,6 +90,7 @@ public class Main {
             System.out.println("Successfully connected to MySQL!");
             Scanner mainInput = new Scanner(System.in); // Create a Scanner object
             System.out.println("\nWelcome to MyBnB!");
+
             while (true) {
                 // mainInput.nextLine();
                 System.out.println("\nPlease select one of the following options:\n\n" +
@@ -102,6 +103,7 @@ public class Main {
                 if (!commandHandler(command)) {
                     break;
                 }
+
             }
 
             System.out.println("Closing connection...");

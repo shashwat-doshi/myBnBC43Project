@@ -39,7 +39,7 @@ public class Review {
         Comment comment = new Comment();
         this.commentID = comment.commentID;
 
-        input.close();
+        // input.close();
     }
 
     public int createReview(User user) {

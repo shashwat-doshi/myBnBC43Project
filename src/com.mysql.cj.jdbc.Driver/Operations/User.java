@@ -106,7 +106,7 @@ public class User {
         System.out.println("Enter your occupation");
         this.occupation = input.nextLine();
 
-        input.close();
+        // input.close();
     }
 
     public boolean getUserInfo(int userID) {
