@@ -42,8 +42,10 @@ public class UserDashboard {
                         int deleteLID = input.nextInt();
                         input.nextLine();
                         Listing deleteListing = Listing.getListingByListingID(deleteLID);
-                        deleteListing.deleteListing(user);
-                        deleteListing = null;
+                        if (deleteListing != null) {
+                            deleteListing.deleteListing(user);
+                            deleteListing = null;
+                        }
                         break;
                     } catch (Exception e) {
                         System.out.println("Incorrect Listing ID! Please try again...");

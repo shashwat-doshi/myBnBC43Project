@@ -80,7 +80,7 @@ public class Listing {
                 System.out.println("Please try again\n");
             }
         }
-        System.out.println("Enter Currency type" +
+        System.out.println("Enter Currency type\n" +
                 "1: Ruble\n" +
                 "2: Franc\n" +
                 "3: Yuan Renminbi\n" +
