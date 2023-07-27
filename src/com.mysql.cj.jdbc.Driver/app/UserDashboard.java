@@ -2,17 +2,30 @@ package app;
 
 import java.util.Scanner;
 
+import Operations.Listing;
 import Operations.User;
-import Operations.Review;
 
 @SuppressWarnings("resource")
 public class UserDashboard {
 
     public static boolean userDashboardCommandHandler(String cmd, User user) {
+        Scanner input = new Scanner(System.in);
+        int listingID;
         switch (cmd) {
             case "1":
-                Review review = new Review(user);
-                System.out.println("finished review");
+                System.out.println("Enter the listing ID of the listing you wish to view:");
+                while (true) {
+                    try {
+                        listingID = input.nextInt();
+                        input.nextLine();
+                        Listing listing = Listing.getListingByListingID(listingID);
+                        ListingDashboard.listingDashboardView(user, listing);
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Rating must be between 1 and 5 (included)! Choose again...");
+                        input.nextLine();
+                    }
+                }
                 break;
             case "exit":
                 return false;
@@ -33,15 +46,13 @@ public class UserDashboard {
             // etc...
             System.out.println("Welcome " + user.fname + "! Your ID is: " + user.userID + "\n\n");
             System.out.println("Choose one of the following options:\n");
-            System.out.println("1: Add a review");
+            System.out.println("1: Select a listing");
             System.out.println("exit: Log out and go to main menu");
             command = input.nextLine(); // Read user input
             if (!userDashboardCommandHandler(command, user)) {
-                System.out.println("THIS");
                 break;
             }
         }
-        // input.close();
     }
 
 }

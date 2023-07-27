@@ -106,8 +106,6 @@ public class User {
         }
         System.out.println("Enter your occupation");
         this.occupation = input.nextLine();
-
-        // input.close();
     }
 
     public boolean getUserInfo(int userID) {
@@ -116,8 +114,6 @@ public class User {
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, userID);
             ResultSet rs = preparedStatement.executeQuery();
-
-            System.out.println("HERE printed");
 
             if (!rs.next()) {
                 System.out.println("User " + userID + " does not exist!");
