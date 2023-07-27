@@ -102,7 +102,6 @@ public class User {
         System.out.println("Enter your occupation");
         this.occupation = input.nextLine();
 
-        input.close();
     }
 
     public void getUserInfo(Connection conn, int userID) {

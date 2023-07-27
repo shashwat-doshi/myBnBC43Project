@@ -101,7 +101,6 @@ public class Listing {
           System.out.println(e);
         }
 
-        input.close();
   }
   public static void deleteListing(Connection conn) {
     Scanner input = new Scanner(System.in); // Create a Scanner object
@@ -131,6 +130,5 @@ public class Listing {
     catch (Exception e) {
       System.out.println(e);
     }
-    input.close();
   }
 }

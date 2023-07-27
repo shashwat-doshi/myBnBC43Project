@@ -80,7 +80,6 @@ public class Payment {
         catch (Exception e) {
           System.out.println(e);
         }
-        input.close();
         return insertId;
   }
 }

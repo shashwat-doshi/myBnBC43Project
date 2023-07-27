@@ -91,6 +91,5 @@ public class Property {
           System.out.println(e);
         }
 
-        input.close();
   }
 }
