@@ -108,7 +108,7 @@ public class User {
         this.occupation = input.nextLine();
     }
 
-    public boolean getUserInfo(int userID) {
+    public boolean isUserExists(int userID) {
         try {
             String sql = "SELECT * FROM User WHERE userID = ?";
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
@@ -116,25 +116,9 @@ public class User {
             ResultSet rs = preparedStatement.executeQuery();
 
             if (!rs.next()) {
-                System.out.println("User " + userID + " does not exist!");
+                System.out.println("\nUser " + userID + " does not exist!");
                 return false;
             }
-
-            System.out.println("Signed in as User " + userID);
-            System.out.println("User " + userID + "'s Profile:\n");
-
-            do {
-                // Display values
-                System.out.print("ID: " + rs.getInt("userID"));
-                System.out.print(", fname: " + rs.getString("firstName"));
-                System.out.print(", lname: " + rs.getString("lastName"));
-                System.out.print(", SIN: " + rs.getString("SIN"));
-                System.out.print(", userAddress: " + rs.getString("userAddress"));
-                System.out.print(", occupation: " + rs.getString("occupation"));
-                System.out.print(", DOB: " + rs.getDate("DOB").toLocalDate());
-                System.out.print(", age: " + rs.getInt("age"));
-                System.out.println(", isAdmin: " + rs.getBoolean("isAdmin"));
-            } while (rs.next());
             rs.close();
             preparedStatement.close();
         } catch (Exception e) {
@@ -185,7 +169,7 @@ public class User {
                 if (preparedStatement != null) {
                     preparedStatement.close();
                 }
-                System.out.println("Created user with User ID: " + candidateID);
+                System.out.println("\nCreated user with User ID: " + candidateID);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }

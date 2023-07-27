@@ -16,7 +16,10 @@ public class Main {
         switch (cmd) {
             case "1":
                 User newUser = new User();
-                newUser.getUserInfo(newUser.userID);
+                if (newUser.isUserExists(newUser.userID)) {
+                    System.out.println("\nSigned in as User " + newUser.userID);
+                    UserDashboard.userDashboardInterface(newUser);
+                }
                 break;
             case "2":
                 int userIDLogIn;
@@ -26,8 +29,9 @@ public class Main {
                     input.nextLine();
                     try {
                         User currentUser = new User(userIDLogIn);
-                        boolean isUserExists = currentUser.getUserInfo(userIDLogIn);
+                        boolean isUserExists = currentUser.isUserExists(userIDLogIn);
                         if (isUserExists) {
+                            System.out.println("\nSigned in as User " + currentUser.userID);
                             UserDashboard.userDashboardInterface(currentUser);
                         }
                     } catch (Exception e) {

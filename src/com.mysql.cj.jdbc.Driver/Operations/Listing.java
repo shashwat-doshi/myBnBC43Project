@@ -42,6 +42,7 @@ public class Listing {
             Listing listing = new Listing();
 
             do {
+                listing.listingID = rs.getInt("listingID");
                 // listing.listingStatus = rs.getString("listingStatus");
                 // listing.startDate = rs.getDate("startDate")
                 // listing.endDate = rs.getDate("endDate");
@@ -49,7 +50,6 @@ public class Listing {
                 listing.pricePerNight = rs.getFloat("pricePerNight");
                 listing.propertyID = rs.getInt("propertyID");
                 listing.posterID = rs.getInt("posterID");
-                listing.currencyID = rs.getInt("currencyID");
             } while (rs.next());
             rs.close();
             preparedStatement.close();
