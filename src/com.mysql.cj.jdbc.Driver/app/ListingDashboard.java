@@ -34,11 +34,11 @@ public class ListingDashboard {
             // add ability to review as a host
             // add ability to review a renter by host
             // etc...
-            System.out.println("Welcome to the listing! Here is the info:" + "\n\n");
+            System.out.println("\nWelcome to the listing! Here is the info:" + "\n");
             System.out.println("ID: " + listing.listingID);
-            // System.out.println("status: " + listing.status);
-            // System.out.println("Start Date: " + listing.startDate);
-            // System.out.println("End Date: " + listing.endDate);
+            System.out.println("status: " + listing.listingStatus);
+            System.out.println("Start Date: " + listing.startDate);
+            System.out.println("End Date: " + listing.endDate);
             System.out.println("Price Per Night: " + listing.pricePerNight);
             System.out.print("Property ID: " + listing.propertyID);
             System.out.print(", Owner ID: " + listing.posterID);
