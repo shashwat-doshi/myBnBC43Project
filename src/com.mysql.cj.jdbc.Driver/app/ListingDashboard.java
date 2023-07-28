@@ -38,9 +38,33 @@ public class ListingDashboard {
         }
     }
 
-    public static boolean isReviewExists(User user, Listing listing, int bookingID) {
+    public static boolean isReviewExists(User user, Listing listing, int bookingID, String reviewType) {
         try {
-            String sql = "SELECT * FROM Booking WHERE bookingID = ? AND reviewForOwner IS NOT NULL";
+            String sql = "SELECT * FROM Booking WHERE bookingID = ? AND " + reviewType + " IS NOT NULL";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
+            preparedStatement.setInt(1, bookingID);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (!rs.next()) {
+                rs.close();
+                preparedStatement.close();
+                return true; // we can add a review if there exists no reviewForOwner
+            } else {
+                System.out.println("Review for owner in the current booking already exists!");
+            }
+            rs.close();
+            preparedStatement.close();
+        } catch (Exception e) {
+            System.out.println("Unable to retrieve booking from the given booking ID, please try again!");
+            System.out.println(e.getMessage());
+            return false;
+        }
+        return false;
+    }
+
+    public static boolean checkRented(User host, Listing listing, int renterID) {
+        try {
+            String sql = "SELECT * FROM Booking WHERE bookingID = ? AND " + reviewType + " IS NOT NULL";
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, bookingID);
             ResultSet rs = preparedStatement.executeQuery();
@@ -67,7 +91,7 @@ public class ListingDashboard {
             case "1":
                 // check if renter has rented the particular listing ever
                 int bookingID = checkIfRented(user, listing);
-                boolean isReviewExists = isReviewExists(user, listing, bookingID);
+                boolean isReviewExists = isReviewExists(user, listing, bookingID, "reviewForOwner");
                 if (bookingID != -1 && isReviewExists) {
                     Review review = new Review(user);
                     if (review != null) {
@@ -83,6 +107,36 @@ public class ListingDashboard {
 
                             int rowAffected = preparedStatement.executeUpdate();
                             if (rowAffected == 1) {
+                                System.out.println("Updated reviewForProperty foreign key in booking table");
+                            }
+                            preparedStatement.close();
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                            System.out.println("Could not update booking table with reviewForProperty ID! Try again...");
+                        }
+
+                    }
+                }
+                break;
+            case "2":
+                // check if renter has rented the particular listing ever
+                int bookingIDReviewProperty = checkIfRented(user, listing);
+                boolean isReviewExistsProperty = isReviewExists(user, listing, bookingIDReviewProperty, "reviewForProperty");
+                if (bookingIDReviewProperty != -1 && isReviewExistsProperty) {
+                    Review review = new Review(user);
+                    if (review != null) {
+                        try {
+                            String sql = "UPDATE Booking " +
+                                    "SET reviewForProperty = ? " +
+                                    "WHERE bookingID = ?";
+                            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql,
+                                    Statement.RETURN_GENERATED_KEYS);
+
+                            preparedStatement.setInt(1, review.reviewID);
+                            preparedStatement.setInt(2, bookingIDReviewProperty);
+
+                            int rowAffected = preparedStatement.executeUpdate();
+                            if (rowAffected == 1) {
                                 System.out.println("Updated reviewForOwner by renter foreign key in booking table");
                             }
                             preparedStatement.close();
@@ -94,11 +148,16 @@ public class ListingDashboard {
                     }
                 }
                 break;
-            case "2":
-                // check if renter has rented the particular listing ever
-                break;
             case "3":
                 // check if renter has stayed in owner's property ever
+                System.out.println("Hello host! Enter the Renter ID you wish to put a review for in this listing:");
+                Scanner input = new Scanner(System.in); // Create a Scanner object
+                int renterID = input.nextInt();
+                input.nextLine(); // read the unnecessary \n character
+                boolean hasRented = checkRented(user, listing, renterID);
+
+
+
             case "exit":
                 return false;
             default:
