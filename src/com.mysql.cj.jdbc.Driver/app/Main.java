@@ -3,19 +3,23 @@ package app;
 import java.sql.*;
 import java.util.Scanner;
 import Operations.User;
-import java.sql.SQLException;
 
+@SuppressWarnings("resource")
 public class Main {
 
     private static final String dbClassName = "com.mysql.cj.jdbc.Driver";
     private static final String CONNECTION = "jdbc:mysql://127.0.0.1/myBnBC43Project";
+    public static Connection conn;
 
-    public static boolean commandHandler(String cmd, Connection conn) {
+    public static boolean commandHandler(String cmd) {
         Scanner input = new Scanner(System.in);
         switch (cmd) {
             case "1":
-                User newUser = new User(conn);
-                newUser.getUserInfo(conn, newUser.userID);
+                User newUser = new User();
+                if (newUser.isUserExists(newUser.userID)) {
+                    System.out.println("\nSigned in as User " + newUser.userID);
+                    UserDashboard.userDashboardInterface(newUser);
+                }
                 break;
             case "2":
                 int userIDLogIn;
@@ -24,10 +28,12 @@ public class Main {
                     userIDLogIn = input.nextInt();
                     input.nextLine();
                     try {
-                        User currentUser = new User(conn, userIDLogIn);
-                        System.out.println("Signed in as User " + userIDLogIn);
-                        System.out.println("User " + userIDLogIn + "'s Profile:\n");
-                        currentUser.getUserInfo(conn, userIDLogIn);
+                        User currentUser = new User(userIDLogIn);
+                        boolean isUserExists = currentUser.isUserExists(userIDLogIn);
+                        if (isUserExists) {
+                            System.out.println("\nSigned in as User " + currentUser.userID);
+                            UserDashboard.userDashboardInterface(currentUser);
+                        }
                     } catch (Exception e) {
                         System.out.println(
                                 "User " + userIDLogIn + " does not exist in the database. Cannot retrieve user!");
@@ -47,8 +53,8 @@ public class Main {
                         userIDDelete = input.nextInt();
                         input.nextLine();
                         try {
-                            User deleteUser = new User(conn, userIDDelete);
-                            deleteUser.deleteUserRecord(conn, userIDDelete);
+                            User deleteUser = new User(userIDDelete);
+                            deleteUser.deleteUserRecord(userIDDelete);
                             deleteUser = null;
                         } catch (Exception e) {
                             System.out.println("Cannot delete user!");
@@ -61,13 +67,12 @@ public class Main {
                     }
                 }
                 break;
+
             case "exit":
-                input.close();
                 return false;
             default:
                 System.out.println("Invalid input! Try again!");
         }
-        input.close();
         return true;
 
     }
@@ -83,10 +88,12 @@ public class Main {
 
         try {
             // Establish connection
-            Connection conn = DriverManager.getConnection(CONNECTION, USER, PASS);
+            Connection connect = DriverManager.getConnection(CONNECTION, USER, PASS);
+            Main.conn = connect;
             System.out.println("Successfully connected to MySQL!");
             Scanner mainInput = new Scanner(System.in); // Create a Scanner object
             System.out.println("\nWelcome to MyBnB!");
+
             while (true) {
                 // mainInput.nextLine();
                 System.out.println("\nPlease select one of the following options:\n\n" +
@@ -96,9 +103,10 @@ public class Main {
                         "exit: To exit the application\n\n" +
                         "Please enter input to continue...");
                 command = mainInput.nextLine(); // Read user input
-                if (!commandHandler(command, conn)) {
+                if (!commandHandler(command)) {
                     break;
                 }
+
             }
 
             System.out.println("Closing connection...");
