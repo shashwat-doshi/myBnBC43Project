@@ -1,30 +1,35 @@
 package Operations;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Scanner;
+import app.Main;
 
+@SuppressWarnings("resource")
 public class User {
 
     public String fname, lname, SIN, userAddress, occupation;
     public boolean isAdmin;
     public LocalDate dob;
-    public int userID, age;
+    public int userID; // as only one user operates in our app at a time, should we make userID
+                       // static??
+    public int age;
+    public String role; // need this? check -- how else will we identify when a user is a renter and
+                        // when are they a host?
 
-    public User(Connection conn) {
-        int userID = createUser(conn);
+    public User() {
+        int userID = createUser();
         this.userID = userID;
-        setAge(conn, userID);
+        setAge(userID);
     }
 
-    public User(Connection conn, int userID) {
+    public User(int userID) {
         try {
             String sql = "SELECT * FROM User WHERE userID = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, userID);
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -45,10 +50,10 @@ public class User {
         }
     }
 
-    private void setAge(Connection conn, int userID) {
+    private void setAge(int userID) {
         try {
             String sql = "SELECT age FROM User WHERE userID = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, userID);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
@@ -101,42 +106,30 @@ public class User {
         }
         System.out.println("Enter your occupation");
         this.occupation = input.nextLine();
-
     }
 
-    public void getUserInfo(Connection conn, int userID) {
+    public boolean isUserExists(int userID) {
         try {
             String sql = "SELECT * FROM User WHERE userID = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, userID);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (!rs.next()) {
-                System.out.println("User " + userID + " does not exist!");
-                return;
-            }
-
-            while (rs.next()) {
-                // Display values
-                System.out.print("ID: " + rs.getInt("userID"));
-                System.out.print(", fname: " + rs.getString("firstName"));
-                System.out.print(", lname: " + rs.getString("lastName"));
-                System.out.print(", SIN: " + rs.getString("SIN"));
-                System.out.print(", userAddress: " + rs.getString("userAddress"));
-                System.out.print(", occupation: " + rs.getString("occupation"));
-                System.out.print(", DOB: " + rs.getDate("DOB").toLocalDate());
-                System.out.print(", age: " + rs.getInt("age"));
-                System.out.println(", isAdmin: " + rs.getBoolean("isAdmin"));
+                System.out.println("\nUser " + userID + " does not exist!");
+                return false;
             }
             rs.close();
             preparedStatement.close();
         } catch (Exception e) {
             System.out.println("Unable to retrieve user from the given user ID, please try again!");
             System.out.println(e.getMessage());
+            return false;
         }
+        return true;
     }
 
-    public int createUser(Connection conn) {
+    public int createUser() {
 
         setNewUserInfo();
 
@@ -146,7 +139,7 @@ public class User {
         try {
             String sql = "INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
-            preparedStatement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement = Main.conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, this.SIN);
             preparedStatement.setString(2, this.userAddress);
@@ -176,6 +169,7 @@ public class User {
                 if (preparedStatement != null) {
                     preparedStatement.close();
                 }
+                System.out.println("\nCreated user with User ID: " + candidateID);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
@@ -184,11 +178,11 @@ public class User {
         return candidateID;
     }
 
-    public void deleteUserRecord(Connection conn, int userID) {
+    public void deleteUserRecord(int userID) {
         try {
             String sql = "DELETE FROM User " +
                     "WHERE userID = ?";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, userID);
             int rowsDeleted = preparedStatement.executeUpdate();
             if (rowsDeleted > 0) {
