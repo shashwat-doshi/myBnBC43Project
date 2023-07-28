@@ -14,7 +14,14 @@ public class ListingDashboard {
     public static int checkIfRented(User user, Listing listing) {
         try {
             String sql = "SELECT bookingID, listingID, renterID FROM Booking " +
-                    "WHERE listingID = ? AND renterID = ? ";
+                    "WHERE listingID = ? AND renterID = ?";
+
+            // what if this returns 2 rows? (if user makes 2 bookings for the same listing)
+            // 20-23 and 27-30
+
+            // ask user which booking id do they want to put a review for? (display both
+            // booking ids and tell them to choose)
+
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, listing.listingID);
             preparedStatement.setInt(2, user.userID);
@@ -39,6 +46,8 @@ public class ListingDashboard {
             ResultSet rs = preparedStatement.executeQuery();
 
             if (!rs.next()) {
+                rs.close();
+                preparedStatement.close();
                 return true; // we can add a review if there exists no reviewForOwner
             } else {
                 System.out.println("Review for owner in the current booking already exists!");
@@ -121,6 +130,7 @@ public class ListingDashboard {
             System.out.println("1: Add review for owner as a renter");
             System.out.println("2: Add review for property as a renter");
             System.out.println("3: Add review for renter as a owner");
+            System.out.println("4: Book a listing");
             System.out.println("exit: Go to User Dashboard");
             command = input.nextLine(); // Read user input
             if (!listingDashboardCommandHandler(command, user, listing)) {
