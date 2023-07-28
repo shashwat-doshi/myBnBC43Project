@@ -50,7 +50,7 @@ public class ListingDashboard {
                 preparedStatement.close();
                 return true; // we can add a review if there exists no reviewForOwner
             } else {
-                System.out.println("Review for owner in the current booking already exists!");
+                System.out.println(reviewType + " in the current booking already exists!");
             }
             rs.close();
             preparedStatement.close();
@@ -62,28 +62,65 @@ public class ListingDashboard {
         return false;
     }
 
-    public static boolean checkRented(User host, Listing listing, int renterID) {
+    public static boolean checkIfHosted(User host, Listing listing) {
         try {
-            String sql = "SELECT * FROM Booking WHERE bookingID = ? AND " + reviewType + " IS NOT NULL";
+            String sql = "SELECT * FROM Listing WHERE listingID = ? AND posterID = ?";
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
-            preparedStatement.setInt(1, bookingID);
+            preparedStatement.setInt(1, listing.listingID);
+            preparedStatement.setInt(2, host.userID);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (!rs.next()) {
+                System.out.println("You are not a host for this listing! Cannot create review!");
                 rs.close();
                 preparedStatement.close();
-                return true; // we can add a review if there exists no reviewForOwner
             } else {
-                System.out.println("Review for owner in the current booking already exists!");
+                rs.close();
+                preparedStatement.close();
+                return true;
             }
-            rs.close();
-            preparedStatement.close();
         } catch (Exception e) {
             System.out.println("Unable to retrieve booking from the given booking ID, please try again!");
             System.out.println(e.getMessage());
             return false;
         }
         return false;
+    }
+
+    public static int checkRenterStay(User host, Listing listing, int renterID) {
+        try {
+            if (host.userID == renterID) {
+                System.out.println("Invalid input! Host and renter cannot be the same!");
+                return -1;
+            }
+            String sql = "SELECT Booking.renterID, Booking.listingID, Booking.bookingID, Listing.posterID " +
+                    "FROM Booking " +
+                    "INNER JOIN Listing " +
+                    "ON Booking.listingID = Listing.listingID " +
+                    "WHERE Booking.renterID = ? AND Booking.listingID = ? AND Listing.posterID = ?";
+
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
+            preparedStatement.setInt(1, renterID);
+            preparedStatement.setInt(2, listing.listingID);
+            preparedStatement.setInt(3, host.userID);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (!rs.next()) {
+                System.out.println("The renter has never stayed in this listing! Cannot create a review!");
+                rs.close();
+                preparedStatement.close();
+            } else {
+                int bookingID = rs.getInt("bookingID");
+                rs.close();
+                preparedStatement.close();
+                return bookingID;
+            }
+        } catch (Exception e) {
+            System.out.println("Unable to verify if renter has stayed in owner's listing, please try again!");
+            System.out.println(e.getMessage());
+            return -1;
+        }
+        return -1;
     }
 
     public static boolean listingDashboardCommandHandler(String cmd, User user, Listing listing) {
@@ -112,7 +149,8 @@ public class ListingDashboard {
                             preparedStatement.close();
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
-                            System.out.println("Could not update booking table with reviewForProperty ID! Try again...");
+                            System.out
+                                    .println("Could not update booking table with reviewForProperty ID! Try again...");
                         }
 
                     }
@@ -121,7 +159,8 @@ public class ListingDashboard {
             case "2":
                 // check if renter has rented the particular listing ever
                 int bookingIDReviewProperty = checkIfRented(user, listing);
-                boolean isReviewExistsProperty = isReviewExists(user, listing, bookingIDReviewProperty, "reviewForProperty");
+                boolean isReviewExistsProperty = isReviewExists(user, listing, bookingIDReviewProperty,
+                        "reviewForProperty");
                 if (bookingIDReviewProperty != -1 && isReviewExistsProperty) {
                     Review review = new Review(user);
                     if (review != null) {
@@ -150,14 +189,43 @@ public class ListingDashboard {
                 break;
             case "3":
                 // check if renter has stayed in owner's property ever
-                System.out.println("Hello host! Enter the Renter ID you wish to put a review for in this listing:");
-                Scanner input = new Scanner(System.in); // Create a Scanner object
-                int renterID = input.nextInt();
-                input.nextLine(); // read the unnecessary \n character
-                boolean hasRented = checkRented(user, listing, renterID);
+                boolean hasHosted = checkIfHosted(user, listing);
+                if (hasHosted) {
+                    System.out.println("Hello host! Enter the Renter ID you wish to put a review for in this listing:");
+                    Scanner input = new Scanner(System.in); // Create a Scanner object
+                    int renterID = input.nextInt();
+                    input.nextLine(); // read the unnecessary \n character
 
+                    int bookingIDReviewRenter = checkRenterStay(user, listing, renterID);
+                    boolean isReviewExistsRenter = isReviewExists(user, listing, bookingIDReviewRenter,
+                            "reviewForRenter");
+                    if (bookingIDReviewRenter != -1 && isReviewExistsRenter) {
+                        Review review = new Review(user);
+                        if (review != null) {
+                            try {
+                                String sql = "UPDATE Booking " +
+                                        "SET reviewForRenter = ? " +
+                                        "WHERE bookingID = ?";
+                                PreparedStatement preparedStatement = Main.conn.prepareStatement(sql,
+                                        Statement.RETURN_GENERATED_KEYS);
 
+                                preparedStatement.setInt(1, review.reviewID);
+                                preparedStatement.setInt(2, bookingIDReviewRenter);
 
+                                int rowAffected = preparedStatement.executeUpdate();
+                                if (rowAffected == 1) {
+                                    System.out.println("Updated reviewForRenter by owner foreign key in booking table");
+                                }
+                                preparedStatement.close();
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage());
+                                System.out.println(
+                                        "Could not update booking table with reviewForRenter ID! Try again...");
+                            }
+                        }
+                    }
+                }
+                break;
             case "exit":
                 return false;
             default:
