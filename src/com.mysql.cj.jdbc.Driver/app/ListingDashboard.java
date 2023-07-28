@@ -123,6 +123,18 @@ public class ListingDashboard {
         return -1;
     }
 
+    public static void viewListingInfo(User user, Listing listing) {
+        System.out.println("Listing information:");
+        System.out.println("ID: " + listing.listingID);
+        System.out.println("status: " + listing.listingStatus);
+        System.out.println("Start Date: " + listing.startDate);
+        System.out.println("End Date: " + listing.endDate);
+        System.out.println("Price Per Night: " + listing.pricePerNight);
+        System.out.print("Property ID: " + listing.propertyID);
+        System.out.print(", Owner ID: " + listing.posterID);
+        System.out.println(", Currency ID: " + listing.currencyID + "\n");
+    }
+
     public static boolean listingDashboardCommandHandler(String cmd, User user, Listing listing) {
         switch (cmd) {
             case "1":
@@ -226,6 +238,9 @@ public class ListingDashboard {
                     }
                 }
                 break;
+            case "5":
+                viewListingInfo(user, listing);
+                break;
             case "exit":
                 return false;
             default:
@@ -243,21 +258,15 @@ public class ListingDashboard {
             // add ability to review as a host
             // add ability to review a renter by host
             // etc...
-            System.out.println("\nWelcome to the listing! Here is the info:" + "\n");
-            System.out.println("ID: " + listing.listingID);
-            System.out.println("status: " + listing.listingStatus);
-            System.out.println("Start Date: " + listing.startDate);
-            System.out.println("End Date: " + listing.endDate);
-            System.out.println("Price Per Night: " + listing.pricePerNight);
-            System.out.print("Property ID: " + listing.propertyID);
-            System.out.print(", Owner ID: " + listing.posterID);
-            System.out.println(", Currency ID: " + listing.currencyID + "\n");
+            System.out.println(
+                    "\nWelcome to the listing with listing ID " + listing.listingID + "!\n");
 
             System.out.println("Choose one of the following options:\n");
             System.out.println("1: Add review for owner as a renter");
             System.out.println("2: Add review for property as a renter");
             System.out.println("3: Add review for renter as a owner");
             System.out.println("4: Book a listing");
+            System.out.println("5: Show listing information");
             System.out.println("exit: Go to User Dashboard");
             command = input.nextLine(); // Read user input
             if (!listingDashboardCommandHandler(command, user, listing)) {
