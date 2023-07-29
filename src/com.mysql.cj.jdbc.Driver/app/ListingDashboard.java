@@ -63,7 +63,7 @@ public class ListingDashboard {
                 System.out.println("Which booking ID do you want to put a review for?\n");
                 for (int x = 0; x < noOfBookingPerListing; x++) {
                     if (x == noOfBookingPerListing - 1) { // if its the last bookingID, no need to put a comma
-                        System.out.print(bookingIDList[x]);
+                        System.out.print(bookingIDList[x] + "\n\n");
                     } else {
                         System.out.print(bookingIDList[x] + ", ");
                     }
@@ -72,7 +72,6 @@ public class ListingDashboard {
                 while (true) {
                     try {
                         selectedBookingID = input.nextInt();
-                        input.nextLine();
                         int flag = 0;
                         for (int j = 0; j < noOfBookingPerListing; j++) {
                             if (bookingIDList[j] == selectedBookingID) {
@@ -81,7 +80,8 @@ public class ListingDashboard {
                             }
                         }
                         if (flag == 0) {
-                            throw new Exception();
+                            System.out.println("here");
+                            throw new Exception("Incorrect Booking ID! Please try again...\n");
                         }
                         break;
                     } catch (Exception e) {
@@ -89,6 +89,7 @@ public class ListingDashboard {
                         input.nextLine();
                     }
                 }
+                input.nextLine();
 
                 return selectedBookingID;
             }
@@ -199,7 +200,6 @@ public class ListingDashboard {
                 while (true) {
                     try {
                         selectedBookingID = input.nextInt();
-                        input.nextLine();
                         int flag = 0;
                         for (int j = 0; j < noOfBookingPerListing; j++) {
                             if (bookingIDList[j] == selectedBookingID) {
@@ -216,7 +216,7 @@ public class ListingDashboard {
                         input.nextLine();
                     }
                 }
-
+                input.nextLine(); // read \n character after nextInt() is executed
                 rs.close();
                 preparedStatement.close();
                 return selectedBookingID;
