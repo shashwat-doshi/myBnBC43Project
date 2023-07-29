@@ -11,16 +11,42 @@ import Operations.Review;
 @SuppressWarnings("resource")
 public class ListingDashboard {
 
-    public static int checkIfRented(User user, Listing listing) {
+    public static int getNumberOfBookingsPerListing(User user, Listing listing) {
         try {
-            String sql = "SELECT bookingID, listingID, renterID FROM Booking " +
+            String sql = "SELECT COUNT(*) FROM Booking " +
                     "WHERE listingID = ? AND renterID = ?";
 
-            // what if this returns 2 rows? (if user makes 2 bookings for the same listing)
-            // 20-23 and 27-30
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
+            preparedStatement.setInt(1, listing.listingID);
+            preparedStatement.setInt(2, user.userID);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (!rs.next()) {
+                return 0;
+            } else {
+                return rs.getInt("COUNT(*)");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return -1;
+        }
+    }
 
-            // ask user which booking id do they want to put a review for? (display both
-            // booking ids and tell them to choose)
+    public static int checkIfRented(User user, Listing listing) {
+        try {
+            Scanner input = new Scanner(System.in); // Create a Scanner object
+            int selectedBookingID = -1;
+
+            int noOfBookingPerListing = getNumberOfBookingsPerListing(user, listing);
+            if (noOfBookingPerListing == 0) {
+                System.out.println("Renter has no bookings for this listing!");
+                return -1;
+            }
+
+            int bookingIDList[] = new int[noOfBookingPerListing];
+            int i = 0;
+
+            String sql = "SELECT bookingID, listingID, renterID FROM Booking " +
+                    "WHERE listingID = ? AND renterID = ?";
 
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             preparedStatement.setInt(1, listing.listingID);
@@ -30,7 +56,41 @@ public class ListingDashboard {
                 System.out.println("Renter has no bookings for this listing!");
                 return -1;
             } else {
-                return rs.getInt("bookingID");
+                do {
+                    bookingIDList[i] = rs.getInt("bookingID");
+                } while (rs.next());
+
+                System.out.println("Which booking ID do you want to put a review for?\n");
+                for (int x = 0; x < noOfBookingPerListing; x++) {
+                    if (x == noOfBookingPerListing - 1) { // if its the last bookingID, no need to put a comma
+                        System.out.print(bookingIDList[x]);
+                    } else {
+                        System.out.print(bookingIDList[x] + ", ");
+                    }
+                }
+
+                while (true) {
+                    try {
+                        selectedBookingID = input.nextInt();
+                        input.nextLine();
+                        int flag = 0;
+                        for (int j = 0; j < noOfBookingPerListing; j++) {
+                            if (bookingIDList[j] == selectedBookingID) {
+                                flag = 1;
+                                break;
+                            }
+                        }
+                        if (flag == 0) {
+                            throw new Exception();
+                        }
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Incorrect Booking ID! Please try again...");
+                        input.nextLine();
+                    }
+                }
+
+                return selectedBookingID;
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -110,10 +170,56 @@ public class ListingDashboard {
                 rs.close();
                 preparedStatement.close();
             } else {
-                int bookingID = rs.getInt("bookingID");
+                // int bookingID = rs.getInt("bookingID");
+                Scanner input = new Scanner(System.in); // Create a Scanner object
+                int selectedBookingID = -1;
+
+                int noOfBookingPerListing = getNumberOfBookingsPerListing(host, listing);
+                if (noOfBookingPerListing == 0) {
+                    System.out.println("Renter has no bookings for this listing!");
+                    return -1;
+                }
+
+                int bookingIDList[] = new int[noOfBookingPerListing];
+                int i = 0;
+
+                do {
+                    bookingIDList[i] = rs.getInt("bookingID");
+                } while (rs.next());
+
+                System.out.println("Which booking ID do you want to put a review for?\n");
+                for (int x = 0; x < noOfBookingPerListing; x++) {
+                    if (x == noOfBookingPerListing - 1) { // if its the last bookingID, no need to put a comma
+                        System.out.print(bookingIDList[x]);
+                    } else {
+                        System.out.print(bookingIDList[x] + ", ");
+                    }
+                }
+
+                while (true) {
+                    try {
+                        selectedBookingID = input.nextInt();
+                        input.nextLine();
+                        int flag = 0;
+                        for (int j = 0; j < noOfBookingPerListing; j++) {
+                            if (bookingIDList[j] == selectedBookingID) {
+                                flag = 1;
+                                break;
+                            }
+                        }
+                        if (flag == 0) {
+                            throw new Exception();
+                        }
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Incorrect Booking ID! Please try again...");
+                        input.nextLine();
+                    }
+                }
+
                 rs.close();
                 preparedStatement.close();
-                return bookingID;
+                return selectedBookingID;
             }
         } catch (Exception e) {
             System.out.println("Unable to verify if renter has stayed in owner's listing, please try again!");
