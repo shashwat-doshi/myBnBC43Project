@@ -67,7 +67,9 @@ public class Main {
                     }
                 }
                 break;
-
+            case "4":
+                
+                break;
             case "exit":
                 return false;
             default:
@@ -95,11 +97,11 @@ public class Main {
             System.out.println("\nWelcome to MyBnB!");
 
             while (true) {
-                // mainInput.nextLine();
                 System.out.println("\nPlease select one of the following options:\n\n" +
                         "1: Sign up as a user\n" +
                         "2: Sign in as a user\n" +
                         "3: Delete user\n" +
+                        "4: Perform queries on the database\n" +
                         "exit: To exit the application\n\n" +
                         "Please enter input to continue...");
                 command = mainInput.nextLine(); // Read user input

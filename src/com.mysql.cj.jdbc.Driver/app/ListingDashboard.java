@@ -80,7 +80,6 @@ public class ListingDashboard {
                             }
                         }
                         if (flag == 0) {
-                            System.out.println("here");
                             throw new Exception("Incorrect Booking ID! Please try again...\n");
                         }
                         break;
