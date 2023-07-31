@@ -8,46 +8,49 @@ import Operations.Listing;
 @SuppressWarnings("resource")
 public class QueryDashboard {
 
-    public static boolean findListingsByLocation(double locationLatitude, double locationLongitude,
+    public static void findListingsByLocation(double locationLatitude, double locationLongitude,
             float searchDistance) {
         try {
-            String sql = "SELECT propertyID, coordinates, " +
-                    "2 * 6371 * ASIN(" +
-                    "SQRT(" +
-                    "POWER(SIN(RADIANS((" + locationLatitude
-                    + " - ST_Latitude(ST_GeomFromText(coordinates, 4326))) / 2)), 2) + " +
-                    "COS(RADIANS(" + locationLatitude + ")) *" +
-                    "COS(RADIANS(ST_Latitude(ST_GeomFromText(coordinates, 4326)))) *" +
-                    "POWER(SIN(RADIANS((" + locationLongitude
-                    + " - ST_LONGITUDE(ST_GeomFromText(coordinates, 4326))) / 2)), 2)" +
-                    ")" +
-                    ") AS distance_in_km " +
-                    "FROM Property " +
+            String sql = "SELECT l.* , ST_Distance(" +
+                    "ST_GeomFromText('POINT(" + locationLongitude + " " + locationLatitude + ")', 4326), " +
+                    "ST_SRID(coordinates, 4326), 'kilometre') as distance_in_km " +
+                    "FROM Property p " +
+                    "INNER JOIN Listing l " +
+                    "ON l.propertyID = p.propertyID " +
                     "HAVING distance_in_km <= " + searchDistance + " " +
                     "ORDER BY distance_in_km";
 
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
-            // preparedStatement.setInt(1, userID);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (!rs.next()) {
-                System.out.println("\nUser " + " does not exist!");
-                return false;
+                System.out.println("\nNo listings found near the given latitude/longitude and the search radius!");
+                return;
             }
+
+            int listingID = 0;
+            Listing listing = null;
+            System.out.println("Here are the listings according to the given input: \n");
+            int count = 1;
+            do {
+                System.out.println("Listing Result " + count++ + ":");
+                listingID = rs.getInt("listingID");
+                listing = Listing.getListingByListingID(listingID);
+                ListingDashboard.viewListingInfo(listing);
+            } while (rs.next());
+
             rs.close();
             preparedStatement.close();
-            return true; // remove!!!! only done to fix error warning, it is a placeholder
         } catch (Exception e) {
-            System.out.println("Unable to retrieve user from the given user ID, please try again!");
+            System.out.println("Unable to retrieve listings from the given input, please try again!");
             System.out.println(e.getMessage());
-            return false;
         }
     }
 
     public static boolean queryDashboardHandler(String cmd) {
         Scanner input = new Scanner(System.in); // Create a Scanner object
         double locationLatitude, locationLongitude;
-        float searchDistance = 5;
+        float searchDistance = 6000; // default search distance
 
         switch (cmd) {
             case "1":
@@ -74,17 +77,19 @@ public class QueryDashboard {
                 }
                 input.nextLine();
 
-                System.out.println("Default search distance: 5km. Do you want to modify it? (Y/N)");
+                System.out.println("Default search distance: 6000km. Do you want to modify it? (Y/N)");
                 String choice;
                 while (true) {
                     try {
                         choice = input.nextLine();
-                        if (choice == "Y") {
+                        System.out.println("CHOICE: " + choice);
+                        if (choice.equals("Y")) {
                             System.out.println("Please enter the new search distance:");
                             searchDistance = input.nextFloat();
+                            input.nextLine();
                             break;
-                        } else if (choice == "N") {
-                            System.out.println("Default search distance = 5km selected.");
+                        } else if (choice.equals("N")) {
+                            System.out.println("Default search distance = 6000km selected.");
                             break;
                         } else {
                             throw new Exception("Incorrect choice! Please try again!");
@@ -94,7 +99,6 @@ public class QueryDashboard {
                         input.nextLine();
                     }
                 }
-                input.nextLine();
 
                 findListingsByLocation(locationLatitude, locationLongitude, searchDistance);
                 break;
