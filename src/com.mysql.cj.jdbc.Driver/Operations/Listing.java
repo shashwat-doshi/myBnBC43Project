@@ -8,8 +8,8 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import app.Main;
 
+import app.Main;
 @SuppressWarnings("resource")
 public class Listing {
 
@@ -62,7 +62,7 @@ public class Listing {
             String startDateString = input.nextLine();
             try {
                 LocalDate localDate = LocalDate.parse(startDateString);
-                this.startDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(11, 0)));
+                this.startDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(15, 0)));
                 break;
             } catch (Exception e) {
                 System.out.println("Please try again");
@@ -74,7 +74,7 @@ public class Listing {
             String endDateString = input.nextLine();
             try {
                 LocalDate localDate = LocalDate.parse(endDateString);
-                this.endDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(15, 0)));
+                this.endDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(11, 0)));
                 break;
             } catch (Exception e) {
                 System.out.println("Please try again\n");
@@ -162,7 +162,19 @@ public class Listing {
         }
     }
 
-    public void deleteListing(User host) {
+    public void findBookingsFromListing (int listingId, Timestamp startDate, Timestamp endDate) {
+        try {
+            String sqlStatement = "SELECT * FROM BOOKING WHERE listingID=? AND bookingStatus='confirmed')";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sqlStatement,
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, listingID);
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public void deleteCaseRemoveEntireRow(User host) {
         try {
             String deleteListingSql = "DELETE FROM Listing l " +
                     "WHERE posterID = ? AND listingID = ? AND NOT EXISTS(SELECT * FROM BOOKING WHERE listingID=l.listingID AND bookingStatus='confirmed')";
@@ -183,5 +195,227 @@ public class Listing {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+
+    public void updateListing(Float newPricePerNight, Timestamp startDate, Timestamp endDate, int listingID) {
+        try {
+             System.out.println(" Passing startDate1 " + startDate.toString()+ " endDate1 " + endDate.toString()  + " listingID1 " + listingID);
+            String updateSQLStatment = "UPDATE Listing SET startDate = ?, endDate = ?, pricePerNight = ? WHERE listingID = ?";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(updateSQLStatment,
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setObject(1, startDate.toString());
+            preparedStatement.setObject(2, endDate.toString());
+            preparedStatement.setFloat(3, newPricePerNight);
+            preparedStatement.setInt(4, listingID);
+
+            preparedStatement.executeUpdate();
+            return;
+        }
+        catch (Exception e) {
+            System.out.println(e);
+            return;
+        }
+    }
+
+    public void updateForeignKeysForBookings (Timestamp startDate1, Timestamp startDate2, int listingID1, int listingID2) {
+        try {
+            String updateSQLString = "UPDATE Booking b " +
+                 "SET listingID = CASE WHEN ? BETWEEN b.startDate AND b.endDate THEN ? ELSE ? END"
+                 + " WHERE listingID = ?";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(updateSQLString,
+                    Statement.RETURN_GENERATED_KEYS);
+
+            preparedStatement.setTimestamp(1, startDate1);
+            preparedStatement.setInt(2, listingID1);
+            preparedStatement.setInt(3, listingID2);
+            preparedStatement.setInt(4, this.listingID);
+
+            preparedStatement.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    public boolean isListingUnavailable (int listingId, Timestamp startDate, Timestamp endDate) {
+        Timestamp maxTimestamp = startDate;
+        Timestamp minTimestamp = endDate;
+        try {
+            String sqlMin = "SELECT MIN(startDate) AS min_timestamp FROM Booking b WHERE b.listingID = ?";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sqlMin,
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, listingId);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                minTimestamp = rs.getTimestamp("min_timestamp");
+            }
+
+            String sqlMax = "SELECT MAX(endDate) AS max_timestamp FROM Booking b WHERE b.listingID = ?";
+            PreparedStatement preparedStatementMax = Main.conn.prepareStatement(sqlMax,
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatementMax.setInt(1, listingId);
+            ResultSet rsMax = preparedStatementMax.executeQuery();
+            if (rsMax.next()) {
+                maxTimestamp = rsMax.getTimestamp("max_timestamp");
+            }
+
+            if (maxTimestamp.equals(endDate) && minTimestamp.equals(startDate)) {
+                return true;
+            }
+            return false;
+        }
+        catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    public boolean doesListingHaveBooking (int listingId) {
+         try {
+            String selectSqlString = "SELECT * FROM Booking WHERE listingID = ? and bookingStatus = 'confirmed'";
+             PreparedStatement preparedStatement = Main.conn.prepareStatement(selectSqlString,
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, listingId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if(!rs.next()) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+    public void updateListingStatus (int listingId, Timestamp startDate, Timestamp endDate) {
+        if (!doesListingHaveBooking(listingId)) {
+            return;
+        }
+        if (!isListingUnavailable(listingId, startDate, endDate)){
+            return;
+        }
+        try {
+            String updateSqlString = "UPDATE Listing SET listingStatus = 'unavailable' WHERE listingID = ?";
+             PreparedStatement preparedStatement = Main.conn.prepareStatement(updateSqlString,
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, listingId);
+
+            preparedStatement.executeUpdate();
+        }
+        catch(Exception e) {
+            System.out.println(e);
+        }
+    }
+    public void breakListingIntoTwo (Timestamp startDate1, Timestamp endDate1, Timestamp startDate2, Timestamp endDate2) {
+        int listingID2 = -1;
+        try {
+            String insertSQLStatment = "INSERT INTO Listing (startDate, endDate, pricePerNight, propertyID, posterID, currencyID) "
+                                        + "SELECT startDate, endDate, pricePerNight, propertyID, posterID, currencyID FROM Listing l WHERE l.ListingID= ?";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(insertSQLStatment,
+                    Statement.RETURN_GENERATED_KEYS);
+
+            preparedStatement.setInt(1, this.listingID);
+
+            int rowAffected = preparedStatement.executeUpdate();
+            ResultSet rs;
+            if (rowAffected == 1) {
+                // get candidate id
+                rs = preparedStatement.getGeneratedKeys();
+                if (rs.next()) {
+                     listingID2 = rs.getInt(1);
+                }
+            }
+        }
+        catch(Exception e){
+            System.out.println(e);
+            return;
+        }
+
+        updateListing(this.pricePerNight, startDate1, endDate1, this.listingID);
+        updateListing(this.pricePerNight, startDate2, endDate2, listingID2);
+
+        updateForeignKeysForBookings(startDate1, startDate2, this.listingID, listingID2);
+
+        updateListingStatus(listingID2, startDate2, endDate2);
+        updateListingStatus(this.listingID, startDate1, endDate1);
+
+    }
+    public boolean deleteListing(User host, Timestamp startDate, Timestamp endDate) {
+        if ((new Booking()).isDateTakenInBooking(startDate, this)
+            || (new Booking()).isDateTakenInBooking(endDate, this)){
+            System.out.println("Confirmed Booking exits for these days cancel them if you want to delete the listing");
+            return false;
+        }
+        if (startDate.equals(this.startDate) && endDate.equals(this.endDate)) {
+            deleteCaseRemoveEntireRow(host);
+            return true;
+        }
+
+        if (startDate.equals(this.startDate)) {
+            LocalDateTime updated = endDate.toLocalDateTime().withHour(15).withMinute(0).withSecond(0);
+            updateListing(pricePerNight, Timestamp.valueOf(updated), this.endDate, listingID);
+            updateListingStatus(listingID, Timestamp.valueOf(updated), this.endDate);
+            return true;
+        }
+
+        if (endDate.equals(this.endDate)) {
+            LocalDateTime updated = startDate.toLocalDateTime().withHour(11).withMinute(0).withSecond(0);
+            updateListing(pricePerNight, this.startDate, Timestamp.valueOf(updated) , listingID);
+            updateListingStatus(listingID, this.startDate, Timestamp.valueOf(updated));
+            return true;
+        }
+
+        Timestamp startDate1 = this.startDate;
+        Timestamp endDate1 = Timestamp.valueOf(startDate.toLocalDateTime().withHour(11).withMinute(0).withSecond(0));
+        Timestamp startDate2 = Timestamp.valueOf(endDate.toLocalDateTime().withHour(15).withMinute(0).withSecond(0));;
+        Timestamp endDate2 = this.endDate;
+        breakListingIntoTwo(startDate1, endDate1, startDate2, endDate2);
+        return true;
+    }
+
+    public void deleteListingPrompt (User user) {
+        if (user.userID != this.posterID) {
+            System.out.println("You are not poster");
+            return;
+        }
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the start date yyyy-mm-dd for delete");
+        System.out.println("This will remove the listing starting from yyyy-mm-dd 15:00:00");
+        Timestamp startDate;
+        Timestamp endDate;
+        while (true) {
+            String startDateString = input.nextLine();
+            try {
+                LocalDate localDate = LocalDate.parse(startDateString);
+                startDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(15, 0)));
+                if (startDate.before(this.startDate) || startDate.after(this.endDate)) {
+                    throw new Exception();
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Please try again");
+            }
+        }
+
+        System.out.println("Enter the end date yyyy-mm-dd for delete");
+        System.out.println("This will remove the listing till yyyy-mm-dd 11:00:00");
+        while (true) {
+            String endDateString = input.nextLine();
+            try {
+
+                LocalDate localDate = LocalDate.parse(endDateString);
+                endDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(11, 0)));
+                if (endDate.before(this.startDate) || endDate.after(this.endDate)) {
+                    throw new Exception();
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Please try again\n");
+            }
+        }
+        deleteListing(user, startDate, endDate);
     }
 }

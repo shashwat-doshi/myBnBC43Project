@@ -6,7 +6,6 @@ create table User(
     firstName varchar(30) NOT NULL,
     lastName varchar(30) NOT NULL,
     age int(10) NULL,
-    isAdmin Boolean NOT NULL DEFAULT 0,
     occupation varchar(50) NOT NULL
 );
 

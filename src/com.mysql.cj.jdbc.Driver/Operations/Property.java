@@ -6,9 +6,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class Property {
-  public static void createNewProperty(Connection conn){
 
+@SuppressWarnings("resource")
+public class Property {
+    public static void createNewProperty(Connection conn) {
         Scanner input = new Scanner(System.in); // Create a Scanner object
         System.out.println("Lets input property information...\n");
 
@@ -30,8 +31,8 @@ public class Property {
         while (true) {
             try {
                 type = input.nextInt();
-                if (type > 2 || type < 0){
-                  throw new Exception();
+                if (type > 2 || type < 0) {
+                    throw new Exception();
                 }
                 break;
             } catch (Exception e) {
@@ -40,19 +41,20 @@ public class Property {
             }
         }
         try {
-          String insertProprtySql = "INSERT INTO Property (street, country, city, postalCode, coordinates) "
-                                      + "values (?, ?, ?, ?, POINT(?, ?))";
-          PreparedStatement preparedStatement = conn.prepareStatement(insertProprtySql, Statement.RETURN_GENERATED_KEYS);
-          preparedStatement.setString(1, street);
-          preparedStatement.setString(2, country);
-          preparedStatement.setString(3, city); // check
-          preparedStatement.setString(4, postalCode);
-          preparedStatement.setFloat(5, latitude);
-          preparedStatement.setFloat(6, longitude);
+            String insertProprtySql = "INSERT INTO Property (street, country, city, postalCode, coordinates) "
+                    + "values (?, ?, ?, ?, POINT(?, ?))";
+            PreparedStatement preparedStatement = conn.prepareStatement(insertProprtySql,
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, street);
+            preparedStatement.setString(2, country);
+            preparedStatement.setString(3, city); // check
+            preparedStatement.setString(4, postalCode);
+            preparedStatement.setFloat(5, latitude);
+            preparedStatement.setFloat(6, longitude);
 
-          int rowAffected = preparedStatement.executeUpdate();
-          ResultSet rs;
-          int insertId = 0;
+            int rowAffected = preparedStatement.executeUpdate();
+            ResultSet rs;
+            int insertId = 0;
             if (rowAffected == 1) {
                 // get candidate id
                 rs = preparedStatement.getGeneratedKeys();
@@ -60,36 +62,33 @@ public class Property {
                     insertId = rs.getInt(1);
                 }
             }
-          System.out.println("Enter Capacity");
-          Integer capacity = input.nextInt();
-          PreparedStatement preparedStatementType;
-          if (type == 0){
-            String insertRoomSql = "INSERT INTO House (propertyID, capacity) values (?, ?)";
-            preparedStatementType = conn.prepareStatement(insertRoomSql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatementType.setInt(1, insertId);
-            preparedStatementType.setInt(2, capacity);
-          }
-          else if (type == 1) {
-            System.out.println("Is this room shared");
-            Boolean isRoomShared = input.nextBoolean();
-            String insertRoomSql = "INSERT INTO Room (propertyID, isShared, capacity) values (?, ?, ?)";
-            preparedStatementType = conn.prepareStatement(insertRoomSql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatementType.setInt(1, insertId);
-            preparedStatementType.setBoolean(2, isRoomShared);
-            preparedStatementType.setInt(3, capacity);
-          }
-          else {
-            String insertRoomSql = "INSERT INTO HotelApartment (propertyID, capacity) values (?, ?)";
-            preparedStatementType = conn.prepareStatement(insertRoomSql, Statement.RETURN_GENERATED_KEYS);
-            preparedStatementType.setInt(1, insertId);
-            preparedStatementType.setInt(2, capacity);
-          }
-          preparedStatementType.executeUpdate();
-          System.out.println("Your property id is " + insertId);
-        }
-        catch(Exception e){
-          System.out.println(e);
+            System.out.println("Enter Capacity");
+            Integer capacity = input.nextInt();
+            PreparedStatement preparedStatementType;
+            if (type == 0) {
+                String insertRoomSql = "INSERT INTO House (propertyID, capacity) values (?, ?)";
+                preparedStatementType = conn.prepareStatement(insertRoomSql, Statement.RETURN_GENERATED_KEYS);
+                preparedStatementType.setInt(1, insertId);
+                preparedStatementType.setInt(2, capacity);
+            } else if (type == 1) {
+                System.out.println("Is this room shared");
+                Boolean isRoomShared = input.nextBoolean();
+                String insertRoomSql = "INSERT INTO Room (propertyID, isShared, capacity) values (?, ?, ?)";
+                preparedStatementType = conn.prepareStatement(insertRoomSql, Statement.RETURN_GENERATED_KEYS);
+                preparedStatementType.setInt(1, insertId);
+                preparedStatementType.setBoolean(2, isRoomShared);
+                preparedStatementType.setInt(3, capacity);
+            } else {
+                String insertRoomSql = "INSERT INTO HotelApartment (propertyID, capacity) values (?, ?)";
+                preparedStatementType = conn.prepareStatement(insertRoomSql, Statement.RETURN_GENERATED_KEYS);
+                preparedStatementType.setInt(1, insertId);
+                preparedStatementType.setInt(2, capacity);
+            }
+            preparedStatementType.executeUpdate();
+            System.out.println("Your property id is " + insertId);
+        } catch (Exception e) {
+            System.out.println(e);
         }
 
-  }
+    }
 }

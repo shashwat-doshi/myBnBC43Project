@@ -3,12 +3,11 @@ package app;
 import java.sql.*;
 import java.util.Scanner;
 import Operations.User;
-
 @SuppressWarnings("resource")
 public class Main {
 
+    private static final String CONNECTION = "jdbc:mysql://localhost:3306/myBnBC43Project";
     private static final String dbClassName = "com.mysql.cj.jdbc.Driver";
-    private static final String CONNECTION = "jdbc:mysql://127.0.0.1/myBnBC43Project";
     public static Connection conn;
 
     public static boolean commandHandler(String cmd) {
@@ -66,17 +65,6 @@ public class Main {
                         System.out.println(e);
                     }
                 }
-            case "4":
-                Property.createNewProperty(conn);
-                break;
-            case "5":
-                Listing.createNewListing(conn);
-                break;
-            case "6":
-                Listing.deleteListing(conn);
-                break;
-            case "7":
-                Payment.createNewPayment(conn);
                 break;
 
             case "exit":
@@ -111,10 +99,6 @@ public class Main {
                         "1: Sign up as a user\n" +
                         "2: Sign in as a user\n" +
                         "3: Delete user\n" +
-                        "4: Create a property\n"+
-                        "5: Create a listing\n"+
-                        "6: Delete a listing\n"+
-                        "7: Create a payment\n"+
                         "exit: To exit the application\n\n" +
                         "Please enter input to continue...");
                 command = mainInput.nextLine(); // Read user input

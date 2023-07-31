@@ -7,7 +7,7 @@ import java.util.Scanner;
 import Operations.Listing;
 import Operations.User;
 import Operations.Review;
-
+import Operations.Booking;
 @SuppressWarnings("resource")
 public class ListingDashboard {
 
@@ -238,9 +238,15 @@ public class ListingDashboard {
                     }
                 }
                 break;
+            case "4":
+                Booking booking = new Booking();
+                booking.createNewBooking(user, listing);
+                break;
             case "5":
                 viewListingInfo(user, listing);
                 break;
+            case "6":
+                listing.deleteListingPrompt(user);
             case "exit":
                 return false;
             default:
