@@ -228,7 +228,7 @@ public class ListingDashboard {
         return -1;
     }
 
-    public static void viewListingInfo(User user, Listing listing) {
+    public static void viewListingInfo(Listing listing) {
         System.out.println("Listing information:");
         System.out.println("ID: " + listing.listingID);
         System.out.println("status: " + listing.listingStatus);
@@ -344,7 +344,7 @@ public class ListingDashboard {
                 }
                 break;
             case "5":
-                viewListingInfo(user, listing);
+                viewListingInfo(listing);
                 break;
             case "exit":
                 return false;

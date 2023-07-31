@@ -68,7 +68,7 @@ public class Main {
                 }
                 break;
             case "4":
-                
+                QueryDashboard.queryDashboardInterface();
                 break;
             case "exit":
                 return false;
