@@ -1,14 +1,14 @@
 /* seed user table */
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('5665424957', '221B Baker St', '1970-11-30', 'Sherlock', 'Holmes', 0, 'Detective');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('3105037991', 'St 1 Calgary', '1972-12-31', 'James', 'Doah', 0, 'Engineer');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('3811452384', 'St 2 Vancouver', '1980-09-02', 'Mahesh', 'Dalle', 0, 'Professor');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('6562433252', 'St 3 Toronto', '2000-02-14', 'Kamlesh', 'Singh', 0, 'Artist');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('6317190891', 'St 4 Dubai', '2002-05-26', 'William', 'Root', 0, 'Lawyer');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('1398192688', 'St 5 Mumbai', '1990-08-13', 'Peter', 'Parker', 0, 'Manager');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('4054121868', 'St 6 Delhi', '2003-04-26', 'Walt', 'Whitman', 0, 'Sportsman');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('4243858298', 'St 7 Singapore', '1970-09-29', 'Stephen', 'Strange', 0, 'Gym Trainee');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('7174630225', 'St 8 Sydney', '2000-11-30', 'Tony', 'Stark', 0, 'UI Designer');
-INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) VALUES ('6800269404', 'St 9 Geneva', '1994-12-08', 'James', 'Trickington', 1, 'Aircraft Pilot');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES ('5665424957', '221B Baker St', '1970-11-30', 'Sherlock', 'Holmes', 'Detective');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES ('3105037991', 'St 1 Calgary', '1972-12-31', 'James', 'Doah', 'Engineer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES ('3811452384', 'St 2 Vancouver', '1980-09-02', 'Mahesh', 'Dalle', 'Professor');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES ('6562433252', 'St 3 Toronto', '2000-02-14', 'Kamlesh', 'Singh', 'Artist');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES ('6317190891', 'St 4 Dubai', '2002-05-26', 'William', 'Root', 'Lawyer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES ('1398192688', 'St 5 Mumbai', '1990-08-13', 'Peter', 'Parker', 'Manager');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES ('4054121868', 'St 6 Delhi', '2003-04-26', 'Walt', 'Whitman', 'Sportsman');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES ('4243858298', 'St 7 Singapore', '1970-09-29', 'Stephen', 'Strange', 'Gym Trainee');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES ('7174630225', 'St 8 Sydney', '2000-11-30', 'Tony', 'Stark', 'UI Designer');
+INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES ('6800269404', 'St 9 Geneva', '1994-12-08', 'James', 'Trickington', 'Aircraft Pilot');
 
 /* seed property table */
 insert into Property (street, country, city, postalCode, coordinates) values ('8354 Walton Way', 'Poland', 'Płońsk', '09-101', POINT(52.931452, 101.9214852));
@@ -65,16 +65,16 @@ insert into Currency (currencyName, symbol) values ('Euro', 'EUR');
 insert into Currency (currencyName, symbol) values ('Peso', 'PHP');
 
 /* Seed Listing table */
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-26 11:00:00', '2023-10-01 15:00:00', 198.51, 9, 9, 7);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-07 11:00:00', '2023-09-12 15:00:00', 301.12, 6, 10, 4);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-08 11:00:00', '2023-09-28 15:00:00', 319.36, 8, 2, 7);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-15 11:00:00', '2023-09-19 15:00:00', 230.56, 4, 4, 3);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-07 11:00:00', '2023-09-20 15:00:00', 168.06, 2, 3, 7);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 11:00:00', '2023-10-01 15:00:00', 261.96, 10, 10, 7);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 11:00:00', '2023-09-20 15:00:00', 42.95, 8, 8, 4);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 11:00:00', '2023-09-29 15:00:00', 298.88, 4, 3, 1);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 11:00:00', '2023-09-22 15:00:00', 109.63, 4, 4, 1);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-26 11:00:00', '2023-09-27 15:00:00', 251.42, 7, 8, 2);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-26 15:00:00', '2023-10-01 11:00:00', 198.51, 9, 9, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-07 15:00:00', '2023-09-12 11:00:00', 301.12, 6, 10, 4);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-08 15:00:00', '2023-09-28 11:00:00', 319.36, 8, 2, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-15 15:00:00', '2023-09-19 11:00:00', 230.56, 4, 4, 3);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-07 15:00:00', '2023-09-20 11:00:00', 168.06, 2, 3, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 15:00:00', '2023-10-01 11:00:00', 261.96, 10, 10, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 15:00:00', '2023-09-20 11:00:00', 42.95, 8, 8, 4);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 15:00:00', '2023-09-29 11:00:00', 298.88, 4, 3, 1);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 15:00:00', '2023-09-22 11:00:00', 109.63, 4, 4, 1);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-26 15:00:00', '2023-09-27 11:00:00', 251.42, 7, 8, 2);
 
 /* Updated seed data for Payment table with cardNumber as a string of length 16 */
 insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('6334222255934911', '2026-01-06', '6902 Briar Crest Junction', 1);
@@ -116,15 +116,15 @@ insert into Review (rating, commentID) values (1, 10);
 
 /* Updated seed data for Booking table with consistent start and end times and valid date ranges */
 insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
-values ('2023-09-26 11:00:00', '2023-10-01 15:00:00', 'I like the place neat and tidy', 1, 1, 3, 2, null, null);
+values ('2023-09-26 15:00:00', '2023-10-01 11:00:00', 'I like the place neat and tidy', 1, 1, 3, 2, null, null);
 insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
-values ('2023-09-08 11:00:00', '2023-09-10 15:00:00', 'Have a disability, can I get help moving my luggage?', 2, 2, 1, 4, null, 3);
+values ('2023-09-08 15:00:00', '2023-09-10 11:00:00', 'Have a disability, can I get help moving my luggage?', 2, 2, 1, 4, null, 3);
 insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
-values ('2023-09-18 11:00:00', '2023-09-21 15:00:00', 'I will have some friends over between 8:00-10:00 pm is that ok?', 3, 3, 5, null, null, null);
+values ('2023-09-18 15:00:00', '2023-09-21 11:00:00', 'I will have some friends over between 8:00-10:00 pm is that ok?', 3, 3, 5, null, null, null);
 insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
-values ('2023-09-16 11:00:00', '2023-09-18 15:00:00', 'Can we please keep the noise to a minimum', 4, 4, 2, null, 1, 5);
+values ('2023-09-16 15:00:00', '2023-09-18 11:00:00', 'Can we please keep the noise to a minimum', 4, 4, 2, null, 1, 5);
 insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
-values ('2023-09-26 11:00:00', '2023-09-27 15:00:00', 'I will have a pet with me can I get the access to the backyard?', 10, 5, 4, 10, 9, 8);
+values ('2023-09-26 15:00:00', '2023-09-27 11:00:00', 'I will have a pet with me can I get the access to the backyard?', 10, 5, 4, 10, 9, 8);
 
 
 /* Seed House table */

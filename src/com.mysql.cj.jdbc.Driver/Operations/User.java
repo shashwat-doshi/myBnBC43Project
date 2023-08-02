@@ -12,7 +12,6 @@ import app.Main;
 public class User {
 
     public String fname, lname, SIN, userAddress, occupation;
-    public boolean isAdmin;
     public LocalDate dob;
     public int userID; // as only one user operates in our app at a time, should we make userID
                        // static??
@@ -67,7 +66,6 @@ public class User {
     }
 
     public void setNewUserInfo() {
-        Integer adminChoice;
 
         Scanner input = new Scanner(System.in); // Create a Scanner object
         System.out.println("Before you get started, let us create your profile...\n");
@@ -76,20 +74,6 @@ public class User {
         this.fname = input.nextLine();
         System.out.println("Enter your last name");
         this.lname = input.nextLine();
-        System.out.println("Are you an admin? 1 - yes, 0 - no");
-        while (true) {
-            try {
-                adminChoice = input.nextInt();
-                if (adminChoice != 0 && adminChoice != 1)
-                    throw new Exception();
-                break;
-            } catch (Exception e) {
-                System.out.println("Incorrect choice! Choose again...");
-                input.nextLine();
-            }
-        }
-        this.isAdmin = adminChoice == 1 ? true : false;
-        input.nextLine(); // need to read \n after nextInt() is called
         System.out.println("Enter your SIN Number");
         this.SIN = input.nextLine();
         System.out.println("Enter your Address");
@@ -137,8 +121,8 @@ public class User {
         ResultSet rs = null;
         PreparedStatement preparedStatement = null;
         try {
-            String sql = "INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, isAdmin, occupation) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) " +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
             preparedStatement = Main.conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setString(1, this.SIN);
@@ -146,8 +130,7 @@ public class User {
             preparedStatement.setObject(3, this.dob); // check
             preparedStatement.setString(4, this.fname);
             preparedStatement.setString(5, this.lname);
-            preparedStatement.setBoolean(6, this.isAdmin);
-            preparedStatement.setString(7, this.occupation);
+            preparedStatement.setString(6, this.occupation);
 
             int rowAffected = preparedStatement.executeUpdate();
             if (rowAffected == 1) {
