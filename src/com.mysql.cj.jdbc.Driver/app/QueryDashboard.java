@@ -16,50 +16,53 @@ public class QueryDashboard {
         Scanner input = new Scanner(System.in); // Create a Scanner object
         String sqlFilterDate = "";
         Timestamp startDate, endDate;
-        try {
-            System.out.println("Do you want to apply a temporal filter? (Y/N)");
-            String choice = input.nextLine();
-            if (choice.equals("Y")) {
-                System.out.println("Enter the start date for the filter:");
-                while (true) {
-                    String startDateString = input.nextLine();
-                    try {
-                        LocalDate localDate = LocalDate.parse(startDateString);
-                        startDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(15, 0)));
-                        break;
-                    } catch (Exception e) {
-                        System.out.println("Incorrect format of the start date! Please try again...");
+        while (true) {
+            try {
+                System.out.println("Do you want to apply a temporal filter? (Y/N)");
+                String choice = input.nextLine();
+                if (choice.equals("Y")) {
+                    System.out.println("Enter the start date for the filter:");
+                    while (true) {
+                        String startDateString = input.nextLine();
+                        try {
+                            LocalDate localDate = LocalDate.parse(startDateString);
+                            startDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(15, 0)));
+                            break;
+                        } catch (Exception e) {
+                            System.out.println("Incorrect format of the start date! Please try again...");
+                        }
                     }
-                }
-                System.out.println("Enter the end date for the filter:");
-                while (true) {
-                    String endDateString = input.nextLine();
-                    try {
-                        LocalDate localDate = LocalDate.parse(endDateString);
-                        endDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(11, 0)));
-                        break;
-                    } catch (Exception e) {
-                        System.out.println("Incorrect format of the end date! Please try again...");
+                    System.out.println("Enter the end date for the filter:");
+                    while (true) {
+                        String endDateString = input.nextLine();
+                        try {
+                            LocalDate localDate = LocalDate.parse(endDateString);
+                            endDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(11, 0)));
+                            break;
+                        } catch (Exception e) {
+                            System.out.println("Incorrect format of the end date! Please try again...");
+                        }
                     }
-                }
 
-                if (startDate.compareTo(endDate) < 0) {
-                    sqlFilterDate = "(UNIX_TIMESTAMP(l.startDate) >= " + " UNIX_TIMESTAMP('"
-                            + startDate.toString() + "')"
-                            + " AND UNIX_TIMESTAMP(l.endDate) <= "
-                            + " UNIX_TIMESTAMP('" + endDate.toString() + "') "
-                            + ") ";
+                    if (startDate.compareTo(endDate) < 0) {
+                        sqlFilterDate = "(UNIX_TIMESTAMP(l.startDate) >= " + " UNIX_TIMESTAMP('"
+                                + startDate.toString() + "')"
+                                + " AND UNIX_TIMESTAMP(l.endDate) <= "
+                                + " UNIX_TIMESTAMP('" + endDate.toString() + "') "
+                                + ") ";
+                    } else {
+                        throw new Exception("End date should be greater than start date! Please try again...");
+                    }
+                    break;
+                } else if (choice.equals("N")) {
+                    sqlFilterDate = "";
+                    break;
                 } else {
-                    throw new Exception("Start date is greater than End date! No filter will be applied...");
+                    throw new Exception("Incorrect choice! Please try again...");
                 }
-
-            } else if (choice.equals("N")) {
-                sqlFilterDate = "";
-            } else {
-                throw new Exception("Incorrect choice! No filter will be applied...");
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
         return sqlFilterDate;
     }
@@ -239,8 +242,18 @@ public class QueryDashboard {
                     }
                     input.nextLine();
 
-                    String sql = "SELECT * FROM Listing " +
-                            "ORDER BY pricePerNight " + order;
+                    String temporalFilterDateOrderByPrice = applyTemporalFilterDates();
+                    String sql;
+
+                    if (temporalFilterDateOrderByPrice.equals("")) {
+                        sql = "SELECT * FROM Listing " +
+                                "ORDER BY pricePerNight " + order;
+                    } else {
+                        sql = "SELECT * FROM Listing l " +
+                                "WHERE " + temporalFilterDateOrderByPrice +
+                                "ORDER BY pricePerNight " + order;
+                    }
+
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
                     ResultSet rs = preparedStatement.executeQuery();
 
@@ -265,11 +278,24 @@ public class QueryDashboard {
                 try {
                     System.out.println("Enter the postal code you want to search for:");
                     String postalCode = input.nextLine();
-                    String sql = "SELECT l.* " +
-                            "FROM Property p " +
-                            "INNER JOIN Listing l " +
-                            "ON p.propertyID = l.propertyID " +
-                            "WHERE p.postalCode = '" + postalCode + "'";
+
+                    String temporalFilterDateSearchPCode = applyTemporalFilterDates();
+
+                    String sql;
+                    if (temporalFilterDateSearchPCode.equals("")) {
+                        sql = "SELECT l.* " +
+                                "FROM Property p " +
+                                "INNER JOIN Listing l " +
+                                "ON p.propertyID = l.propertyID " +
+                                "WHERE p.postalCode = '" + postalCode + "'";
+                    } else {
+                        sql = "SELECT l.* " +
+                                "FROM Property p " +
+                                "INNER JOIN Listing l " +
+                                "ON p.propertyID = l.propertyID " +
+                                "WHERE p.postalCode = '" + postalCode + "' AND " + temporalFilterDateSearchPCode;
+                    }
+
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
                     ResultSet rs = preparedStatement.executeQuery();
                     if (!rs.next()) {
