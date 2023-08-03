@@ -44,7 +44,7 @@ public class UserDashboard {
                         Listing deleteListing = Listing.getListingByListingID(deleteLID);
                         if (deleteListing != null) {
                             if (deleteListing.posterID == user.userID) {
-                                deleteListing.deleteListing(user);
+                                deleteListing.deleteListingPrompt(user);
                                 deleteListing = null;
                             } else {
                                 System.out.println(
@@ -81,7 +81,6 @@ public class UserDashboard {
                         System.out.print(", occupation: " + rs.getString("occupation"));
                         System.out.print(", DOB: " + rs.getDate("DOB").toLocalDate());
                         System.out.print(", age: " + rs.getInt("age"));
-                        System.out.println(", isAdmin: " + rs.getBoolean("isAdmin"));
                     } while (rs.next());
                     rs.close();
                     preparedStatement.close();

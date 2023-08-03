@@ -3,12 +3,11 @@ package app;
 import java.sql.*;
 import java.util.Scanner;
 import Operations.User;
-
 @SuppressWarnings("resource")
 public class Main {
 
+    private static final String CONNECTION = "jdbc:mysql://localhost:3306/myBnBC43Project";
     private static final String dbClassName = "com.mysql.cj.jdbc.Driver";
-    private static final String CONNECTION = "jdbc:mysql://127.0.0.1/myBnBC43Project";
     public static Connection conn;
 
     public static boolean commandHandler(String cmd) {
@@ -84,7 +83,7 @@ public class Main {
         Class.forName(dbClassName);
         // Database credentials
         final String USER = "root";
-        final String PASS = "alpapiyush";
+        final String PASS = "password";
         System.out.println("Connecting to database...");
         String command;
 
