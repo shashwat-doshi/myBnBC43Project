@@ -261,6 +261,37 @@ public class QueryDashboard {
                     System.out.println(e.getMessage());
                 }
                 break;
+            case "4":
+                try {
+                    System.out.println("Enter the postal code you want to search for:");
+                    String postalCode = input.nextLine();
+                    String sql = "SELECT l.* " +
+                            "FROM Property p " +
+                            "INNER JOIN Listing l " +
+                            "ON p.propertyID = l.propertyID " +
+                            "WHERE p.postalCode = '" + postalCode + "'";
+                    PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
+                    ResultSet rs = preparedStatement.executeQuery();
+                    if (!rs.next()) {
+                        rs.close();
+                        preparedStatement.close();
+                        System.out.println("No listing exists with the given postal code!\n");
+                    } else {
+                        int listingID = 0;
+                        Listing listing = null;
+                        System.out.println("Here are the listings according to the given input: \n");
+                        int count = 1;
+                        do {
+                            System.out.println("Listing Result " + count++ + ":");
+                            listingID = rs.getInt("listingID");
+                            listing = Listing.getListingByListingID(listingID);
+                            ListingDashboard.viewListingInfo(listing);
+                        } while (rs.next());
+                    }
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
             case "exit":
                 return false;
             default:
@@ -278,6 +309,7 @@ public class QueryDashboard {
             System.out.println("1: Search for listings by latitude and longitude\n" +
                     "2: Search for listings by address (exact match)\n" +
                     "3: Show listings ordered by price\n" +
+                    "4: Search for listings by postal code\n" +
                     "exit: Go back to main menu\n");
             command = input.nextLine(); // Read user input
             if (!queryDashboardHandler(command)) {
