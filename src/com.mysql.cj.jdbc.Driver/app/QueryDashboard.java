@@ -2,23 +2,93 @@ package app;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Scanner;
 import Operations.Listing;
 
 @SuppressWarnings("resource")
 public class QueryDashboard {
 
+    public static String applyTemporalFilterDates() {
+        Scanner input = new Scanner(System.in); // Create a Scanner object
+        String sqlFilterDate = "";
+        Timestamp startDate, endDate;
+        try {
+            System.out.println("Do you want to apply a temporal filter? (Y/N)");
+            String choice = input.nextLine();
+            if (choice.equals("Y")) {
+                System.out.println("Enter the start date for the filter:");
+                while (true) {
+                    String startDateString = input.nextLine();
+                    try {
+                        LocalDate localDate = LocalDate.parse(startDateString);
+                        startDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(15, 0)));
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Incorrect format of the start date! Please try again...");
+                    }
+                }
+                System.out.println("Enter the end date for the filter:");
+                while (true) {
+                    String endDateString = input.nextLine();
+                    try {
+                        LocalDate localDate = LocalDate.parse(endDateString);
+                        endDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(11, 0)));
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Incorrect format of the end date! Please try again...");
+                    }
+                }
+
+                if (startDate.compareTo(endDate) < 0) {
+                    sqlFilterDate = "(UNIX_TIMESTAMP(l.startDate) >= " + " UNIX_TIMESTAMP('"
+                            + startDate.toString() + "')"
+                            + " AND UNIX_TIMESTAMP(l.endDate) <= "
+                            + " UNIX_TIMESTAMP('" + endDate.toString() + "') "
+                            + ") ";
+                } else {
+                    throw new Exception("Start date is greater than End date! No filter will be applied...");
+                }
+
+            } else if (choice.equals("N")) {
+                sqlFilterDate = "";
+            } else {
+                throw new Exception("Incorrect choice! No filter will be applied...");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return sqlFilterDate;
+    }
+
     public static void findListingsByLocation(double locationLatitude, double locationLongitude,
             float searchDistance) {
         try {
-            String sql = "SELECT l.* , ST_Distance(" +
-                    "ST_GeomFromText('POINT(" + locationLongitude + " " + locationLatitude + ")', 4326), " +
-                    "ST_SRID(coordinates, 4326), 'kilometre') as distance_in_km " +
-                    "FROM Property p " +
-                    "INNER JOIN Listing l " +
-                    "ON l.propertyID = p.propertyID " +
-                    "HAVING distance_in_km <= " + searchDistance + " " +
-                    "ORDER BY distance_in_km";
+            String temporalFilterDate = applyTemporalFilterDates();
+            String sql;
+            if (temporalFilterDate.equals("")) {
+                sql = "SELECT l.* , ST_Distance(" +
+                        "ST_GeomFromText('POINT(" + locationLongitude + " " + locationLatitude + ")', 4326), " +
+                        "ST_SRID(coordinates, 4326), 'kilometre') as distance_in_km " +
+                        "FROM Property p " +
+                        "INNER JOIN Listing l " +
+                        "ON l.propertyID = p.propertyID " +
+                        "HAVING distance_in_km <= " + searchDistance + " " +
+                        "ORDER BY distance_in_km";
+            } else {
+                sql = "SELECT l.* , ST_Distance(" +
+                        "ST_GeomFromText('POINT(" + locationLongitude + " " + locationLatitude + ")', 4326), " +
+                        "ST_SRID(coordinates, 4326), 'kilometre') as distance_in_km " +
+                        "FROM Property p " +
+                        "INNER JOIN Listing l " +
+                        "ON l.propertyID = p.propertyID " +
+                        "WHERE " + temporalFilterDate +
+                        "HAVING distance_in_km <= " + searchDistance + " " +
+                        "ORDER BY distance_in_km";
+            }
 
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
@@ -105,12 +175,22 @@ public class QueryDashboard {
             case "2":
                 System.out.println("Please enter the address you want to search for:");
                 String addr = input.nextLine();
+                String temporalFilterDate = applyTemporalFilterDates();
                 try {
-                    String sql = "SELECT l.* " +
-                            "FROM Listing l " +
-                            "INNER JOIN Property p " +
-                            "ON l.propertyID = p.propertyID " +
-                            "WHERE p.street = '" + addr + "'";
+                    String sql;
+                    if (temporalFilterDate.equals("")) {
+                        sql = "SELECT l.* " +
+                                "FROM Listing l " +
+                                "INNER JOIN Property p " +
+                                "ON l.propertyID = p.propertyID " +
+                                "WHERE p.street = '" + addr + "'";
+                    } else {
+                        sql = "SELECT l.* " +
+                                "FROM Listing l " +
+                                "INNER JOIN Property p " +
+                                "ON l.propertyID = p.propertyID " +
+                                "WHERE p.street = '" + addr + "' AND " + temporalFilterDate;
+                    }
 
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
                     ResultSet rs = preparedStatement.executeQuery();
@@ -120,9 +200,16 @@ public class QueryDashboard {
                         preparedStatement.close();
                         System.out.println("No property exists with the given address!\n");
                     } else {
-                        int listingID = rs.getInt("listingID");
-                        Listing listing = Listing.getListingByListingID(listingID);
-                        ListingDashboard.viewListingInfo(listing);
+                        int listingID = 0;
+                        Listing listing = null;
+                        System.out.println("Here are the listings according to the given input: \n");
+                        int count = 1;
+                        do {
+                            System.out.println("Listing Result " + count++ + ":");
+                            listingID = rs.getInt("listingID");
+                            listing = Listing.getListingByListingID(listingID);
+                            ListingDashboard.viewListingInfo(listing);
+                        } while (rs.next());
                     }
                 } catch (Exception e) {
                     System.out.println(e.getMessage());

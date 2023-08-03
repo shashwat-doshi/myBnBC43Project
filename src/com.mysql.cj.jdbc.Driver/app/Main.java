@@ -3,6 +3,7 @@ package app;
 import java.sql.*;
 import java.util.Scanner;
 import Operations.User;
+
 @SuppressWarnings("resource")
 public class Main {
 
@@ -83,7 +84,7 @@ public class Main {
         Class.forName(dbClassName);
         // Database credentials
         final String USER = "root";
-        final String PASS = "password";
+        final String PASS = "alpapiyush";
         System.out.println("Connecting to database...");
         String command;
 
