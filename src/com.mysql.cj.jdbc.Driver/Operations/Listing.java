@@ -19,6 +19,7 @@ public class Listing {
     public int listingID;
     public int propertyID, posterID, currencyID; // foreign keys
 
+
     public static Listing getListingByListingID(int listingID) {
         try {
             String sql = "SELECT * FROM Listing WHERE listingID = ?";
@@ -53,6 +54,34 @@ public class Listing {
         }
     }
 
+    public void insertListing (User host) {
+        try {
+            String insertProprtySql = "INSERT INTO Listing (startDate, endDate, pricePerNight, propertyID, posterID, currencyID)"
+                    +
+                    "values (?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(insertProprtySql,
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setTimestamp(1, this.startDate);
+            preparedStatement.setTimestamp(2, this.endDate);
+            preparedStatement.setFloat(3, this.pricePerNight);
+            preparedStatement.setInt(4, this.propertyID);
+            preparedStatement.setInt(5, host.userID);
+            preparedStatement.setInt(6, this.currencyID);
+
+            int rowAffected = preparedStatement.executeUpdate();
+            ResultSet rs;
+            if (rowAffected == 1) {
+                // get candidate id
+                rs = preparedStatement.getGeneratedKeys();
+                if (rs.next()) {
+                    this.listingID = rs.getInt(1);
+                }
+            }
+            System.out.println("Created listing with listing ID: " + this.listingID);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
     public void createNewListing(User host) {
         Scanner input = new Scanner(System.in); // Create a Scanner object
         System.out.println("Lets input listing information...\n");
@@ -134,32 +163,7 @@ public class Listing {
         }
         this.propertyID = propID;
 
-        try {
-            String insertProprtySql = "INSERT INTO Listing (startDate, endDate, pricePerNight, propertyID, posterID, currencyID)"
-                    +
-                    "values (?, ?, ?, ?, ?, ?)";
-            PreparedStatement preparedStatement = Main.conn.prepareStatement(insertProprtySql,
-                    Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setTimestamp(1, this.startDate);
-            preparedStatement.setTimestamp(2, this.endDate);
-            preparedStatement.setFloat(3, this.pricePerNight);
-            preparedStatement.setInt(4, this.propertyID);
-            preparedStatement.setInt(5, host.userID);
-            preparedStatement.setInt(6, this.currencyID);
-
-            int rowAffected = preparedStatement.executeUpdate();
-            ResultSet rs;
-            if (rowAffected == 1) {
-                // get candidate id
-                rs = preparedStatement.getGeneratedKeys();
-                if (rs.next()) {
-                    this.listingID = rs.getInt(1);
-                }
-            }
-            System.out.println("Created listing with listing ID: " + this.listingID);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        this.insertListing(host);
     }
 
     public void findBookingsFromListing (int listingId, Timestamp startDate, Timestamp endDate) {
@@ -417,5 +421,119 @@ public class Listing {
             }
         }
         deleteListing(user, startDate, endDate);
+    }
+
+    public void updateCaseRemoveEntireRow(User host, Float newPrice) {
+        try {
+            String deleteListingSql = "UPDATE Listing l SET pricePerNight = ?  " +
+                    "WHERE posterID = ? AND listingID = ? AND NOT EXISTS(SELECT * FROM BOOKING WHERE listingID=l.listingID AND bookingStatus='confirmed')";
+
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(deleteListingSql,
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setFloat(1, newPrice);
+            preparedStatement.setInt(2, host.userID);
+            preparedStatement.setInt(3, this.listingID);
+
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public boolean updateListing(User host, Timestamp startDate, Timestamp endDate, Float newPrice) {
+
+        if ((new Booking()).isDateTakenInBooking(startDate, this)
+            || (new Booking()).isDateTakenInBooking(endDate, this)){
+            System.out.println("Confirmed Booking exits for these days cancel them if you want to delete the listing");
+            return false;
+        }
+        if (startDate.equals(this.startDate) && endDate.equals(this.endDate)) {
+            updateCaseRemoveEntireRow(host, newPrice);
+            return true;
+        }
+
+        if (startDate.equals(this.startDate)) {
+            LocalDateTime updated = endDate.toLocalDateTime().withHour(15).withMinute(0).withSecond(0);
+            updateListing(pricePerNight, Timestamp.valueOf(updated), this.endDate, listingID);
+            updateListingStatus(listingID, Timestamp.valueOf(updated), this.endDate);
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.pricePerNight = newPrice;
+            this.insertListing(host);
+            return true;
+        }
+
+        if (endDate.equals(this.endDate)) {
+            LocalDateTime updated = startDate.toLocalDateTime().withHour(11).withMinute(0).withSecond(0);
+            updateListing(pricePerNight, this.startDate, Timestamp.valueOf(updated) , listingID);
+            updateListingStatus(listingID, this.startDate, Timestamp.valueOf(updated));
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.pricePerNight = newPrice;
+            this.insertListing(host);
+            return true;
+        }
+
+        Timestamp startDate1 = this.startDate;
+        Timestamp endDate1 = Timestamp.valueOf(startDate.toLocalDateTime().withHour(11).withMinute(0).withSecond(0));
+        Timestamp startDate2 = Timestamp.valueOf(endDate.toLocalDateTime().withHour(15).withMinute(0).withSecond(0));;
+        Timestamp endDate2 = this.endDate;
+        breakListingIntoTwo(startDate1, endDate1, startDate2, endDate2);
+
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.pricePerNight = newPrice;
+
+        this.insertListing(host);
+        return true;
+    }
+
+    public void updateListingPrompt(User user) {
+        if (user.userID != this.posterID) {
+            System.out.println("You are not poster");
+            return;
+        }
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Please enter the new Price of listing");
+        Float newPrice = input.nextFloat();
+        input.nextLine();
+        System.out.println("Enter the start date yyyy-mm-dd for update");
+
+        System.out.println("This will update the listing starting from yyyy-mm-dd 15:00:00");
+        Timestamp startDate;
+        Timestamp endDate;
+        while (true) {
+            String startDateString = input.nextLine();
+            try {
+                LocalDate localDate = LocalDate.parse(startDateString);
+                startDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(15, 0)));
+                if (startDate.before(this.startDate) || startDate.after(this.endDate)) {
+                    throw new Exception();
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Please try again");
+            }
+        }
+
+        System.out.println("Enter the end date yyyy-mm-dd for update");
+        System.out.println("This will update the listing till yyyy-mm-dd 11:00:00");
+        while (true) {
+            String endDateString = input.nextLine();
+            try {
+
+                LocalDate localDate = LocalDate.parse(endDateString);
+                endDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(11, 0)));
+                if (endDate.before(this.startDate) || endDate.after(this.endDate)) {
+                    throw new Exception();
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Please try again\n");
+            }
+        }
+
+        updateListing(user, startDate, endDate, newPrice);
     }
 }
