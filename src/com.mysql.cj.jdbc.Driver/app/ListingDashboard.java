@@ -246,7 +246,27 @@ public class ListingDashboard {
                 viewListingInfo(user, listing);
                 break;
             case "6":
-                listing.deleteListingPrompt(user);
+            while (true) {
+                System.out.println("Enter the booking ID");
+                Scanner input = new Scanner(System.in);
+                try {
+                    int bookingIDView = input.nextInt();
+                    input.nextLine();
+                    Booking bookingView = Booking.getBookingByBookingID(bookingIDView);
+                    if (listing != null && (bookingView.renterID == user.userID || listing.posterID == user.userID)) {
+                        BookingDashboard.BookingDashboardInterface(user, listing, bookingView);
+                        break;
+                    }
+                    else{
+                        System.out.println("You are not involved with this booking");
+                        throw new Exception();
+                    }
+                } catch (Exception e) {
+                    System.out.println("Incorrect Booking ID! Please try again...");
+                    input.nextLine();
+                }
+            }
+            break;
             case "exit":
                 return false;
             default:
@@ -273,6 +293,7 @@ public class ListingDashboard {
             System.out.println("3: Add review for renter as a owner");
             System.out.println("4: Book a listing");
             System.out.println("5: Show listing information");
+            System.out.println("6: Select a Booking");
             System.out.println("exit: Go to User Dashboard");
             command = input.nextLine(); // Read user input
             if (!listingDashboardCommandHandler(command, user, listing)) {

@@ -89,6 +89,30 @@ public class UserDashboard {
                     System.out.println(e.getMessage());
                 }
                 break;
+            case "5":
+                while (true) {
+                    try {
+                        System.out.println("Enter the listing's Listing ID which you wish to delete:");
+                        int updateLID = input.nextInt();
+                        input.nextLine();
+                        Listing updateListing = Listing.getListingByListingID(updateLID);
+                        if (updateListing != null) {
+                            if (updateListing.posterID == user.userID) {
+                                updateListing.updateListingPrompt(user);
+                                updateListing = null;
+                            } else {
+                                System.out.println(
+                                        "Update listing not allowed! Only the host of listing "
+                                                + updateListing.listingID + " can delete the listing!");
+                            }
+                        }
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Incorrect Listing ID! Please try again...");
+                        input.nextLine();
+                    }
+                }
+                break;
             case "exit":
                 return false;
             default:
@@ -112,6 +136,7 @@ public class UserDashboard {
             System.out.println("2: Select a listing");
             System.out.println("3: Delete a listing");
             System.out.println("4: Show profile");
+            System.out.println("5: Update a listing");
             System.out.println("exit: Log out and go to main menu");
             command = input.nextLine(); // Read user input
             if (!userDashboardCommandHandler(command, user)) {
