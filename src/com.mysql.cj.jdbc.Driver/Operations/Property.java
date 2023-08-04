@@ -2,13 +2,18 @@ package Operations;
 
 import java.sql.Statement;
 import java.util.Scanner;
+
+import app.Main;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.sql.Timestamp;
 
 @SuppressWarnings("resource")
 public class Property {
+    public int propertyID;
     public static void createNewProperty(Connection conn) {
         Scanner input = new Scanner(System.in); // Create a Scanner object
         System.out.println("Lets input property information...\n");
@@ -148,5 +153,73 @@ public class Property {
             System.out.println(e);
         }
 
+    }
+    public boolean isPropertyFreeOnDate (Timestamp date) {
+        try {
+            String propertySql = "SELECT * FROM Booking INNER JOIN Listing ON Booking.listingID = Listing.listingID" +
+                                    " WHERE Listing.propertyID = ? AND Booking.bookingStatus = 'confirmed' AND ? BETWEEN Booking.startDate AND Booking.endDate;";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(propertySql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, this.propertyID);
+            preparedStatement.setTimestamp(2, date);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                return false;
+            }
+            return true;
+        }
+        catch (Exception e){
+            System.out.println(e);
+            return false;
+        }
+    }
+    public void printAvailableDates(Timestamp startDate, Timestamp endDate, Float pricePerNight) {
+        Timestamp currentTime = startDate;
+        while (!currentTime.after(endDate)) {
+            if (isPropertyFreeOnDate(currentTime)) {
+                System.out.println("Property " + this.propertyID + " is available on " + currentTime.toString() + " for price of " + pricePerNight);
+            }
+            currentTime.setTime(currentTime.getTime() + 24 * 60 * 60 * 1000); // Add one day in milliseconds
+        }
+    }
+    public void getPropertyCalender () {
+        try {
+            String sqlStatement = "SELECT startDate, endDate, pricePerNight FROM Listing WHERE propertyID = ? AND listingStatus = 'available' ORDER BY startDate";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, this.propertyID);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Timestamp startDate = rs.getTimestamp("startDate");
+                Timestamp endDate = rs.getTimestamp("endDate");
+                Float pricePerNight = rs.getFloat("pricePerNight");
+                printAvailableDates(startDate, endDate, pricePerNight);
+            }
+
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    public static Property getPropertyFromID (int propertyId) {
+        try {
+            String sqlStatement = "SELECT * FROM Property WHERE propertyId = ?;";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
+
+            preparedStatement.setInt(1, propertyId);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                Property property = new Property();
+                property.propertyID = rs.getInt("propertyId");
+                return property;
+            }
+            return null;
+        }
+        catch(Exception e){
+            System.out.println(e);
+            return null;
+        }
     }
 }
