@@ -8,64 +8,10 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Scanner;
 import Operations.Listing;
+import static Queries.TemporalFilter.*;
 
 @SuppressWarnings("resource")
 public class QueryDashboard {
-
-    public static String applyTemporalFilterDates() {
-        Scanner input = new Scanner(System.in); // Create a Scanner object
-        String sqlFilterDate = "";
-        Timestamp startDate, endDate;
-        while (true) {
-            try {
-                System.out.println("Do you want to apply a temporal filter? (Y/N)");
-                String choice = input.nextLine();
-                if (choice.equals("Y")) {
-                    System.out.println("Enter the start date for the filter:");
-                    while (true) {
-                        String startDateString = input.nextLine();
-                        try {
-                            LocalDate localDate = LocalDate.parse(startDateString);
-                            startDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(15, 0)));
-                            break;
-                        } catch (Exception e) {
-                            System.out.println("Incorrect format of the start date! Please try again...");
-                        }
-                    }
-                    System.out.println("Enter the end date for the filter:");
-                    while (true) {
-                        String endDateString = input.nextLine();
-                        try {
-                            LocalDate localDate = LocalDate.parse(endDateString);
-                            endDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(11, 0)));
-                            break;
-                        } catch (Exception e) {
-                            System.out.println("Incorrect format of the end date! Please try again...");
-                        }
-                    }
-
-                    if (startDate.compareTo(endDate) < 0) {
-                        sqlFilterDate = "(UNIX_TIMESTAMP(l.startDate) >= " + " UNIX_TIMESTAMP('"
-                                + startDate.toString() + "')"
-                                + " AND UNIX_TIMESTAMP(l.endDate) <= "
-                                + " UNIX_TIMESTAMP('" + endDate.toString() + "') "
-                                + ") ";
-                    } else {
-                        throw new Exception("End date should be greater than start date! Please try again...");
-                    }
-                    break;
-                } else if (choice.equals("N")) {
-                    sqlFilterDate = "";
-                    break;
-                } else {
-                    throw new Exception("Incorrect choice! Please try again...");
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        return sqlFilterDate;
-    }
 
     public static void findListingsByLocation(double locationLatitude, double locationLongitude,
             float searchDistance) {
