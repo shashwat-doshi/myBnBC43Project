@@ -102,7 +102,7 @@ create table Booking(
     paymentID int(50) NOT NULL,
     renterID int(50) NOT NULL,
     reviewForRenter int(50) NULL,
-    reviewForOwner int(50) NULL, /* allows NULL -- check */
+    reviewForOwner int(50) NULL,
     reviewForProperty int(50) NULL,
 
     FOREIGN KEY (listingID)

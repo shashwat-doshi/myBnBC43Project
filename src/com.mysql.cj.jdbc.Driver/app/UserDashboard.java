@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.util.Scanner;
 
 import Operations.Listing;
+import Operations.Property;
 import Operations.User;
 
 @SuppressWarnings("resource")
@@ -113,6 +114,26 @@ public class UserDashboard {
                     }
                 }
                 break;
+            case "6":
+                 while (true) {
+                    try {
+                        System.out.println("Enter the Property's Property ID which you wish to see calender of:");
+                        int propertyId = input.nextInt();
+                        input.nextLine();
+                        Property property = Property.getPropertyFromID(propertyId);
+                        if (property != null) {
+                            property.getPropertyCalender();
+                        }
+                        else{
+                            throw new Exception();
+                        }
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Incorrect Property ID! Please try again...");
+                        input.nextLine();
+                    }
+                 }
+                 break;
             case "exit":
                 return false;
             default:
@@ -137,6 +158,7 @@ public class UserDashboard {
             System.out.println("3: Delete a listing");
             System.out.println("4: Show profile");
             System.out.println("5: Update a listing");
+            System.out.println("6: Show Calender of Property");
             System.out.println("exit: Log out and go to main menu");
             command = input.nextLine(); // Read user input
             if (!userDashboardCommandHandler(command, user)) {
