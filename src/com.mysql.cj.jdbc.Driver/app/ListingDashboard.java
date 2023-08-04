@@ -80,7 +80,6 @@ public class ListingDashboard {
                             }
                         }
                         if (flag == 0) {
-                            System.out.println("here");
                             throw new Exception("Incorrect Booking ID! Please try again...\n");
                         }
                         break;
@@ -229,7 +228,7 @@ public class ListingDashboard {
         return -1;
     }
 
-    public static void viewListingInfo(User user, Listing listing) {
+    public static void viewListingInfo(Listing listing) {
         System.out.println("Listing information:");
         System.out.println("ID: " + listing.listingID);
         System.out.println("status: " + listing.listingStatus);
@@ -349,7 +348,7 @@ public class ListingDashboard {
                 booking.createNewBooking(user, listing);
                 break;
             case "5":
-                viewListingInfo(user, listing);
+                viewListingInfo(listing);
                 break;
             case "6":
             while (true) {
