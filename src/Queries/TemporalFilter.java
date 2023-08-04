@@ -15,21 +15,22 @@ public class TemporalFilter {
         filterString = "";
         String filterDate = applyTemporalFilterDates();
         if (!filterDate.equals("")) {
-            filterString = "WHERE " + filterDate;
+            filterString = filterDate;
         }
         String filterPriceRange = applyTemporalFilterPriceRange();
         if ((!filterString.equals("")) && (!filterPriceRange.equals(""))) {
             filterString += "AND " + filterPriceRange;
         } else if ((filterString.equals("") && (!filterPriceRange.equals("")))) {
-            filterString = "WHERE " + filterPriceRange;
+            filterString = filterPriceRange;
         }
         String filterPostalCode = applyTemporalFilterPostalCode();
         if ((!filterString.equals("")) && (!filterPostalCode.equals(""))) {
             filterString += "AND " + filterPostalCode;
         } else if ((filterString.equals("") && (!filterPostalCode.equals("")))) {
-            filterString = "WHERE " + filterPostalCode;
+            filterString = filterPostalCode;
         }
         filterString.trim();
+        System.out.println("THIS IS THE FILTER STRING: " + filterString);
         return filterString;
     }
 
@@ -66,7 +67,7 @@ public class TemporalFilter {
                     }
 
                     if (startDate.compareTo(endDate) < 0) {
-                        sqlFilterDate = "(UNIX_TIMESTAMP(l.startDate) >= " + " UNIX_TIMESTAMP('"
+                        sqlFilterDate = "(UNIX_TIMESTAMP(l.startDate) >= " + "UNIX_TIMESTAMP('"
                                 + startDate.toString() + "')"
                                 + " AND UNIX_TIMESTAMP(l.endDate) <= "
                                 + " UNIX_TIMESTAMP('" + endDate.toString() + "') "
@@ -155,7 +156,7 @@ public class TemporalFilter {
                             input.nextLine();
                         }
                     }
-                    sql = "l.pricePerNight >= " + minPrice + " AND l.pricePerNight <= " + maxPrice;
+                    sql = "l.pricePerNight >= " + minPrice + " AND l.pricePerNight <= " + maxPrice + " ";
                     break;
                 } else if (choice.equals("N")) {
                     sql = "";

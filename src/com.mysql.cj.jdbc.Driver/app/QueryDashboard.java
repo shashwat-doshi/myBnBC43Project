@@ -2,10 +2,6 @@ package app;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Scanner;
 import Operations.Listing;
 import static Queries.TemporalFilter.*;
@@ -16,7 +12,7 @@ public class QueryDashboard {
     public static void findListingsByLocation(double locationLatitude, double locationLongitude,
             float searchDistance) {
         try {
-            String temporalFilterDate = applyTemporalFilterDates();
+            String temporalFilterDate = applyFilters();
             String sql;
             if (temporalFilterDate.equals("")) {
                 sql = "SELECT l.* , ST_Distance(" +
@@ -34,7 +30,7 @@ public class QueryDashboard {
                         "FROM Property p " +
                         "INNER JOIN Listing l " +
                         "ON l.propertyID = p.propertyID " +
-                        "WHERE " + temporalFilterDate +
+                        "WHERE " + temporalFilterDate + " " +
                         "HAVING distance_in_km <= " + searchDistance + " " +
                         "ORDER BY distance_in_km";
             }
@@ -124,10 +120,10 @@ public class QueryDashboard {
             case "2":
                 System.out.println("Please enter the address you want to search for:");
                 String addr = input.nextLine();
-                String temporalFilterDate = applyTemporalFilterDates();
+                String temporalFilterAddr = applyFilters();
                 try {
                     String sql;
-                    if (temporalFilterDate.equals("")) {
+                    if (temporalFilterAddr.equals("")) {
                         sql = "SELECT l.* " +
                                 "FROM Listing l " +
                                 "INNER JOIN Property p " +
@@ -138,7 +134,7 @@ public class QueryDashboard {
                                 "FROM Listing l " +
                                 "INNER JOIN Property p " +
                                 "ON l.propertyID = p.propertyID " +
-                                "WHERE p.street = '" + addr + "' AND " + temporalFilterDate;
+                                "WHERE p.street = '" + addr + "' AND " + temporalFilterAddr;
                     }
 
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
@@ -188,15 +184,15 @@ public class QueryDashboard {
                     }
                     input.nextLine();
 
-                    String temporalFilterDateOrderByPrice = applyTemporalFilterDates();
+                    String temporalFilterOrderByPrice = applyFilters();
                     String sql;
 
-                    if (temporalFilterDateOrderByPrice.equals("")) {
+                    if (temporalFilterOrderByPrice.equals("")) {
                         sql = "SELECT * FROM Listing " +
                                 "ORDER BY pricePerNight " + order;
                     } else {
                         sql = "SELECT * FROM Listing l " +
-                                "WHERE " + temporalFilterDateOrderByPrice +
+                                "WHERE " + temporalFilterOrderByPrice + " " +
                                 "ORDER BY pricePerNight " + order;
                     }
 
@@ -225,10 +221,10 @@ public class QueryDashboard {
                     System.out.println("Enter the postal code you want to search for:");
                     String postalCode = input.nextLine();
 
-                    String temporalFilterDateSearchPCode = applyTemporalFilterDates();
+                    String temporalFilterSearchPCode = applyFilters();
 
                     String sql;
-                    if (temporalFilterDateSearchPCode.equals("")) {
+                    if (temporalFilterSearchPCode.equals("")) {
                         sql = "SELECT l.* " +
                                 "FROM Property p " +
                                 "INNER JOIN Listing l " +
@@ -239,7 +235,7 @@ public class QueryDashboard {
                                 "FROM Property p " +
                                 "INNER JOIN Listing l " +
                                 "ON p.propertyID = l.propertyID " +
-                                "WHERE p.postalCode = '" + postalCode + "' AND " + temporalFilterDateSearchPCode;
+                                "WHERE p.postalCode = '" + postalCode + "' AND " + temporalFilterSearchPCode;
                     }
 
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
