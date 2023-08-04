@@ -45,7 +45,6 @@ public class Booking {
             try {
                 LocalDate localDate = LocalDate.parse(startDateString);
                 startDate = LocalDateTime.of(localDate, LocalTime.of(15, 0));
-                System.out.println(listing.startDate.toString() + "waow");
                 if (Timestamp.valueOf(startDate).before(listing.startDate)
                     || Timestamp.valueOf(startDate).after(listing.endDate)
                     || isDateTakenInBooking(Timestamp.valueOf(startDate), listing)) {
@@ -125,7 +124,7 @@ public class Booking {
                 booking.startDate = rs.getTimestamp("startDate");
                 booking.endDate = rs.getTimestamp("endDate");
                 booking.paymentID = rs.getInt("paymentID");
-                booking.accomodation = rs.getString("accomodations");
+                booking.accomodation = rs.getString("accommodations");
                 booking.renterID = rs.getInt("renterID");
                 booking.bookingID = rs.getInt("bookingID");
             } while (rs.next());
@@ -133,9 +132,46 @@ public class Booking {
             preparedStatement.close();
             return booking;
         } catch (Exception e) {
-            System.out.println("Unable to retrieve the listing from the given listing ID!");
+            System.out.println("Unable to retrieve the booking from the given booking ID!");
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+
+    public void cancelBooking (User user) {
+        if (!this.bookingStatus.equals("confirmed")){
+            System.out.println("Booking is already cancelled");
+            return;
+        }
+        try {
+            String newStatus = user.userID == this.renterID ? "canceled by guest" : "canceled by host";
+            String updateSQLStatment = "UPDATE Booking SET bookingStatus = ? WHERE bookingID = ?";
+
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(updateSQLStatment,
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, newStatus);
+            preparedStatement.setInt(2, this.bookingID);
+
+            preparedStatement.executeUpdate();
+        }
+        catch(Exception e) {
+            System.out.println(e);
+        }
+
+        try {
+            String newStatusListing = "available";
+            String updateSQLStatment = "UPDATE Listing SET listingStatus = ? WHERE listingID = ?";
+
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(updateSQLStatment,
+                    Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, newStatusListing);
+            preparedStatement.setInt(2, this.listingID);
+
+            preparedStatement.executeUpdate();
+        }
+
+        catch(Exception e) {
+            System.out.println(e);
         }
     }
 }

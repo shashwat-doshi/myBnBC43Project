@@ -2,6 +2,8 @@ package app;
 
 import java.sql.*;
 import java.util.Scanner;
+
+import Operations.Property;
 import Operations.User;
 @SuppressWarnings("resource")
 public class Main {
@@ -66,7 +68,9 @@ public class Main {
                     }
                 }
                 break;
-
+            case "4":
+                Property.createNewProperty(conn);
+                break;
             case "exit":
                 return false;
             default:
@@ -79,7 +83,7 @@ public class Main {
     public static void main(String[] args) throws ClassNotFoundException {
         // Register JDBC driver
         Class.forName(dbClassName);
-        // Database credentials
+        // Database credentials2
         final String USER = "root";
         final String PASS = "password";
         System.out.println("Connecting to database...");
@@ -99,6 +103,7 @@ public class Main {
                         "1: Sign up as a user\n" +
                         "2: Sign in as a user\n" +
                         "3: Delete user\n" +
+                        "4: Create a new Property\n" +
                         "exit: To exit the application\n\n" +
                         "Please enter input to continue...");
                 command = mainInput.nextLine(); // Read user input
