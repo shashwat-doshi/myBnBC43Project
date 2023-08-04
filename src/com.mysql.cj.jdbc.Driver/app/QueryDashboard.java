@@ -21,6 +21,7 @@ public class QueryDashboard {
                         "FROM Property p " +
                         "INNER JOIN Listing l " +
                         "ON l.propertyID = p.propertyID " +
+                        "WHERE l.listingStatus = 'available' " +
                         "HAVING distance_in_km <= " + searchDistance + " " +
                         "ORDER BY distance_in_km";
             } else {
@@ -30,7 +31,7 @@ public class QueryDashboard {
                         "FROM Property p " +
                         "INNER JOIN Listing l " +
                         "ON l.propertyID = p.propertyID " +
-                        "WHERE " + temporalFilterDate + " " +
+                        "WHERE l.listingStatus = 'available' AND " + temporalFilterDate + " " +
                         "HAVING distance_in_km <= " + searchDistance + " " +
                         "ORDER BY distance_in_km";
             }
@@ -128,13 +129,14 @@ public class QueryDashboard {
                                 "FROM Listing l " +
                                 "INNER JOIN Property p " +
                                 "ON l.propertyID = p.propertyID " +
-                                "WHERE p.street = '" + addr + "'";
+                                "WHERE l.listingStatus = " + "'available' AND p.street = '" + addr + "'";
                     } else {
                         sql = "SELECT l.* " +
                                 "FROM Listing l " +
                                 "INNER JOIN Property p " +
                                 "ON l.propertyID = p.propertyID " +
-                                "WHERE p.street = '" + addr + "' AND " + temporalFilterAddr;
+                                "WHERE l.listingStatus = 'available' AND p.street = '" + addr + "' AND "
+                                + temporalFilterAddr;
                     }
 
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
@@ -188,13 +190,14 @@ public class QueryDashboard {
                     String sql;
 
                     if (temporalFilterOrderByPrice.equals("")) {
-                        sql = "SELECT * FROM Listing " +
+                        sql = "SELECT * FROM Listing l " +
+                                "WHERE l.listingStatus = 'available' " +
                                 "ORDER BY pricePerNight " + order;
                     } else {
                         sql = "SELECT l.* FROM Listing l " +
                                 "INNER JOIN Property p " +
                                 "ON l.propertyID = p.propertyID " +
-                                "WHERE " + temporalFilterOrderByPrice + " " +
+                                "WHERE l.listingStatus = 'available' AND " + temporalFilterOrderByPrice + " " +
                                 "ORDER BY l.pricePerNight " + order;
                     }
 
@@ -231,13 +234,14 @@ public class QueryDashboard {
                                 "FROM Property p " +
                                 "INNER JOIN Listing l " +
                                 "ON p.propertyID = l.propertyID " +
-                                "WHERE p.postalCode = '" + postalCode + "'";
+                                "WHERE l.listingStatus = 'available' AND p.postalCode = '" + postalCode + "'";
                     } else {
                         sql = "SELECT l.* " +
                                 "FROM Property p " +
                                 "INNER JOIN Listing l " +
                                 "ON p.propertyID = l.propertyID " +
-                                "WHERE p.postalCode = '" + postalCode + "' AND " + temporalFilterSearchPCode;
+                                "WHERE l.listingStatus = 'available' AND p.postalCode = '" + postalCode + "' AND "
+                                + temporalFilterSearchPCode;
                     }
 
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
