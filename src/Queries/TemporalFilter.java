@@ -29,9 +29,39 @@ public class TemporalFilter {
         } else if ((filterString.equals("") && (!filterPostalCode.equals("")))) {
             filterString = filterPostalCode;
         }
+        String filterAddress = applyTemporalFilterAddress();
+        if ((!filterString.equals("")) && (!filterAddress.equals(""))) {
+            filterString += "AND " + filterAddress;
+        } else if ((filterString.equals("") && (!filterAddress.equals("")))) {
+            filterString = filterAddress;
+        }
         filterString.trim();
-        System.out.println("THIS IS THE FILTER STRING: " + filterString);
         return filterString;
+    }
+
+    public static String applyTemporalFilterAddress() {
+        Scanner input = new Scanner(System.in); // Create a Scanner object
+        String sql = "";
+        while (true) {
+            try {
+                System.out.println("Do you want to apply a filter for listing's address (exact match)? (Y/N)");
+                String choice = input.nextLine();
+                if (choice.equals("Y")) {
+                    System.out.println("Enter the address you want to filter your listings by:");
+                    String address = input.nextLine();
+                    sql = "p.street = '" + address + "' ";
+                    break;
+                } else if (choice.equals("N")) {
+                    sql = "";
+                    break;
+                } else {
+                    throw new Exception("Incorrect choice! Please try again...");
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return sql;
     }
 
     public static String applyTemporalFilterDates() {

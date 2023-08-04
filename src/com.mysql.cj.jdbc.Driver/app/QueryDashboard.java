@@ -191,9 +191,11 @@ public class QueryDashboard {
                         sql = "SELECT * FROM Listing " +
                                 "ORDER BY pricePerNight " + order;
                     } else {
-                        sql = "SELECT * FROM Listing l " +
+                        sql = "SELECT l.* FROM Listing l " +
+                                "INNER JOIN Property p " +
+                                "ON l.propertyID = p.propertyID " +
                                 "WHERE " + temporalFilterOrderByPrice + " " +
-                                "ORDER BY pricePerNight " + order;
+                                "ORDER BY l.pricePerNight " + order;
                     }
 
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
