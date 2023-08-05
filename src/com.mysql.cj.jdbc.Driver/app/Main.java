@@ -76,7 +76,7 @@ public class Main {
                 QueryDashboard.queryDashboardInterface();
                 break;
             case "6":
-                ReportDashboard.reportDashboardInterface();
+                ReportDashboard.ReportDashboardInterface();
                 break;
             case "exit":
                 return false;
@@ -92,7 +92,7 @@ public class Main {
         Class.forName(dbClassName);
         // Database credentials2
         final String USER = "root";
-        final String PASS = "alpapiyush";
+        final String PASS = "password";
         System.out.println("Connecting to database...");
         String command;
 

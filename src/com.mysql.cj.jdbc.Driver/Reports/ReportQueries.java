@@ -1,4 +1,4 @@
-package Queries;
+package Reports;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
