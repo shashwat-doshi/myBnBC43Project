@@ -92,6 +92,7 @@ public class TemporalFilter {
                 }
                 if (!amenities.contains(amenity)) {
                     amenities.add(amenity);
+                    System.out.println("Added amenity " + amenity + " as a filter!");
                 } else {
                     System.out.println("Amenity already added!");
                 }
@@ -103,9 +104,9 @@ public class TemporalFilter {
         input.nextLine();
         for (int i = 0; i < amenities.size(); i++) {
             if (i == amenities.size() - 1) {
-                sql += "o.amenityID = " + amenities.get(i) + " ";
+                sql += "o.amenityID = " + amenities.get(i);
             } else {
-                sql += "o.amenityID = " + amenities.get(i) + "AND ";
+                sql += "o.amenityID = " + amenities.get(i) + " AND ";
             }
         }
         return sql;

@@ -2,7 +2,6 @@ package app;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Scanner;
 import Operations.Listing;
 import static Queries.TemporalFilter.*;
@@ -46,7 +45,7 @@ public class QueryDashboard {
                         "ON l.propertyID = p.propertyID " +
                         "INNER JOIN Offers o " +
                         "ON o.propertyID = p.propertyID " +
-                        "WHERE l.listingStatus = 'available' " + amenityFilter +
+                        "WHERE l.listingStatus = 'available' AND " + amenityFilter + " " +
                         "HAVING distance_in_km <= " + searchDistance + " " +
                         "ORDER BY distance_in_km";
             } else if (!temporalFilterDate.equals("") && !amenityFilter.equals("")) {
@@ -58,17 +57,20 @@ public class QueryDashboard {
                         "ON l.propertyID = p.propertyID " +
                         "INNER JOIN Offers o " +
                         "ON o.propertyID = p.propertyID " +
-                        "WHERE l.listingStatus = 'available' AND " + amenityFilter + "AND "
+                        "WHERE l.listingStatus = 'available' AND " + amenityFilter + " AND "
                         + temporalFilterDate + " " +
                         "HAVING distance_in_km <= " + searchDistance + " " +
                         "ORDER BY distance_in_km";
             }
 
+            System.out.println("SQL QUERY latitude/longitude: " + sql);
+
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
 
             if (!rs.next()) {
-                System.out.println("\nNo listings found near the given latitude/longitude and the search radius!");
+                System.out.println(
+                        "\nNo available listings found near the given latitude/longitude and the search radius!");
                 return;
             }
 
@@ -150,22 +152,44 @@ public class QueryDashboard {
                 System.out.println("Please enter the address you want to search for:");
                 String addr = input.nextLine();
                 String temporalFilterAddr = applyFilters();
+                String amenityFilter;
+                amenityFilter = getFilterAmenities();
                 try {
-                    String sql;
-                    if (temporalFilterAddr.equals("")) {
+                    String sql = "";
+                    if (temporalFilterAddr.equals("") && amenityFilter.equals("")) {
                         sql = "SELECT l.* " +
                                 "FROM Listing l " +
                                 "INNER JOIN Property p " +
                                 "ON l.propertyID = p.propertyID " +
                                 "WHERE l.listingStatus = " + "'available' AND p.street = '" + addr + "'";
-                    } else {
+                    } else if (!temporalFilterAddr.equals("") && amenityFilter.equals("")) {
                         sql = "SELECT l.* " +
                                 "FROM Listing l " +
                                 "INNER JOIN Property p " +
                                 "ON l.propertyID = p.propertyID " +
                                 "WHERE l.listingStatus = 'available' AND p.street = '" + addr + "' AND "
                                 + temporalFilterAddr;
+                    } else if (temporalFilterAddr.equals("") && !amenityFilter.equals("")) {
+                        sql = "SELECT l.* " +
+                                "FROM Listing l " +
+                                "INNER JOIN Property p " +
+                                "ON l.propertyID = p.propertyID " +
+                                "INNER JOIN Offers o " +
+                                "ON o.propertyID = p.propertyID " +
+                                "WHERE l.listingStatus = " + "'available' AND p.street = '" + addr + "' AND "
+                                + amenityFilter;
+                    } else if (!temporalFilterAddr.equals("") && !amenityFilter.equals("")) {
+                        sql = "SELECT l.* " +
+                                "FROM Listing l " +
+                                "INNER JOIN Property p " +
+                                "ON l.propertyID = p.propertyID " +
+                                "INNER JOIN Offers o " +
+                                "ON o.propertyID = p.propertyID " +
+                                "WHERE l.listingStatus = " + "'available' AND p.street = '" + addr + "' AND "
+                                + amenityFilter + " AND " + temporalFilterAddr;
                     }
+
+                    System.out.println("ADDY: " + sql);
 
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
                     ResultSet rs = preparedStatement.executeQuery();
@@ -173,7 +197,7 @@ public class QueryDashboard {
                     if (!rs.next()) {
                         rs.close();
                         preparedStatement.close();
-                        System.out.println("No property exists with the given address!\n");
+                        System.out.println("No available listing exists with the given address!\n");
                     } else {
                         int listingID = 0;
                         Listing listing = null;
@@ -215,18 +239,37 @@ public class QueryDashboard {
                     input.nextLine();
 
                     String temporalFilterOrderByPrice = applyFilters();
-                    String sql;
+                    String sql = "";
+                    String amenityFilterPrice;
+                    amenityFilterPrice = getFilterAmenities();
 
-                    if (temporalFilterOrderByPrice.equals("")) {
+                    if (temporalFilterOrderByPrice.equals("") && amenityFilterPrice.equals("")) {
                         sql = "SELECT * FROM Listing l " +
                                 "WHERE l.listingStatus = 'available' " +
                                 "ORDER BY pricePerNight " + order;
-                    } else {
+                    } else if (!temporalFilterOrderByPrice.equals("") && amenityFilterPrice.equals("")) {
                         sql = "SELECT l.* FROM Listing l " +
                                 "INNER JOIN Property p " +
                                 "ON l.propertyID = p.propertyID " +
                                 "WHERE l.listingStatus = 'available' AND " + temporalFilterOrderByPrice + " " +
                                 "ORDER BY l.pricePerNight " + order;
+                    } else if (temporalFilterOrderByPrice.equals("") && !amenityFilterPrice.equals("")) {
+                        sql = "SELECT l.* FROM Listing l " +
+                                "INNER JOIN Property p " +
+                                "p.propertyID = l.propertyID " +
+                                "INNER JOIN Offers o " +
+                                "ON o.propertyID = p.propertyID " +
+                                "WHERE l.listingStatus = 'available' AND " + amenityFilterPrice + " " +
+                                "ORDER BY pricePerNight " + order;
+                    } else if (!temporalFilterOrderByPrice.equals("") && !amenityFilterPrice.equals("")) {
+                        sql = "SELECT l.* FROM Listing l " +
+                                "INNER JOIN Property p " +
+                                "p.propertyID = l.propertyID " +
+                                "INNER JOIN Offers o " +
+                                "ON o.propertyID = p.propertyID " +
+                                "WHERE l.listingStatus = 'available' " + amenityFilterPrice + " "
+                                + temporalFilterOrderByPrice + " " +
+                                "ORDER BY pricePerNight " + order;
                     }
 
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
@@ -235,7 +278,7 @@ public class QueryDashboard {
                     if (!rs.next()) {
                         rs.close();
                         preparedStatement.close();
-                        System.out.println("No listings exist!\n");
+                        System.out.println("No available listings exist!\n");
                     } else {
                         int listingID;
                         Listing listing = null;
@@ -255,21 +298,41 @@ public class QueryDashboard {
                     String postalCode = input.nextLine();
 
                     String temporalFilterSearchPCode = applyFilters();
+                    String sql = "";
+                    String amenityFilterPostalCode;
+                    amenityFilterPostalCode = getFilterAmenities();
 
-                    String sql;
-                    if (temporalFilterSearchPCode.equals("")) {
+                    if (temporalFilterSearchPCode.equals("") && amenityFilterPostalCode.equals("")) {
                         sql = "SELECT l.* " +
                                 "FROM Property p " +
                                 "INNER JOIN Listing l " +
                                 "ON p.propertyID = l.propertyID " +
                                 "WHERE l.listingStatus = 'available' AND p.postalCode = '" + postalCode + "'";
-                    } else {
+                    } else if (!temporalFilterSearchPCode.equals("") && amenityFilterPostalCode.equals("")) {
                         sql = "SELECT l.* " +
                                 "FROM Property p " +
                                 "INNER JOIN Listing l " +
                                 "ON p.propertyID = l.propertyID " +
                                 "WHERE l.listingStatus = 'available' AND p.postalCode = '" + postalCode + "' AND "
                                 + temporalFilterSearchPCode;
+                    } else if (temporalFilterSearchPCode.equals("") && !amenityFilterPostalCode.equals("")) {
+                        sql = "SELECT l.* " +
+                                "FROM Property p " +
+                                "INNER JOIN Listing l " +
+                                "ON p.propertyID = l.propertyID " +
+                                "INNER JOIN Offers o " +
+                                "ON o.propertyID = p.propertyID " +
+                                "WHERE l.listingStatus = 'available' AND p.postalCode = '" + postalCode + "' AND "
+                                + amenityFilterPostalCode;
+                    } else if (!temporalFilterSearchPCode.equals("") && !amenityFilterPostalCode.equals("")) {
+                        sql = "SELECT l.* " +
+                                "FROM Property p " +
+                                "INNER JOIN Listing l " +
+                                "ON p.propertyID = l.propertyID " +
+                                "INNER JOIN Offers o " +
+                                "ON o.propertyID = p.propertyID " +
+                                "WHERE l.listingStatus = 'available' AND p.postalCode = '" + postalCode + "' AND "
+                                + amenityFilterPostalCode + " AND " + temporalFilterSearchPCode;
                     }
 
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
@@ -277,7 +340,7 @@ public class QueryDashboard {
                     if (!rs.next()) {
                         rs.close();
                         preparedStatement.close();
-                        System.out.println("No listing exists with the given postal code!\n");
+                        System.out.println("No available listing exists with the given postal code!\n");
                     } else {
                         int listingID = 0;
                         Listing listing = null;
