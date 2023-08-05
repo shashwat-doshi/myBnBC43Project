@@ -13,6 +13,10 @@ public class ReportDashboard {
             case "1":
                 getNoOfBookingsByCity();
                 break;
+            case "2":
+                getNoOfBookingsByPCode();
+                break;
+
             case "exit":
                 return false;
             default:
@@ -27,8 +31,8 @@ public class ReportDashboard {
 
         while (true) {
             System.out.println("Please enter the appropriate choice you wish to run a report for...\n");
-            System.out.println("1: Provide the total number of bookings in a specific date range by city\n" +
-                    "2: Search for listings by address (exact match)\n" +
+            System.out.println("1: Get total number of bookings in a specific date range by city\n" +
+                    "2: Get total number of bookings in a specific date range in a city by postal code\n" +
                     "3: Show listings ordered by price\n" +
                     "4: Search for listings by postal code\n" +
                     "exit: Go back to main menu\n");

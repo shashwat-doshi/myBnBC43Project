@@ -74,8 +74,10 @@ public class Main {
                 break;
             case "5":
                 QueryDashboard.queryDashboardInterface();
+                break;
             case "6":
                 ReportDashboard.reportDashboardInterface();
+                break;
             case "exit":
                 return false;
             default:
