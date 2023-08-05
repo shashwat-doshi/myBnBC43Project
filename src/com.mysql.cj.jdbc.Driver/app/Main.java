@@ -74,6 +74,8 @@ public class Main {
                 break;
             case "5":
                 QueryDashboard.queryDashboardInterface();
+            case "6":
+                ReportDashboard.ReportDashboardInterface();
             case "exit":
                 return false;
             default:
@@ -88,7 +90,7 @@ public class Main {
         Class.forName(dbClassName);
         // Database credentials2
         final String USER = "root";
-        final String PASS = "alpapiyush";
+        final String PASS = "password";
         System.out.println("Connecting to database...");
         String command;
 
@@ -107,6 +109,7 @@ public class Main {
                         "3: Delete user\n" +
                         "4: Create a new Property\n" +
                         "5: Perform queries on the database\n" +
+                        "6: Perform reports on database\n" +
                         "exit: To exit the application\n\n" +
                         "Please enter input to continue...");
                 command = mainInput.nextLine(); // Read user input

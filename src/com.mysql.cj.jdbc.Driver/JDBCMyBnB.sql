@@ -98,18 +98,21 @@ create table Booking(
     startDate DATETIME NOT NULL,
     endDate DATETIME NOT NULL,
     accommodations varchar(100),
-    listingID int(50) NOT NULL,
+    listingID int(50) NULL,
     paymentID int(50) NOT NULL,
     renterID int(50) NOT NULL,
+    posterID int(50) NULL,
     reviewForRenter int(50) NULL,
     reviewForOwner int(50) NULL,
     reviewForProperty int(50) NULL,
 
     FOREIGN KEY (listingID)
-        REFERENCES Listing(listingID),
+        REFERENCES Listing(listingID) ON DELETE SET NULL,
     FOREIGN KEY (paymentID)
         REFERENCES Payment(paymentID),
     FOREIGN KEY (renterID)
+        REFERENCES User(userID),
+    FOREIGN KEY (posterID)
         REFERENCES User(userID),
     FOREIGN KEY (reviewForRenter)
         REFERENCES Review(reviewID),
