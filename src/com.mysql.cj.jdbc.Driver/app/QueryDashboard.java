@@ -2,6 +2,7 @@ package app;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Scanner;
 import Operations.Listing;
 import static Queries.TemporalFilter.*;
@@ -13,8 +14,10 @@ public class QueryDashboard {
             float searchDistance) {
         try {
             String temporalFilterDate = applyFilters();
-            String sql;
-            if (temporalFilterDate.equals("")) {
+            String amenityFilter;
+            amenityFilter = getFilterAmenities();
+            String sql = "";
+            if (temporalFilterDate.equals("") && amenityFilter.equals("")) {
                 sql = "SELECT l.* , ST_Distance(" +
                         "ST_GeomFromText('POINT(" + locationLongitude + " " + locationLatitude + ")', 4326), " +
                         "ST_SRID(coordinates, 4326), 'kilometre') as distance_in_km " +
@@ -24,7 +27,7 @@ public class QueryDashboard {
                         "WHERE l.listingStatus = 'available' " +
                         "HAVING distance_in_km <= " + searchDistance + " " +
                         "ORDER BY distance_in_km";
-            } else {
+            } else if (!temporalFilterDate.equals("") && amenityFilter.equals("")) {
                 sql = "SELECT l.* , ST_Distance(" +
                         "ST_GeomFromText('POINT(" + locationLongitude + " " + locationLatitude + ")', 4326), " +
                         "ST_SRID(coordinates, 4326), 'kilometre') as distance_in_km " +
@@ -32,6 +35,31 @@ public class QueryDashboard {
                         "INNER JOIN Listing l " +
                         "ON l.propertyID = p.propertyID " +
                         "WHERE l.listingStatus = 'available' AND " + temporalFilterDate + " " +
+                        "HAVING distance_in_km <= " + searchDistance + " " +
+                        "ORDER BY distance_in_km";
+            } else if (temporalFilterDate.equals("") && !amenityFilter.equals("")) {
+                sql = "SELECT l.* , ST_Distance(" +
+                        "ST_GeomFromText('POINT(" + locationLongitude + " " + locationLatitude + ")', 4326), " +
+                        "ST_SRID(coordinates, 4326), 'kilometre') as distance_in_km " +
+                        "FROM Property p " +
+                        "INNER JOIN Listing l " +
+                        "ON l.propertyID = p.propertyID " +
+                        "INNER JOIN Offers o " +
+                        "ON o.propertyID = p.propertyID " +
+                        "WHERE l.listingStatus = 'available' " + amenityFilter +
+                        "HAVING distance_in_km <= " + searchDistance + " " +
+                        "ORDER BY distance_in_km";
+            } else if (!temporalFilterDate.equals("") && !amenityFilter.equals("")) {
+                sql = "SELECT l.* , ST_Distance(" +
+                        "ST_GeomFromText('POINT(" + locationLongitude + " " + locationLatitude + ")', 4326), " +
+                        "ST_SRID(coordinates, 4326), 'kilometre') as distance_in_km " +
+                        "FROM Property p " +
+                        "INNER JOIN Listing l " +
+                        "ON l.propertyID = p.propertyID " +
+                        "INNER JOIN Offers o " +
+                        "ON o.propertyID = p.propertyID " +
+                        "WHERE l.listingStatus = 'available' AND " + amenityFilter + "AND "
+                        + temporalFilterDate + " " +
                         "HAVING distance_in_km <= " + searchDistance + " " +
                         "ORDER BY distance_in_km";
             }
