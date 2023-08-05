@@ -256,7 +256,7 @@ public class QueryDashboard {
                     } else if (temporalFilterOrderByPrice.equals("") && !amenityFilterPrice.equals("")) {
                         sql = "SELECT l.* FROM Listing l " +
                                 "INNER JOIN Property p " +
-                                "p.propertyID = l.propertyID " +
+                                "ON p.propertyID = l.propertyID " +
                                 "INNER JOIN Offers o " +
                                 "ON o.propertyID = p.propertyID " +
                                 "WHERE l.listingStatus = 'available' AND " + amenityFilterPrice + " " +
@@ -264,13 +264,15 @@ public class QueryDashboard {
                     } else if (!temporalFilterOrderByPrice.equals("") && !amenityFilterPrice.equals("")) {
                         sql = "SELECT l.* FROM Listing l " +
                                 "INNER JOIN Property p " +
-                                "p.propertyID = l.propertyID " +
+                                "ON p.propertyID = l.propertyID " +
                                 "INNER JOIN Offers o " +
                                 "ON o.propertyID = p.propertyID " +
                                 "WHERE l.listingStatus = 'available' " + amenityFilterPrice + " "
                                 + temporalFilterOrderByPrice + " " +
                                 "ORDER BY pricePerNight " + order;
                     }
+
+                    System.out.println("PRICE: " + sql);
 
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
                     ResultSet rs = preparedStatement.executeQuery();
