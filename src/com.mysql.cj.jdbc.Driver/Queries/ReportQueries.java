@@ -62,7 +62,7 @@ public class ReportQueries {
                     int bookingCount;
                     String bookingCity;
                     System.out.println("Here are the listings according to the given input: \n");
-                    System.out.println("City\t\tCOUNT(*)\n");
+                    System.out.println("City\t\ttotalBookings\n");
                     do {
                         bookingCount = rs.getInt("COUNT(*)");
                         bookingCity = rs.getString("city");
