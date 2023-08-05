@@ -5,6 +5,7 @@ import java.util.Scanner;
 import Reports.PerCountry;
 import Reports.RenterReports;
 import Reports.CancellationReports;
+import Reports.ReportQueries;
 
 @SuppressWarnings("resource")
 public class ReportDashboard {
@@ -37,6 +38,13 @@ public class ReportDashboard {
             case "9":
                 CancellationReports.cancellationPrompt(false);
                 break;
+            case "10":
+                ReportQueries.getNoOfBookingsByCity();
+                break;
+            case "11":
+                ReportQueries.getNoOfBookingsByPCode();
+                break;
+
             case "exit":
                 return false;
             default:
@@ -68,6 +76,8 @@ public class ReportDashboard {
                     "specific time period per city and having atleast 2 bookings");
             System.out.println("8: report the renters with the largest number of cancellations within a year");
             System.out.println("9: report the hosts with the largest number of cancellations within a year");
+            System.out.println("10: Get total number of bookings in a specific date range by city");
+            System.out.println("11: Get total number of bookings in a specific date range in a city by postal code");
             System.out.println("exit: Log out and go to main menu");
             command = input.nextLine(); // Read user input
             if (!ReportDashboardCommandHandler(command)) {

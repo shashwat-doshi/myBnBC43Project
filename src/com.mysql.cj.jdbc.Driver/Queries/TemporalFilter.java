@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 @SuppressWarnings("resource")
@@ -37,6 +38,78 @@ public class TemporalFilter {
         }
         filterString.trim();
         return filterString;
+    }
+
+    public static String getFilterAmenities() {
+        Scanner input = new Scanner(System.in); // Create a Scanner object
+        String sql = "";
+        while (true) {
+            try {
+                System.out.println("Do you want to apply a filter for amenities? (Y/N)");
+                String choice = input.nextLine();
+                if (choice.equals("Y")) {
+                    sql = applyTemporalFilterAmenities();
+                    break;
+                } else if (choice.equals("N")) {
+                    sql = "";
+                    break;
+                } else {
+                    throw new Exception("Incorrect choice! Please try again...");
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return sql;
+    }
+
+    public static String applyTemporalFilterAmenities() {
+        Scanner input = new Scanner(System.in); // Create a Scanner object
+        String sql = "";
+        int amenity;
+        ArrayList<Integer> amenities = new ArrayList<Integer>();
+        while (true) {
+            System.out.println("Enter ammenities to add options are:\n" +
+                    "1:A washer or dryer\n" +
+                    "2:Heating\n" +
+                    "3:pool\n" +
+                    "4:kitchen\n" +
+                    "5:mini bar\n" +
+                    "6:Pets\n" +
+                    "7:Wifi\n" +
+                    "8:Jacuzzi\n" +
+                    "9:Free parking\n" +
+                    "10:Laptop friendly\n" +
+                    "11:to finish selecting amenities");
+            try {
+                amenity = input.nextInt();
+                if (amenity > 11 || amenity < 0) {
+                    throw new Exception();
+                }
+
+                if (amenity == 11) {
+                    break;
+                }
+                if (!amenities.contains(amenity)) {
+                    amenities.add(amenity);
+                    System.out.println("Added amenity " + amenity + " as a filter!");
+                } else {
+                    System.out.println("Amenity already added!");
+                }
+            } catch (Exception e) {
+                System.out.println("Incorrect choice! Choose again...");
+                input.nextLine();
+            }
+        }
+        input.nextLine();
+        for (int i = 0; i < amenities.size(); i++) {
+            if (i == amenities.size() - 1) {
+                sql += "o.amenityID = " + amenities.get(i);
+            } else {
+                sql += "o.amenityID = " + amenities.get(i) + " AND ";
+            }
+        }
+        return sql;
     }
 
     public static String applyTemporalFilterAddress() {
