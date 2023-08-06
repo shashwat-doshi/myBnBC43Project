@@ -3,6 +3,7 @@ package Operations;
 import java.sql.Statement;
 import java.util.Scanner;
 
+import HostToolkit.SuggestAmenity;
 import app.Main;
 
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 @SuppressWarnings("resource")
 public class Property {
     public int propertyID;
+    public String city;
     public static void createNewProperty(Connection conn) {
         Scanner input = new Scanner(System.in); // Create a Scanner object
         System.out.println("Lets input property information...\n");
@@ -51,9 +53,11 @@ public class Property {
         int amenity = -1;
         int price = 0;
         Boolean availability = true;
+
+        SuggestAmenity.SuggestAmenityForProperty(city);
          while (true) {
             System.out.println("Enter ammenities to add options are:\n" +
-                            "1:A washer or dryer\n" +
+                            "1:washer or dryer\n" +
                             "2:Heating\n" +
                             "3:pool\n" +
                             "4:kitchen\n" +
@@ -213,6 +217,7 @@ public class Property {
             if (rs.next()) {
                 Property property = new Property();
                 property.propertyID = rs.getInt("propertyId");
+                property.city = rs.getString("city");
                 return property;
             }
             return null;
