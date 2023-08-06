@@ -44,7 +44,12 @@ public class ReportDashboard {
             case "11":
                 ReportQueries.getNoOfBookingsByPCode();
                 break;
-
+            case "12":
+                ReportQueries.reportHostsTenPercent();
+                break;
+            case "13":
+                ReportQueries.reportNounPhrases();
+                break;
             case "exit":
                 return false;
             default:
@@ -57,11 +62,6 @@ public class ReportDashboard {
         Scanner input = new Scanner(System.in); // Create a Scanner object
         String command;
         while (true) {
-
-            // ADD LISTING CORRELATION!!!
-            // add ability to review as a host
-            // add ability to review a renter by host
-            // etc...
             System.out.println("Choose one of the following options:\n");
             System.out.println("1: Report number of Listings per Country");
             System.out.println("2: Report number of Listings per Country per City");
@@ -78,7 +78,11 @@ public class ReportDashboard {
             System.out.println("9: report the hosts with the largest number of cancellations within a year");
             System.out.println("10: Get total number of bookings in a specific date range by city");
             System.out.println("11: Get total number of bookings in a specific date range in a city by postal code");
-            System.out.println("exit: Log out and go to main menu");
+            System.out.println(
+                    "12: Report hosts that have number of listings more than 10% of the number of listings in that city and country");
+            System.out.println(
+                    "13: Report that presents for each listing the set of most popular noun phrases associated with the listing");
+            System.out.println("exit: Go to main menu");
             command = input.nextLine(); // Read user input
             if (!ReportDashboardCommandHandler(command)) {
                 break;
