@@ -258,7 +258,6 @@ public class ReportQueries {
                                     "No details present for this commentID! (empty comment)\n" + sqlSecondQuery);
                         } else {
                             String details;
-                            // System.out.println("ListingID\t\tNoun Phrases\n");
                             do {
                                 details = rsSecondQuery.getString("c.details");
                                 details = details.toLowerCase();
