@@ -261,7 +261,7 @@ public class ListingDashboard {
 
                             int rowAffected = preparedStatement.executeUpdate();
                             if (rowAffected == 1) {
-                                System.out.println("Updated reviewForProperty foreign key in booking table");
+                                System.out.println("Updated reviewForOwner foreign key in booking table");
                             }
                             preparedStatement.close();
                         } catch (Exception e) {
@@ -293,7 +293,7 @@ public class ListingDashboard {
 
                             int rowAffected = preparedStatement.executeUpdate();
                             if (rowAffected == 1) {
-                                System.out.println("Updated reviewForOwner by renter foreign key in booking table");
+                                System.out.println("Updated reviewForProperty by renter foreign key in booking table");
                             }
                             preparedStatement.close();
                         } catch (Exception e) {
