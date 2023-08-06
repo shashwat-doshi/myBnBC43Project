@@ -8,6 +8,7 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import HostToolkit.SuggestPrice;
 
 import app.Main;
 @SuppressWarnings("resource")
@@ -109,6 +110,39 @@ public class Listing {
                 System.out.println("Please try again\n");
             }
         }
+
+        System.out.println("Enter Property ID");
+        int propID;
+        while (true) {
+            try {
+                propID = input.nextInt();
+                input.nextLine();
+                break;
+            } catch (Exception e) {
+                System.out.println("Incorrect type! Please enter an int type...");
+                input.nextLine();
+            }
+        }
+        this.propertyID = propID;
+        Property property = Property.getPropertyFromID(propID);
+        Integer capacity = SuggestPrice.getCapacityOfProperty(propID);
+        if (capacity != -1) {
+            SuggestPrice.SuggestPriceBasedOnProperty(property.city, capacity);
+        }
+        System.out.println("Enter Price Per night");
+        Float price;
+        while (true) {
+            try {
+                price = input.nextFloat();
+                input.nextLine();
+                break;
+            } catch (Exception e) {
+                System.out.println("Incorrect type! Please enter a floating type...");
+                input.nextLine();
+            }
+        }
+
+        this.pricePerNight = price;
         System.out.println("Enter Currency type\n" +
                 "1: Ruble\n" +
                 "2: Franc\n" +
@@ -136,32 +170,7 @@ public class Listing {
         }
         this.currencyID = type;
 
-        System.out.println("Enter Price Per night");
-        Float price;
-        while (true) {
-            try {
-                price = input.nextFloat();
-                input.nextLine();
-                break;
-            } catch (Exception e) {
-                System.out.println("Incorrect type! Please enter a floating type...");
-                input.nextLine();
-            }
-        }
-        this.pricePerNight = price;
-        System.out.println("Enter Property ID");
-        int propID;
-        while (true) {
-            try {
-                propID = input.nextInt();
-                input.nextLine();
-                break;
-            } catch (Exception e) {
-                System.out.println("Incorrect type! Please enter an int type...");
-                input.nextLine();
-            }
-        }
-        this.propertyID = propID;
+
 
         this.insertListing(host);
     }
