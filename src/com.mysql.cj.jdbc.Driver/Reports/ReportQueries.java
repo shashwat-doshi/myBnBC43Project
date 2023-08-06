@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -194,23 +196,26 @@ public class ReportQueries {
     public static void reportNounPhrases() {
         ArrayList<String> commonNounPhrases = new ArrayList<String>();
 
-        commonNounPhrases.add("Great stay");
-        commonNounPhrases.add("Highly recommended!");
-        commonNounPhrases.add("Amazing experience");
-        commonNounPhrases.add("Top-notch service");
-        commonNounPhrases.add("impeccable cleanliness");
+        commonNounPhrases.add("great stay!");
+        commonNounPhrases.add("highly recommended!");
+        commonNounPhrases.add("amazing experience!");
+        commonNounPhrases.add("top-notch");
+        commonNounPhrases.add("impeccable");
         commonNounPhrases.add("clean");
         commonNounPhrases.add("neat");
         commonNounPhrases.add("tidy");
         commonNounPhrases.add("cozy accommodation");
         commonNounPhrases.add("disappointing");
-        commonNounPhrases.add("would definitely come back");
+        commonNounPhrases.add("would definitely come back.");
         commonNounPhrases.add("overrated");
         commonNounPhrases.add("overpriced");
         commonNounPhrases.add("awesome");
 
         String sqlFirstQuery = "", sqlSecondQuery = "";
         ArrayList<String> dbCommentsPerListing = new ArrayList<String>();
+
+        Map<Integer, ArrayList<String>> map = new HashMap<Integer, ArrayList<String>>();
+
         try {
             sqlFirstQuery = "SELECT l.listingID, b.reviewForRenter, b.reviewForOwner, b.reviewForProperty, rRenter.commentID as RenterCommentID, rOwner.commentID as OwnerCommentID, rProperty.commentID as PropertyCommentID "
                     +
@@ -255,45 +260,67 @@ public class ReportQueries {
                                     "No details present for this commentID! (empty comment)\n" + sqlSecondQuery);
                         } else {
                             String details;
-                            System.out.println("ListingID\t\tNoun Phrases\n");
+                            // System.out.println("ListingID\t\tNoun Phrases\n");
                             do {
                                 details = rsSecondQuery.getString("c.details");
+                                details = details.toLowerCase();
 
                                 String regex = "[!._,'@? ]";
                                 StringTokenizer str = new StringTokenizer(details, regex);
-                                int flag = 0;
+
                                 if (commonNounPhrases.contains(details)) {
-                                    flag = 1;
+                                    System.out.println("here1");
                                     dbCommentsPerListing.add(details);
+                                    if (map.containsKey(listingID)) {
+                                        ArrayList<String> temp = new ArrayList<String>();
+                                        temp = map.get(listingID);
+                                        if (!map.get(listingID).contains(details)) {
+                                            temp.add(details);
+                                        }
+                                        map.put(listingID, temp);
+                                    } else {
+                                        ArrayList<String> temp = new ArrayList<String>();
+                                        temp.add(details);
+                                        map.put(listingID, temp);
+                                    }
                                 } else {
-                                    dbCommentsPerListing.removeAll(dbCommentsPerListing);
                                     while (str.hasMoreTokens()) {
                                         String nounPhrase = str.nextToken();
+                                        nounPhrase = nounPhrase.toLowerCase();
                                         if (commonNounPhrases.contains(nounPhrase)) {
-                                            flag = 1;
                                             dbCommentsPerListing.add(nounPhrase);
-                                        }
-                                    }
-                                }
-
-                                if (flag == 1) {
-                                    System.out.print(listingID + "\t\t");
-                                    for (int i = 0; i < dbCommentsPerListing.size(); i++) {
-                                        if (i == dbCommentsPerListing.size() - 1) {
-                                            System.out.println(dbCommentsPerListing.get(i) + "\n");
-                                        } else {
-                                            System.out.print(dbCommentsPerListing.get(i) + ", ");
+                                            if (map.containsKey(listingID)) {
+                                                ArrayList<String> temp = new ArrayList<String>();
+                                                temp = map.get(listingID);
+                                                if (!map.get(listingID).contains(nounPhrase)) {
+                                                    temp.add(nounPhrase);
+                                                }
+                                                map.put(listingID, temp);
+                                            } else {
+                                                ArrayList<String> temp = new ArrayList<String>();
+                                                temp.add(nounPhrase);
+                                                map.put(listingID, temp);
+                                            }
                                         }
                                     }
                                 }
                             } while (rsSecondQuery.next());
                         }
                     }
+                    dbCommentsPerListing.removeAll(dbCommentsPerListing);
                 } while (rs.next());
+
+                System.out.println("ListingID\t\tNoun Phrases\n");
+
+                for (Map.Entry<Integer, ArrayList<String>> entry : map.entrySet()) {
+                    System.out.println(entry.getKey() + "\t\t" + entry.getValue());
+                }
+
+                System.out.print("\n");
             }
 
         } catch (Exception e) {
-
+            System.out.println(e.getMessage());
         }
 
     }
