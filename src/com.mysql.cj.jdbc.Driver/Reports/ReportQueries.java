@@ -212,8 +212,6 @@ public class ReportQueries {
         commonNounPhrases.add("awesome");
 
         String sqlFirstQuery = "", sqlSecondQuery = "";
-        ArrayList<String> dbCommentsPerListing = new ArrayList<String>();
-
         Map<Integer, ArrayList<String>> map = new HashMap<Integer, ArrayList<String>>();
 
         try {
@@ -269,8 +267,6 @@ public class ReportQueries {
                                 StringTokenizer str = new StringTokenizer(details, regex);
 
                                 if (commonNounPhrases.contains(details)) {
-                                    System.out.println("here1");
-                                    dbCommentsPerListing.add(details);
                                     if (map.containsKey(listingID)) {
                                         ArrayList<String> temp = new ArrayList<String>();
                                         temp = map.get(listingID);
@@ -288,7 +284,6 @@ public class ReportQueries {
                                         String nounPhrase = str.nextToken();
                                         nounPhrase = nounPhrase.toLowerCase();
                                         if (commonNounPhrases.contains(nounPhrase)) {
-                                            dbCommentsPerListing.add(nounPhrase);
                                             if (map.containsKey(listingID)) {
                                                 ArrayList<String> temp = new ArrayList<String>();
                                                 temp = map.get(listingID);
@@ -307,7 +302,6 @@ public class ReportQueries {
                             } while (rsSecondQuery.next());
                         }
                     }
-                    dbCommentsPerListing.removeAll(dbCommentsPerListing);
                 } while (rs.next());
 
                 System.out.println("ListingID\t\tNoun Phrases\n");
