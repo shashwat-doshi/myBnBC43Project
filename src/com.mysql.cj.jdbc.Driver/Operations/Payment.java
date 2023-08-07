@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import app.Main;
 
 @SuppressWarnings("resource")
@@ -17,13 +20,23 @@ public class Payment {
         System.out.println("Enter Card Number");
         String cardNumber;
         while (true) {
-            cardNumber = input.nextLine();
             try {
-                Integer.parseInt(cardNumber);
+                cardNumber = input.nextLine();
+                String numericPattern = "^[0-9]+$";
+
+                // Compile the pattern
+                Pattern pattern = Pattern.compile(numericPattern);
+
+                Matcher matcher = pattern.matcher(cardNumber);
+                if (!matcher.matches()) {
+                    throw new Exception();
+                }
                 break;
-            } catch (Exception e) {
-                System.out.println("Please try again");
             }
+            catch (Exception e) {
+                System.out.println("Please enter numeric card number");
+            }
+
         }
         System.out.println("Enter Card Expiry date yyyy-mm-dd");
         LocalDate expiryDate;
@@ -54,6 +67,7 @@ public class Payment {
                 input.nextLine();
             }
         }
+        input.nextLine();
         System.out.println("Enter Billing Address");
         String billingAddress = input.nextLine();
         try {
@@ -79,5 +93,19 @@ public class Payment {
             System.out.println(e);
         }
         return insertId;
+    }
+
+    public static void RollBackPayment(int deleteId) {
+        try {
+            String deletePaymentSql = "DELETE FROM Payment p WHERE p.paymentID = ?";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(deletePaymentSql, Statement.RETURN_GENERATED_KEYS);
+
+            preparedStatement.setInt(1, deleteId);
+            preparedStatement.executeUpdate();
+
+            System.out.println("Rolled back payment with id " + deleteId);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }

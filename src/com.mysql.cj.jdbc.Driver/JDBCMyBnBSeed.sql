@@ -71,7 +71,7 @@ insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyI
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-15 15:00:00', '2023-09-19 11:00:00', 230.56, 4, 4, 3);
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-07 15:00:00', '2023-09-20 11:00:00', 168.06, 2, 3, 7);
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 15:00:00', '2023-10-01 11:00:00', 261.96, 10, 10, 7);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 15:00:00', '2023-09-20 11:00:00', 42.95, 8, 8, 4);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 15:00:00', '2023-09-20 11:00:00', 42.95, 1, 8, 4);
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 15:00:00', '2023-09-29 11:00:00', 298.88, 4, 3, 1);
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 15:00:00', '2023-09-22 11:00:00', 109.63, 4, 4, 1);
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-26 15:00:00', '2023-09-27 11:00:00', 251.42, 7, 8, 2);
@@ -156,7 +156,6 @@ insert into Offers (amenityID, propertyID, isAvailable, cost) values (8, 9, true
 insert into Offers (amenityID, propertyID, isAvailable, cost) values (8, 10, true, 25);
 insert into Offers (amenityID, propertyID, isAvailable, cost) values (1, 7, true, 0);
 insert into Offers (amenityID, propertyID, isAvailable, cost) values (1, 8, true, 0);
-
 
 /* FOR REPORTS */
 

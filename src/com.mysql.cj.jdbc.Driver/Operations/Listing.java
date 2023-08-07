@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import HostToolkit.SuggestPrice;
+import java.time.LocalDate;
 
 import app.Main;
 @SuppressWarnings("resource")
@@ -212,7 +213,6 @@ public class Listing {
 
     public void updateListing(Float newPricePerNight, Timestamp startDate, Timestamp endDate, int listingID) {
         try {
-             System.out.println(" Passing startDate1 " + startDate.toString()+ " endDate1 " + endDate.toString()  + " listingID1 " + listingID);
             String updateSQLStatment = "UPDATE Listing SET startDate = ?, endDate = ?, pricePerNight = ? WHERE listingID = ?";
             PreparedStatement preparedStatement = Main.conn.prepareStatement(updateSQLStatment,
                     Statement.RETURN_GENERATED_KEYS);
@@ -421,7 +421,8 @@ public class Listing {
 
                 LocalDate localDate = LocalDate.parse(endDateString);
                 endDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(11, 0)));
-                if (endDate.before(this.startDate) || endDate.after(this.endDate)) {
+                if (endDate.before(this.startDate) || endDate.after(this.endDate)
+                    || (startDate.toLocalDateTime()).toLocalDate().equals(localDate)) {
                     throw new Exception();
                 }
                 break;
@@ -505,7 +506,16 @@ public class Listing {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Please enter the new Price of listing");
-        Float newPrice = input.nextFloat();
+        Float newPrice;
+        while (true) {
+            try {
+                newPrice = input.nextFloat();
+                break;
+            } catch (Exception e) {
+                System.out.println("Try again");
+                input.nextLine();
+            }
+        }
         input.nextLine();
         System.out.println("Enter the start date yyyy-mm-dd for update");
 
@@ -534,7 +544,8 @@ public class Listing {
 
                 LocalDate localDate = LocalDate.parse(endDateString);
                 endDate = Timestamp.valueOf(LocalDateTime.of(localDate, LocalTime.of(11, 0)));
-                if (endDate.before(this.startDate) || endDate.after(this.endDate)) {
+                if (endDate.before(this.startDate) || endDate.after(this.endDate)
+                    || (startDate.toLocalDateTime()).toLocalDate().equals(localDate)) {
                     throw new Exception();
                 }
                 break;

@@ -16,14 +16,33 @@ import java.sql.Timestamp;
 public class Property {
     public int propertyID;
     public String city;
+
     public static void createNewProperty(Connection conn) {
         Scanner input = new Scanner(System.in); // Create a Scanner object
         System.out.println("Lets input property information...\n");
+        System.out.println("Enter Property Latitude");
+        Float latitude;
+        while (true) {
+            try {
+                latitude = input.nextFloat();
+                break;
+            } catch (Exception e) {
+                System.out.println("Try again");
+                input.nextLine();
+            }
+        }
 
-        System.out.println("Enter Property Latitue");
-        Float latitude = input.nextFloat();
         System.out.println("Enter Property Longitude");
-        Float longitude = input.nextFloat();
+        Float longitude;
+        while (true) {
+            try {
+                longitude = input.nextFloat();
+                break;
+            } catch (Exception e) {
+                System.out.println("Try again");
+                input.nextLine();
+            }
+        }
         System.out.println("Enter Property Street");
         input.nextLine();
         String street = input.nextLine();
@@ -47,6 +66,7 @@ public class Property {
                 input.nextLine();
             }
         }
+        input.nextLine();
         ArrayList<Integer> amenities = new ArrayList<Integer>();
         ArrayList<Integer> prices = new ArrayList<Integer>();
         ArrayList<Boolean> availabilities = new ArrayList<Boolean>();
@@ -55,19 +75,19 @@ public class Property {
         Boolean availability = true;
 
         SuggestAmenity.SuggestAmenityForProperty(city);
-         while (true) {
+        while (true) {
             System.out.println("Enter ammenities to add options are:\n" +
-                            "1:washer or dryer\n" +
-                            "2:Heating\n" +
-                            "3:pool\n" +
-                            "4:kitchen\n" +
-                            "5:mini bar\n" +
-                            "6:Pets\n" +
-                            "7:Wifi\n" +
-                            "8:Jacuzzi\n" +
-                            "9:Free parking\n" +
-                            "10:Laptop friendly\n" +
-                            "11:to finish selecting amenities");
+                    "1:washer or dryer\n" +
+                    "2:Heating\n" +
+                    "3:pool\n" +
+                    "4:kitchen\n" +
+                    "5:mini bar\n" +
+                    "6:Pets\n" +
+                    "7:Wifi\n" +
+                    "8:Jacuzzi\n" +
+                    "9:Free parking\n" +
+                    "10:Laptop friendly\n" +
+                    "11:to finish selecting amenities");
             try {
                 amenity = input.nextInt();
                 if (amenity > 11 || amenity < 0) {
@@ -77,13 +97,13 @@ public class Property {
                 if (amenity == 11) {
                     break;
                 }
-                amenities.add(amenity);
                 System.out.println("Please input price of amenity");
                 price = input.nextInt();
-                prices.add(price);
                 System.out.println("Please input availability of amenity");
                 availability = input.nextBoolean();
                 availabilities.add(availability);
+                amenities.add(amenity);
+                prices.add(price);
             } catch (Exception e) {
                 System.out.println("Incorrect choice! Choose again...");
                 input.nextLine();
@@ -113,7 +133,17 @@ public class Property {
                 }
             }
             System.out.println("Enter Capacity");
-            Integer capacity = input.nextInt();
+            Integer capacity;
+            while (true) {
+                try {
+                    capacity = input.nextInt();
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Try again");
+                    input.nextLine();
+                }
+            }
+            input.nextLine();
             PreparedStatement preparedStatementType;
             if (type == 0) {
                 String insertRoomSql = "INSERT INTO House (propertyID, capacity) values (?, ?)";
@@ -140,15 +170,15 @@ public class Property {
             for (int i = 0; i < amenities.size(); i++) {
                 try {
                     String amenitySql = "INSERT INTO Offers (amenityID, propertyID, isAvailable, cost) values (?, ?, ?, ?)";
-                    PreparedStatement amenityInsert = conn.prepareStatement(amenitySql, Statement.RETURN_GENERATED_KEYS);
+                    PreparedStatement amenityInsert = conn.prepareStatement(amenitySql,
+                            Statement.RETURN_GENERATED_KEYS);
                     amenityInsert.setInt(1, amenities.get(i));
                     amenityInsert.setInt(2, insertId);
                     amenityInsert.setBoolean(3, availabilities.get(i));
                     amenityInsert.setInt(4, prices.get(i));
 
                     amenityInsert.executeUpdate();
-                }
-                catch(Exception e){
+                } catch (Exception e) {
                     System.out.println(e);
                 }
             }
@@ -158,11 +188,13 @@ public class Property {
         }
 
     }
-    public boolean isPropertyFreeOnDate (Timestamp date) {
+
+    public boolean isPropertyFreeOnDate(Timestamp date) {
         try {
             String propertySql = "SELECT * FROM Booking INNER JOIN Listing ON Booking.listingID = Listing.listingID" +
-                                    " WHERE Listing.propertyID = ? AND Booking.bookingStatus = 'confirmed' AND ? BETWEEN Booking.startDate AND Booking.endDate;";
-            PreparedStatement preparedStatement = Main.conn.prepareStatement(propertySql, Statement.RETURN_GENERATED_KEYS);
+                    " WHERE Listing.propertyID = ? AND Booking.bookingStatus = 'confirmed' AND ? BETWEEN Booking.startDate AND Booking.endDate;";
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(propertySql,
+                    Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, this.propertyID);
             preparedStatement.setTimestamp(2, date);
 
@@ -171,25 +203,28 @@ public class Property {
                 return false;
             }
             return true;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
             return false;
         }
     }
+
     public void printAvailableDates(Timestamp startDate, Timestamp endDate, Float pricePerNight) {
         Timestamp currentTime = startDate;
         while (!currentTime.after(endDate)) {
             if (isPropertyFreeOnDate(currentTime)) {
-                System.out.println("Property " + this.propertyID + " is available on " + currentTime.toString() + " for price of " + pricePerNight);
+                System.out.println("Property " + this.propertyID + " is available on " + currentTime.toString()
+                        + " for price of " + pricePerNight);
             }
             currentTime.setTime(currentTime.getTime() + 24 * 60 * 60 * 1000); // Add one day in milliseconds
         }
     }
-    public void getPropertyCalender () {
+
+    public void getPropertyCalender() {
         try {
             String sqlStatement = "SELECT startDate, endDate, pricePerNight FROM Listing WHERE propertyID = ? AND listingStatus = 'available' ORDER BY startDate";
-            PreparedStatement preparedStatement = Main.conn.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sqlStatement,
+                    Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, this.propertyID);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -201,16 +236,16 @@ public class Property {
                 printAvailableDates(startDate, endDate, pricePerNight);
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    public static Property getPropertyFromID (int propertyId) {
+    public static Property getPropertyFromID(int propertyId) {
         try {
             String sqlStatement = "SELECT * FROM Property WHERE propertyId = ?;";
-            PreparedStatement preparedStatement = Main.conn.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatement = Main.conn.prepareStatement(sqlStatement,
+                    Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setInt(1, propertyId);
             ResultSet rs = preparedStatement.executeQuery();
@@ -221,8 +256,7 @@ public class Property {
                 return property;
             }
             return null;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
             return null;
         }
