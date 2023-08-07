@@ -118,7 +118,6 @@ public class Main {
                 if (!commandHandler(command)) {
                     break;
                 }
-
             }
 
             System.out.println("Closing connection...");

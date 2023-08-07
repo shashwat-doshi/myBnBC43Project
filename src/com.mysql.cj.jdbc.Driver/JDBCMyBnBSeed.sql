@@ -157,3 +157,16 @@ insert into Offers (amenityID, propertyID, isAvailable, cost) values (8, 10, tru
 insert into Offers (amenityID, propertyID, isAvailable, cost) values (1, 7, true, 0);
 insert into Offers (amenityID, propertyID, isAvailable, cost) values (1, 8, true, 0);
 
+
+/* FOR REPORTS */
+
+insert into Property (street, country, city, postalCode, coordinates) values ('28 Mallory Point', 'Canada', 'Toronto', 'J6O 7K1', POINT(-100.93262, 49.8508));
+insert into Property (street, country, city, postalCode, coordinates) values ('8 8th Trail', 'Canada', 'Toronto', 'U5Q 8D0', POINT(-71.58275, 46.69823));
+insert into Property (street, country, city, postalCode, coordinates) values ('971 Steensland Center', 'Canada', 'Toronto', 'G6G 7D6', POINT(-113.6463436, 53.7925065));
+insert into Property (street, country, city, postalCode, coordinates) values ('616 Waywood Road', 'Canada', 'Toronto', 'R3D 5Z5', POINT(-73.6072341, 45.7055658));
+insert into Property (street, country, city, postalCode, coordinates) values ('43116 Kipling Hill', 'Canada', 'Toronto', 'Z4T 5H5', POINT(-114.4678603, 51.1909883));
+insert into Property (street, country, city, postalCode, coordinates) values ('90 Garrison Trail', 'Canada', 'Toronto', 'M1N 5B9', POINT(-63.7716391, 46.4027492));
+insert into Property (street, country, city, postalCode, coordinates) values ('1784 Westend Street', 'Canada', 'Toronto', 'P2K 9T8', POINT(-122.9057947, 49.1536517));
+insert into Property (street, country, city, postalCode, coordinates) values ('06 Rowland Parkway', 'Canada', 'Toronto', 'M1N 5F9', POINT(-119.5937077, 49.4991381));
+insert into Property (street, country, city, postalCode, coordinates) values ('5870 Rigney Pass', 'Canada', 'Toronto', 'C5R 8E6', POINT(-122.7535881, 49.2815819));
+insert into Property (street, country, city, postalCode, coordinates) values ('6 Melrose Circle', 'Canada', 'Toronto', 'M1N 592', POINT(-81.41646, 42.91679));
