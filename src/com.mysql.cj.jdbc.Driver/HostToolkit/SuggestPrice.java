@@ -13,7 +13,7 @@ public class SuggestPrice {
                                     "INNER JOIN Property p ON l.propertyID = p.propertyID " +
                                     "INNER JOIN (SELECT capacity, r.propertyID  FROM Room r " +
                                     "UNION ALL " +
-                                    "SELECT capacity, ha.propertyID  FROM HotelApartment ha " +
+                                    "SELECT capacity, ha.propertyID FROM HotelApartment ha " +
                                     "UNION ALL " +
                                     "SELECT capacity, h.propertyID FROM House h) AS t ON l.propertyID = t.propertyID " +
                                     "WHERE p.city = ?";

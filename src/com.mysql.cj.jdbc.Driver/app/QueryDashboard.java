@@ -298,6 +298,7 @@ public class QueryDashboard {
                 try {
                     System.out.println("Enter the postal code you want to search for:");
                     String postalCode = input.nextLine();
+                    String comparePostalCode = postalCode.substring(0, postalCode.length() - 2);
 
                     String temporalFilterSearchPCode = applyFilters();
                     String sql = "";
@@ -309,13 +310,15 @@ public class QueryDashboard {
                                 "FROM Property p " +
                                 "INNER JOIN Listing l " +
                                 "ON p.propertyID = l.propertyID " +
-                                "WHERE l.listingStatus = 'available' AND p.postalCode = '" + postalCode + "'";
+                                "WHERE l.listingStatus = 'available' AND p.postalCode LIKE '" + comparePostalCode
+                                + "__'";
                     } else if (!temporalFilterSearchPCode.equals("") && amenityFilterPostalCode.equals("")) {
                         sql = "SELECT l.* " +
                                 "FROM Property p " +
                                 "INNER JOIN Listing l " +
                                 "ON p.propertyID = l.propertyID " +
-                                "WHERE l.listingStatus = 'available' AND p.postalCode = '" + postalCode + "' AND "
+                                "WHERE l.listingStatus = 'available' AND p.postalCode LIKE '" + comparePostalCode
+                                + "__' AND "
                                 + temporalFilterSearchPCode;
                     } else if (temporalFilterSearchPCode.equals("") && !amenityFilterPostalCode.equals("")) {
                         sql = "SELECT l.* " +
@@ -324,7 +327,7 @@ public class QueryDashboard {
                                 "ON p.propertyID = l.propertyID " +
                                 "INNER JOIN Offers o " +
                                 "ON o.propertyID = p.propertyID " +
-                                "WHERE l.listingStatus = 'available' AND p.postalCode = '" + postalCode + "' AND "
+                                "WHERE l.listingStatus = 'available' AND p.postalCode LIKE '" + postalCode + "__' AND "
                                 + amenityFilterPostalCode;
                     } else if (!temporalFilterSearchPCode.equals("") && !amenityFilterPostalCode.equals("")) {
                         sql = "SELECT l.* " +
@@ -333,7 +336,7 @@ public class QueryDashboard {
                                 "ON p.propertyID = l.propertyID " +
                                 "INNER JOIN Offers o " +
                                 "ON o.propertyID = p.propertyID " +
-                                "WHERE l.listingStatus = 'available' AND p.postalCode = '" + postalCode + "' AND "
+                                "WHERE l.listingStatus = 'available' AND p.postalCode LIKE '" + postalCode + "__' AND "
                                 + amenityFilterPostalCode + " AND " + temporalFilterSearchPCode;
                     }
 
