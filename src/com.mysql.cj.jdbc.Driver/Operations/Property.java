@@ -19,11 +19,30 @@ public class Property {
     public static void createNewProperty(Connection conn) {
         Scanner input = new Scanner(System.in); // Create a Scanner object
         System.out.println("Lets input property information...\n");
-
         System.out.println("Enter Property Latitue");
-        Float latitude = input.nextFloat();
+        Float latitude;
+        while (true) {
+            try {
+                latitude = input.nextFloat();
+                break;
+            } catch (Exception e) {
+                System.out.println("Try again");
+                input.nextLine();
+            }
+        }
+
+
         System.out.println("Enter Property Longitude");
-        Float longitude = input.nextFloat();
+        Float longitude;
+        while (true) {
+            try {
+                longitude = input.nextFloat();
+                break;
+            } catch (Exception e) {
+                System.out.println("Try again");
+                input.nextLine();
+            }
+        }
         System.out.println("Enter Property Street");
         input.nextLine();
         String street = input.nextLine();
@@ -47,6 +66,7 @@ public class Property {
                 input.nextLine();
             }
         }
+        input.nextLine();
         ArrayList<Integer> amenities = new ArrayList<Integer>();
         ArrayList<Integer> prices = new ArrayList<Integer>();
         ArrayList<Boolean> availabilities = new ArrayList<Boolean>();
@@ -77,13 +97,13 @@ public class Property {
                 if (amenity == 11) {
                     break;
                 }
-                amenities.add(amenity);
                 System.out.println("Please input price of amenity");
                 price = input.nextInt();
-                prices.add(price);
                 System.out.println("Please input availability of amenity");
                 availability = input.nextBoolean();
                 availabilities.add(availability);
+                amenities.add(amenity);
+                prices.add(price);
             } catch (Exception e) {
                 System.out.println("Incorrect choice! Choose again...");
                 input.nextLine();
@@ -113,7 +133,17 @@ public class Property {
                 }
             }
             System.out.println("Enter Capacity");
-            Integer capacity = input.nextInt();
+            Integer capacity;
+             while (true) {
+                try {
+                    capacity = input.nextInt();
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Try again");
+                    input.nextLine();
+                }
+            }
+            input.nextLine();
             PreparedStatement preparedStatementType;
             if (type == 0) {
                 String insertRoomSql = "INSERT INTO House (propertyID, capacity) values (?, ?)";

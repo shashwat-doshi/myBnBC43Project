@@ -45,11 +45,6 @@ public class Booking {
             try {
                 LocalDate localDate = LocalDate.parse(startDateString);
                 startDate = LocalDateTime.of(localDate, LocalTime.of(15, 0));
-                if (Timestamp.valueOf(startDate).before(listing.startDate)
-                    || Timestamp.valueOf(startDate).after(listing.endDate)
-                    || isDateTakenInBooking(Timestamp.valueOf(startDate), listing)) {
-                    throw new Exception();
-                }
                 break;
             } catch (Exception e) {
                 System.out.println("Please try again");
@@ -63,12 +58,6 @@ public class Booking {
             try {
                 LocalDate localDate = LocalDate.parse(endDateString);
                 endDate = LocalDateTime.of(localDate, LocalTime.of(11, 0));
-                if (Timestamp.valueOf(endDate).before(listing.startDate)
-                    || Timestamp.valueOf(endDate).after(listing.endDate)
-                    || isDateTakenInBooking(Timestamp.valueOf(endDate), listing)) {
-                    throw new Exception();
-                }
-
                 break;
             } catch (Exception e) {
                 System.out.println("Please try again\n");
@@ -101,6 +90,7 @@ public class Booking {
             System.out.println("Created booking with id " + insertId);
         } catch (Exception e) {
             System.out.println(e);
+            Payment.RollBackPayment(paymentId);
         }
     }
 
