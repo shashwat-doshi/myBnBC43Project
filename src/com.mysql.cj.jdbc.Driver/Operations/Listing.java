@@ -228,18 +228,19 @@ public class Listing {
         }
     }
 
-    public void updateForeignKeysForBookings (Timestamp startDate1, Timestamp startDate2, int listingID1, int listingID2) {
+    public void updateForeignKeysForBookings (Timestamp startDate1, Timestamp endDate1, int listingID1, int listingID2) {
         try {
             String updateSQLString = "UPDATE Booking b " +
-                 "SET listingID = CASE WHEN ? BETWEEN b.startDate AND b.endDate THEN ? ELSE ? END"
+                 "SET listingID = CASE WHEN b.startDate BETWEEN ? AND ? THEN ? ELSE ? END"
                  + " WHERE listingID = ?";
             PreparedStatement preparedStatement = Main.conn.prepareStatement(updateSQLString,
                     Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setTimestamp(1, startDate1);
-            preparedStatement.setInt(2, listingID1);
-            preparedStatement.setInt(3, listingID2);
-            preparedStatement.setInt(4, this.listingID);
+            preparedStatement.setTimestamp(2, endDate1);
+            preparedStatement.setInt(3, listingID1);
+            preparedStatement.setInt(4, listingID2);
+            preparedStatement.setInt(5, this.listingID);
 
             preparedStatement.executeUpdate();
         }
@@ -348,7 +349,7 @@ public class Listing {
         updateListing(this.pricePerNight, startDate1, endDate1, this.listingID);
         updateListing(this.pricePerNight, startDate2, endDate2, listingID2);
 
-        updateForeignKeysForBookings(startDate1, startDate2, this.listingID, listingID2);
+        updateForeignKeysForBookings(startDate1, endDate1, this.listingID, listingID2);
 
         updateListingStatus(listingID2, startDate2, endDate2);
         updateListingStatus(this.listingID, startDate1, endDate1);

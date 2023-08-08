@@ -55,7 +55,7 @@ create table Listing (
     FOREIGN KEY (propertyID)
         REFERENCES Property(propertyID),
     FOREIGN KEY (posterID)
-        REFERENCES User(userID),
+        REFERENCES User(userID) ON DELETE CASCADE,
     FOREIGN KEY (currencyID)
         REFERENCES Currency(currencyID)
 );
@@ -79,7 +79,7 @@ create table PaymentInfo(
     userID int(50) NOT NULL,
     paymentTypeID int(50) NOT NULL,
     FOREIGN KEY (userID)
-        REFERENCES User(userID),
+        REFERENCES User(userID) ON DELETE CASCADE,
     FOREIGN KEY (paymentTypeID)
         REFERENCES PaymentType(paymentTypeID)
 );
@@ -111,9 +111,9 @@ create table Booking(
     FOREIGN KEY (paymentID)
         REFERENCES Payment(paymentID),
     FOREIGN KEY (renterID)
-        REFERENCES User(userID),
+        REFERENCES User(userID) ON DELETE CASCADE,
     FOREIGN KEY (posterID)
-        REFERENCES User(userID),
+        REFERENCES User(userID) ON DELETE CASCADE,
     FOREIGN KEY (reviewForRenter)
         REFERENCES Review(reviewID),
     FOREIGN KEY (reviewForOwner)

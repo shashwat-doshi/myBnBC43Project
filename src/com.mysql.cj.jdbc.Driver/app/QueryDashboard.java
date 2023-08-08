@@ -63,8 +63,6 @@ public class QueryDashboard {
                         "ORDER BY distance_in_km";
             }
 
-            System.out.println("SQL QUERY latitude/longitude: " + sql);
-
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -189,8 +187,6 @@ public class QueryDashboard {
                                 + amenityFilter + " AND " + temporalFilterAddr;
                     }
 
-                    System.out.println("ADDY: " + sql);
-
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
                     ResultSet rs = preparedStatement.executeQuery();
 
@@ -271,8 +267,6 @@ public class QueryDashboard {
                                 + temporalFilterOrderByPrice + " " +
                                 "ORDER BY pricePerNight " + order;
                     }
-
-                    System.out.println("PRICE: " + sql);
 
                     PreparedStatement preparedStatement = Main.conn.prepareStatement(sql);
                     ResultSet rs = preparedStatement.executeQuery();

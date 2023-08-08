@@ -93,7 +93,7 @@ public class UserDashboard {
             case "5":
                 while (true) {
                     try {
-                        System.out.println("Enter the listing's Listing ID which you wish to delete:");
+                        System.out.println("Enter the listing's Listing ID which you wish to update:");
                         int updateLID = input.nextInt();
                         input.nextLine();
                         Listing updateListing = Listing.getListingByListingID(updateLID);
@@ -115,7 +115,7 @@ public class UserDashboard {
                 }
                 break;
             case "6":
-                 while (true) {
+                while (true) {
                     try {
                         System.out.println("Enter the Property's Property ID which you wish to see calender of:");
                         int propertyId = input.nextInt();
@@ -123,8 +123,7 @@ public class UserDashboard {
                         Property property = Property.getPropertyFromID(propertyId);
                         if (property != null) {
                             property.getPropertyCalender();
-                        }
-                        else{
+                        } else {
                             throw new Exception();
                         }
                         break;
@@ -132,8 +131,8 @@ public class UserDashboard {
                         System.out.println("Incorrect Property ID! Please try again...");
                         input.nextLine();
                     }
-                 }
-                 break;
+                }
+                break;
             case "exit":
                 return false;
             default:

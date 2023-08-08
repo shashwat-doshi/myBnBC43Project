@@ -11,16 +11,16 @@ INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES
 INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES ('6800269404', 'St 9 Geneva', '1994-12-08', 'James', 'Trickington', 'Aircraft Pilot');
 
 /* seed property table */
-insert into Property (street, country, city, postalCode, coordinates) values ('8354 Walton Way', 'Poland', 'Płońsk', '09-101', POINT(52.931452, 101.9214852));
-insert into Property (street, country, city, postalCode, coordinates) values ('67 Glacier Hill Plaza', 'Iran', 'Semīrom', 'M1X 445', POINT(7.9632405, 123.8751554));
-insert into Property (street, country, city, postalCode, coordinates) values ('023 Bayside Circle', 'Indonesia', 'Palamadu', 'M1A 5J2', POINT(-10.0396, 120.754));
+insert into Property (street, country, city, postalCode, coordinates) values ('8354 Walton Way', 'Poland', 'Płońsk', '09-101', POINT(52.931452, 71.9214852));
+insert into Property (street, country, city, postalCode, coordinates) values ('67 Glacier Hill Plaza', 'Iran', 'Semīrom', 'M1X 445', POINT(7.9632405, 23.8751554));
+insert into Property (street, country, city, postalCode, coordinates) values ('023 Bayside Circle', 'Indonesia', 'Palamadu', 'M1A 5J2', POINT(-10.0396, 20.754));
 insert into Property (street, country, city, postalCode, coordinates) values ('76 Brentwood Place', 'Iran', 'Semīrom', 'M1X 4D1', POINT(31.4151366, 51.5683274));
-insert into Property (street, country, city, postalCode, coordinates) values ('644 Luster Circle', 'Japan', 'Setaka', '834-0122', POINT(32.5539412, 130.4103077));
-insert into Property (street, country, city, postalCode, coordinates) values ('66 Talmadge Center', 'China', 'Erdao', '772-9234', POINT(43.865595, 125.374217));
-insert into Property (street, country, city, postalCode, coordinates) values ('71310 Havey Terrace', 'New Caledonia', 'Koumac', '98850', POINT(-20.5805385, 164.2740515));
+insert into Property (street, country, city, postalCode, coordinates) values ('644 Luster Circle', 'Japan', 'Setaka', '834-0122', POINT(32.5539412, 30.4103077));
+insert into Property (street, country, city, postalCode, coordinates) values ('66 Talmadge Center', 'China', 'Erdao', '772-9234', POINT(43.865595, 25.374217));
+insert into Property (street, country, city, postalCode, coordinates) values ('71310 Havey Terrace', 'New Caledonia', 'Koumac', '98850', POINT(-20.5805385, 64.2740515));
 insert into Property (street, country, city, postalCode, coordinates) values ('95 Graedel Lane', 'Ireland', 'Coolock', 'D17', POINT(53.3916434, -6.1920933));
-insert into Property (street, country, city, postalCode, coordinates) values ('007 Green Ridge Place', 'China', 'Yudong', 'M1X 4S2', POINT(28.705864, 109.276796));
-insert into Property (street, country, city, postalCode, coordinates) values ('45738 3rd Center', 'Japan', 'Toyonaka', '771-0217', POINT(34.1228075, 134.5990156));
+insert into Property (street, country, city, postalCode, coordinates) values ('007 Green Ridge Place', 'China', 'Yudong', 'M1X 4S2', POINT(28.705864, 19.276796));
+insert into Property (street, country, city, postalCode, coordinates) values ('45738 3rd Center', 'Japan', 'Toyonaka', '771-0217', POINT(34.1228075, 34.5990156));
 
 /* seed amenity table */
 insert into Amenity (amenityType, details) values ('A washer or dryer', 'Includes washer/dryer in the property');
@@ -69,7 +69,7 @@ insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyI
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-07 15:00:00', '2023-09-12 11:00:00', 301.12, 6, 10, 4);
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-08 15:00:00', '2023-09-28 11:00:00', 319.36, 8, 2, 7);
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-15 15:00:00', '2023-09-19 11:00:00', 230.56, 4, 4, 3);
-insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('unavailable', '2023-09-07 15:00:00', '2023-09-20 11:00:00', 168.06, 2, 3, 7);
+insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-07 15:00:00', '2023-09-20 11:00:00', 168.06, 2, 3, 7);
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 15:00:00', '2023-10-01 11:00:00', 261.96, 10, 10, 7);
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-11 15:00:00', '2023-09-20 11:00:00', 42.95, 1, 8, 4);
 insert into Listing (listingStatus, startDate, endDate, pricePerNight, propertyID, posterID, currencyID) values ('available', '2023-09-22 15:00:00', '2023-09-29 11:00:00', 298.88, 4, 3, 1);
@@ -120,7 +120,7 @@ values ('2023-09-26 15:00:00', '2023-10-01 11:00:00', 'I like the place neat and
 insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
 values ('2023-09-08 15:00:00', '2023-09-10 11:00:00', 'Have a disability, can I get help moving my luggage?', 2, 2, 1, 4, null, 3);
 insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
-values ('2023-09-18 15:00:00', '2023-09-21 11:00:00', 'I will have some friends over between 8:00-10:00 pm is that ok?', 3, 3, 5, null, null, null);
+values ('2023-09-18 15:00:00', '2023-09-19 11:00:00', 'I will have some friends over between 8:00-10:00 pm is that ok?', 5, 3, 2, null, null, null);
 insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
 values ('2023-09-16 15:00:00', '2023-09-18 11:00:00', 'Can we please keep the noise to a minimum', 4, 4, 2, null, 1, 5);
 insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
@@ -162,13 +162,13 @@ insert into Offers (amenityID, propertyID, isAvailable, cost) values (1, 8, true
 
 /* FOR REPORTS */
 
-insert into Property (street, country, city, postalCode, coordinates) values ('28 Mallory Point', 'Canada', 'Toronto', 'J6O 7K1', POINT(-100.93262, 49.8508));
+insert into Property (street, country, city, postalCode, coordinates) values ('28 Mallory Point', 'Canada', 'Toronto', 'J6O 7K1', POINT(-80.93262, 49.8508));
 insert into Property (street, country, city, postalCode, coordinates) values ('8 8th Trail', 'Canada', 'Toronto', 'U5Q 8D0', POINT(-71.58275, 46.69823));
-insert into Property (street, country, city, postalCode, coordinates) values ('971 Steensland Center', 'Canada', 'Toronto', 'G6G 7D6', POINT(-113.6463436, 53.7925065));
+insert into Property (street, country, city, postalCode, coordinates) values ('971 Steensland Center', 'Canada', 'Toronto', 'G6G 7D6', POINT(-13.6463436, 53.7925065));
 insert into Property (street, country, city, postalCode, coordinates) values ('616 Waywood Road', 'Canada', 'Toronto', 'R3D 5Z5', POINT(-73.6072341, 45.7055658));
-insert into Property (street, country, city, postalCode, coordinates) values ('43116 Kipling Hill', 'Canada', 'Toronto', 'Z4T 5H5', POINT(-114.4678603, 51.1909883));
+insert into Property (street, country, city, postalCode, coordinates) values ('43116 Kipling Hill', 'Canada', 'Toronto', 'Z4T 5H5', POINT(-14.4678603, 51.1909883));
 insert into Property (street, country, city, postalCode, coordinates) values ('90 Garrison Trail', 'Canada', 'Toronto', 'M1N 5B9', POINT(-63.7716391, 46.4027492));
-insert into Property (street, country, city, postalCode, coordinates) values ('1784 Westend Street', 'Canada', 'Toronto', 'P2K 9T8', POINT(-122.9057947, 49.1536517));
-insert into Property (street, country, city, postalCode, coordinates) values ('06 Rowland Parkway', 'Canada', 'Toronto', 'M1N 5F9', POINT(-119.5937077, 49.4991381));
-insert into Property (street, country, city, postalCode, coordinates) values ('5870 Rigney Pass', 'Canada', 'Toronto', 'C5R 8E6', POINT(-122.7535881, 49.2815819));
+insert into Property (street, country, city, postalCode, coordinates) values ('1784 Westend Street', 'Canada', 'Toronto', 'P2K 9T8', POINT(-22.9057947, 49.1536517));
+insert into Property (street, country, city, postalCode, coordinates) values ('06 Rowland Parkway', 'Canada', 'Toronto', 'M1N 5F9', POINT(-19.5937077, 49.4991381));
+insert into Property (street, country, city, postalCode, coordinates) values ('5870 Rigney Pass', 'Canada', 'Toronto', 'C5R 8E6', POINT(-22.7535881, 49.2815819));
 insert into Property (street, country, city, postalCode, coordinates) values ('6 Melrose Circle', 'Canada', 'Toronto', 'M1N 592', POINT(-81.41646, 42.91679));

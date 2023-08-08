@@ -25,7 +25,7 @@ public class PerCountry {
                             + "INNER JOIN Property p ON l.propertyID = p.propertyID "
                             + groupByStatement
                             + " ORDER BY COUNT(*) DESC;";
-            System.out.println(sqlQuery);
+            // System.out.println(sqlQuery);
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -62,7 +62,7 @@ public class PerCountry {
                             + "INNER JOIN Property p ON l.propertyID = p.propertyID "
                             + groupByStatement
                             + " ORDER BY COUNT(*) DESC;";
-            System.out.println(sqlQuery);
+            // System.out.println(sqlQuery);
             PreparedStatement preparedStatement = Main.conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
 
             ResultSet rs = preparedStatement.executeQuery();

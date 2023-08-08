@@ -102,7 +102,7 @@ public class Booking {
             ResultSet rs = preparedStatement.executeQuery();
 
             if (!rs.next()) {
-                System.out.println("BOoking with listing ID " + bookingID + " does not exist!");
+                System.out.println("Booking with listing ID " + bookingID + " does not exist!");
                 return null;
             }
 

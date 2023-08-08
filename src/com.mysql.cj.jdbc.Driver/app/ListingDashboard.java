@@ -8,6 +8,7 @@ import Operations.Listing;
 import Operations.User;
 import Operations.Review;
 import Operations.Booking;
+
 @SuppressWarnings("resource")
 public class ListingDashboard {
 
@@ -149,10 +150,10 @@ public class ListingDashboard {
 
     public static int checkRenterStay(User host, Listing listing, int renterID) {
         try {
-            if (host.userID == renterID) {
-                System.out.println("Invalid input! Host and renter cannot be the same!");
-                return -1;
-            }
+            // if (host.userID == renterID) {
+            // System.out.println("Invalid input! Host and renter cannot be the same!");
+            // return -1;
+            // }
             String sql = "SELECT Booking.renterID, Booking.listingID, Booking.bookingID, Listing.posterID " +
                     "FROM Booking " +
                     "INNER JOIN Listing " +
@@ -351,27 +352,27 @@ public class ListingDashboard {
                 viewListingInfo(listing);
                 break;
             case "6":
-            while (true) {
-                System.out.println("Enter the booking ID");
-                Scanner input = new Scanner(System.in);
-                try {
-                    int bookingIDView = input.nextInt();
-                    input.nextLine();
-                    Booking bookingView = Booking.getBookingByBookingID(bookingIDView);
-                    if (listing != null && (bookingView.renterID == user.userID || listing.posterID == user.userID)) {
-                        BookingDashboard.BookingDashboardInterface(user, listing, bookingView);
-                        break;
+                while (true) {
+                    System.out.println("Enter the booking ID");
+                    Scanner input = new Scanner(System.in);
+                    try {
+                        int bookingIDView = input.nextInt();
+                        input.nextLine();
+                        Booking bookingView = Booking.getBookingByBookingID(bookingIDView);
+                        if (listing != null
+                                && (bookingView.renterID == user.userID || listing.posterID == user.userID)) {
+                            BookingDashboard.BookingDashboardInterface(user, listing, bookingView);
+                            break;
+                        } else {
+                            System.out.println("You are not involved with this booking");
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Incorrect Booking ID! Please try again...");
+                        input.nextLine();
                     }
-                    else{
-                        System.out.println("You are not involved with this booking");
-                        throw new Exception();
-                    }
-                } catch (Exception e) {
-                    System.out.println("Incorrect Booking ID! Please try again...");
-                    input.nextLine();
                 }
-            }
-            break;
+                break;
             case "exit":
                 return false;
             default:
