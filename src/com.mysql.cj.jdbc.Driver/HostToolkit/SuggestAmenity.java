@@ -85,12 +85,10 @@ public class SuggestAmenity {
                     // System.out.println("No results found with the given input!\n");
                 } else {
                     int differenceInPrice;
-                    String inputCity;
                     System.out.println("Here are the listings according to the given input: \n");
                     System.out.println("HostID\t\tCity\t\tCountry\n");
                     do {
                         differenceInPrice = rs.getInt("diff");
-                        inputCity = rs.getString("city");
                         // System.out.println(differenceInPrice + "\t\t" + inputCity);
                         map.put(i, differenceInPrice);
                     } while (rs.next());

@@ -9,8 +9,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import HostToolkit.SuggestPrice;
-import java.time.LocalDate;
-
 import app.Main;
 @SuppressWarnings("resource")
 public class Listing {
