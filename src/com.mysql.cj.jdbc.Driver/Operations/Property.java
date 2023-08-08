@@ -11,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("resource")
 public class Property {
@@ -75,18 +77,21 @@ public class Property {
         Boolean availability = true;
 
         SuggestAmenity.SuggestAmenityForProperty(city);
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        map = SuggestAmenity.suggestIncreaseInPrice(city);
+
         while (true) {
             System.out.println("Enter ammenities to add options are:\n" +
-                    "1:washer or dryer\n" +
-                    "2:Heating\n" +
-                    "3:pool\n" +
-                    "4:kitchen\n" +
-                    "5:mini bar\n" +
-                    "6:Pets\n" +
-                    "7:Wifi\n" +
-                    "8:Jacuzzi\n" +
-                    "9:Free parking\n" +
-                    "10:Laptop friendly\n" +
+                    "1:washer or dryer, adding this will increase your profit by: " + map.get(1) + "\n" +
+                    "2:Heating, adding this will increase your profit by: " + map.get(2) + "\n" +
+                    "3:pool, adding this will increase your profit by: " + map.get(3) + "\n" +
+                    "4:kitchen, adding this will increase your profit by: " + map.get(4) + "\n" +
+                    "5:mini bar, adding this will increase your profit by: " + map.get(5) + "\n" +
+                    "6:Pets, adding this will increase your profit by: " + map.get(6) + "\n" +
+                    "7:Wifi, adding this will increase your profit by: " + map.get(7) + "\n" +
+                    "8:Jacuzzi, adding this will increase your profit by: " + map.get(8) + "\n" +
+                    "9:Free parking, adding this will increase your profit by: " + map.get(9) + "\n" +
+                    "10:Laptop friendly, adding this will increase your profit by: " + map.get(10) + "\n" +
                     "11:to finish selecting amenities");
             try {
                 amenity = input.nextInt();

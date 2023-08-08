@@ -12,14 +12,14 @@ INSERT INTO User (SIN, userAddress, DOB, firstName, lastName, occupation) VALUES
 
 /* seed property table */
 insert into Property (street, country, city, postalCode, coordinates) values ('8354 Walton Way', 'Poland', 'Płońsk', '09-101', POINT(52.931452, 101.9214852));
-insert into Property (street, country, city, postalCode, coordinates) values ('67 Glacier Hill Plaza', 'Philippines', 'Tubod', '9209', POINT(7.9632405, 123.8751554));
+insert into Property (street, country, city, postalCode, coordinates) values ('67 Glacier Hill Plaza', 'Iran', 'Semīrom', 'M1X 445', POINT(7.9632405, 123.8751554));
 insert into Property (street, country, city, postalCode, coordinates) values ('023 Bayside Circle', 'Indonesia', 'Palamadu', 'M1A 5J2', POINT(-10.0396, 120.754));
 insert into Property (street, country, city, postalCode, coordinates) values ('76 Brentwood Place', 'Iran', 'Semīrom', 'M1X 4D1', POINT(31.4151366, 51.5683274));
 insert into Property (street, country, city, postalCode, coordinates) values ('644 Luster Circle', 'Japan', 'Setaka', '834-0122', POINT(32.5539412, 130.4103077));
 insert into Property (street, country, city, postalCode, coordinates) values ('66 Talmadge Center', 'China', 'Erdao', '772-9234', POINT(43.865595, 125.374217));
 insert into Property (street, country, city, postalCode, coordinates) values ('71310 Havey Terrace', 'New Caledonia', 'Koumac', '98850', POINT(-20.5805385, 164.2740515));
 insert into Property (street, country, city, postalCode, coordinates) values ('95 Graedel Lane', 'Ireland', 'Coolock', 'D17', POINT(53.3916434, -6.1920933));
-insert into Property (street, country, city, postalCode, coordinates) values ('007 Green Ridge Place', 'China', 'Yudong', 'M1D LS2', POINT(28.705864, 109.276796));
+insert into Property (street, country, city, postalCode, coordinates) values ('007 Green Ridge Place', 'China', 'Yudong', 'M1X 4S2', POINT(28.705864, 109.276796));
 insert into Property (street, country, city, postalCode, coordinates) values ('45738 3rd Center', 'Japan', 'Toyonaka', '771-0217', POINT(34.1228075, 134.5990156));
 
 /* seed amenity table */
@@ -89,7 +89,7 @@ insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) valu
 insert into Payment (cardNumber, expiryDate, billingAddress, paymentTypeID) values ('5108752749363939', '2025-04-27', '28289 Birchwood Drive', 2);
 
 
-/* Updated seed data for PaymentInfo table with cardNumber as a string of length 16 */
+/* seed paymentInfo Table */
 insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('6334222255934911', '2026-01-06', '6902 Briar Crest Junction', 3, 1);
 insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('4405641406297816', '2025-04-18', '45440 Harper Avenue', 1, 2);
 insert into PaymentInfo (cardNumber, expiryDate, billingAddress, userID, paymentTypeID) values ('3561548840374782', '2025-11-16', '7 Texas Avenue', 5, 3);
@@ -125,7 +125,10 @@ insert into Booking (startDate, endDate, accommodations, listingID, paymentID, r
 values ('2023-09-16 15:00:00', '2023-09-18 11:00:00', 'Can we please keep the noise to a minimum', 4, 4, 2, null, 1, 5);
 insert into Booking (startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
 values ('2023-09-26 15:00:00', '2023-09-27 11:00:00', 'I will have a pet with me can I get the access to the backyard?', 10, 5, 4, 10, 9, 8);
-
+insert into Booking (bookingStatus, startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
+values ('canceled by host', '2023-09-26 15:00:00', '2023-10-01 11:00:00', 'I like the place neat and tidy', 6, 1, 3, 2, null, null);
+insert into Booking (bookingStatus, startDate, endDate, accommodations, listingID, paymentID, renterID, reviewForRenter, reviewForOwner, reviewForProperty)
+values ('canceled by guest', '2023-09-23 15:00:00', '2023-09-25 11:00:00', 'I like the place neat and tidy', 6, 1, 3, 2, null, null);
 
 /* Seed House table */
 insert into House (propertyID, capacity) values (1, 6);
